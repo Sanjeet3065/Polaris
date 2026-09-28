@@ -14,6 +14,13 @@ export interface EquipmentFilterOptions {
   status?: EquipmentStatus;
 }
 
+export type EquipmentWithDetails = Prisma.EquipmentGetPayload<{
+  include: {
+    healthRecords: true;
+    maintenanceRecords: true;
+  };
+}>;
+
 export class EquipmentRepository {
   /**
    * Retrieves equipment belonging to a station with optional category & status filtering
@@ -65,7 +72,7 @@ export class EquipmentRepository {
   /**
    * Finds a specific piece of equipment with recent health and maintenance
    */
-  async findById(id: string): Promise<Equipment | null> {
+  async findById(id: string): Promise<EquipmentWithDetails | null> {
     try {
       return await prisma.equipment.findUnique({
         where: { id },
