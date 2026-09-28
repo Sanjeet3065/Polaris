@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/client": [
+        "./backend/node_modules/@prisma/client",
+        "./node_modules/@prisma/client"
+      ],
+      ".prisma/client": [
+        "./backend/node_modules/.prisma/client",
+        "./node_modules/.prisma/client"
+      ],
+      ".prisma/client/*": [
+        "./backend/node_modules/.prisma/client/*",
+        "./node_modules/.prisma/client/*"
+      ]
+    },
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  }
+}
