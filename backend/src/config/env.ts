@@ -13,10 +13,14 @@ const envSchema = z.object({
   DATABASE_URL: z
     .string()
     .default("postgresql://polaris_admin:polaris_secure_password@localhost:5432/polaris_db?schema=public"),
-  JWT_SECRET: z.string().default("polaris_default_jwt_secret_phase0"),
-  JWT_EXPIRES_IN: z.string().default("1h"),
-  JWT_REFRESH_SECRET: z.string().default("polaris_default_refresh_secret_phase0"),
+  JWT_ACCESS_SECRET: z.string().default(process.env.JWT_SECRET || "polaris_super_secret_jwt_access_key_2026"),
+  JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
+  JWT_REFRESH_SECRET: z.string().default("polaris_super_secret_refresh_token_key_change_in_production_2026"),
   JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
+  AUTH_COOKIE_SECURE: z.preprocess((val) => val === "true" || val === true, z.boolean()).default(false),
+  AUTH_COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).default("lax"),
+  SEED_ADMIN_EMAIL: z.string().email().default("admin@polaris.local"),
+  SEED_ADMIN_PASSWORD: z.string().default("Polaris@Admin2026!"),
   AI_SERVICE_URL: z.string().default("http://localhost:8000"),
   SOCKET_URL: z.string().default("http://localhost:5000")
 });

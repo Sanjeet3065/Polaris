@@ -2,6 +2,7 @@ import { Router } from "express";
 import { stationController } from "../controllers/station.controller";
 import { validateRequest } from "../middleware/validateRequest";
 import { stationIdParamSchema } from "../validators/station.validator";
+import { authenticate } from "../middleware/authenticate";
 
 import telemetryRoutes from "./telemetry.routes";
 import energyRoutes from "./energy.routes";
@@ -13,6 +14,9 @@ import inventoryRoutes from "./inventory.routes";
 import maintenanceRoutes from "./maintenance.routes";
 
 const router = Router();
+
+// Protect all station endpoints with JWT authentication (ADMIN, OPERATOR, VIEWER)
+router.use(authenticate);
 
 // Mount nested station sub-routers
 router.use("/:stationId/telemetry", telemetryRoutes);

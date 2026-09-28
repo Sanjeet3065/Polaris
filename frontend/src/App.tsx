@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "./context/AuthContext";
 import { StationProvider } from "./context/StationContext";
 import { AppRoutes } from "./routes/AppRoutes";
 
@@ -17,11 +18,13 @@ const queryClient = new QueryClient({
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <StationProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </StationProvider>
+      <AuthProvider>
+        <StationProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </StationProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };

@@ -1,3 +1,10 @@
+import dotenv from "dotenv";
+import path from "path";
+
+// Load environment variables for seed execution
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
 import {
   PrismaClient,
   StationStatus,
@@ -8,8 +15,10 @@ import {
   InventoryStatus,
   MaintenanceType,
   MaintenanceStatus,
-  TelemetryStatus
+  TelemetryStatus,
+  UserRole
 } from "@prisma/client";
+import { PasswordService } from "../src/utils/password";
 
 const prisma = new PrismaClient();
 
@@ -664,6 +673,71 @@ async function main() {
     ]
   });
 
+  // ------------------------------------------------------------
+  // 10. AUTHENTICATION & ACCESS CONTROL SEED (PHASE 3)
+  // ------------------------------------------------------------
+  console.log("Seeding Phase 3 Authentication Users (Idempotent)...");
+  
+  const adminEmail = (process.env.SEED_ADMIN_EMAIL || "admin@polaris.local").toLowerCase().trim();
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Polaris@Admin2026!";
+  const adminHash = await PasswordService.hashPassword(adminPassword);
+
+  const adminUser = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      name: "Dr. Rajesh Sharma (Lead Commander)",
+      role: UserRole.ADMIN,
+      isActive: true
+    },
+    create: {
+      email: adminEmail,
+      name: "Dr. Rajesh Sharma (Lead Commander)",
+      passwordHash: adminHash,
+      role: UserRole.ADMIN,
+      isActive: true
+    }
+  });
+
+  const operatorEmail = "operator@polaris.local";
+  const operatorPassword = process.env.SEED_OPERATOR_PASSWORD || "Polaris@Operator2026!";
+  const operatorHash = await PasswordService.hashPassword(operatorPassword);
+
+  const operatorUser = await prisma.user.upsert({
+    where: { email: operatorEmail },
+    update: {
+      name: "Vikram Malhotra (Operations Lead)",
+      role: UserRole.OPERATOR,
+      isActive: true
+    },
+    create: {
+      email: operatorEmail,
+      name: "Vikram Malhotra (Operations Lead)",
+      passwordHash: operatorHash,
+      role: UserRole.OPERATOR,
+      isActive: true
+    }
+  });
+
+  const viewerEmail = "viewer@polaris.local";
+  const viewerPassword = process.env.SEED_VIEWER_PASSWORD || "Polaris@Viewer2026!";
+  const viewerHash = await PasswordService.hashPassword(viewerPassword);
+
+  const viewerUser = await prisma.user.upsert({
+    where: { email: viewerEmail },
+    update: {
+      name: "Dr. Ananya Sen (Research Scientist)",
+      role: UserRole.VIEWER,
+      isActive: true
+    },
+    create: {
+      email: viewerEmail,
+      name: "Dr. Ananya Sen (Research Scientist)",
+      passwordHash: viewerHash,
+      role: UserRole.VIEWER,
+      isActive: true
+    }
+  });
+
   console.log("=================================================");
   console.log("✅ Seed completed successfully!");
   console.log(`- Stations created/updated: 2 (Maitri & Bharati)`);
@@ -675,6 +749,7 @@ async function main() {
   console.log(`- Alerts: 4`);
   console.log(`- Operational timeline events: 5`);
   console.log(`- Inventory items: 7`);
+  console.log(`- Users seeded (ADMIN, OPERATOR, VIEWER): 3`);
   console.log("=================================================");
 }
 

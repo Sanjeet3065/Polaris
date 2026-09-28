@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { env } from "./config/env";
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
@@ -28,9 +29,10 @@ export const createApp = (): Application => {
     })
   );
 
-  // Body Parsing Middleware
+  // Body and Cookie Parsing Middleware
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+  app.use(cookieParser());
 
   // Request Auditing & Logging
   app.use(requestLogger);

@@ -85,6 +85,12 @@ enum TelemetryStatus {
   CRITICAL
 }
 
+enum UserRole {
+  ADMIN
+  OPERATOR
+  VIEWER
+}
+
 // ============================================================
 // CORE ENTITIES
 // ============================================================
@@ -307,4 +313,67 @@ model MaintenanceRecord {
   @@index([equipmentId, status])
   @@index([scheduledAt])
   @@map("maintenance_records")
+}
+
+// ============================================================
+// AUTHENTICATION & ACCESS CONTROL (PHASE 3)
+// ============================================================
+
+/// Registered station operator, scientist, or administrative user
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique /// Normalized lowercase email address
+  passwordHash String    /// Strong cryptographic password hash (Argon2id)
+  name         String    /// Full name of the user
+  role         UserRole  @default(VIEWER) /// Role-Based Access Level (ADMIN, OPERATOR, VIEWER)
+  isActive     Boolean   @default(true) /// Account status flag (active / deactivated)
+  lastLoginAt  DateTime? /// UTC timestamp of the most recent successful login
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relationships
+  sessions   Session[]
+  authEvents AuthenticationEvent[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+/// Active user refresh token session with cryptographic token rotation
+model Session {
+  id               String    @id @default(uuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokenHash String    @unique /// Cryptographic SHA-256 hash of the issued refresh token
+  expiresAt        DateTime  /// UTC expiration timestamp
+  revokedAt        DateTime? /// UTC revocation timestamp (set on logout, rotation, or security invalidation)
+  userAgent        String?   /// Browser or client User-Agent string
+  ipAddress        String?   /// Originating client IP address
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([refreshTokenHash])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+/// Security audit trail for authentication, authorization, and administrative events
+model AuthenticationEvent {
+  id        String   @id @default(uuid())
+  userId    String?  /// Nullable user identifier for failed logins or deleted accounts
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  eventType String   /// LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT, REFRESH, TOKEN_REVOKED, PASSWORD_CHANGED, ROLE_CHANGED, USER_CREATED, USER_UPDATED, USER_STATUS_CHANGED, etc.
+  success   Boolean  /// Whether the attempted action succeeded
+  ipAddress String?  /// Originating client IP
+  userAgent String?  /// Client User-Agent
+  metadata  String?  /// Optional JSON string containing safe contextual audit data
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("authentication_events")
 }

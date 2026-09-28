@@ -11,6 +11,7 @@ import { maintenanceService } from "../services/maintenance.service";
 import { healthService } from "../services/health.service";
 import { historyQuerySchema, paginationQuerySchema } from "../validators/station.validator";
 import { ApiError } from "../utils/apiError";
+import { runAuthTests } from "./auth-tests";
 
 interface TestReport {
   name: string;
@@ -234,12 +235,15 @@ async function runAllTests() {
   const totalTests = results.length;
   const passedTests = results.filter((r) => r.passed).length;
   const failedTests = results.filter((r) => !r.passed).length;
-  console.log(`Test Execution Summary: ${passedTests}/${totalTests} Passed (${failedTests} Failed)`);
-  console.log("=================================================");
+  console.log(`Phase 2 Test Execution Summary: ${passedTests}/${totalTests} Passed (${failedTests} Failed)`);
+  console.log("=================================================\n");
 
   if (failedTests > 0) {
     process.exit(1);
   }
+
+  // Execute Phase 3 Auth & RBAC Test Suite
+  await runAuthTests();
 }
 
 runAllTests()

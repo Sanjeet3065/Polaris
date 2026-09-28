@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   ChevronDown,
   Bell,
   Clock,
-  Radio
+  Radio,
+  User,
+  LogOut,
+  KeyRound,
+  Shield
 } from "lucide-react";
 import { useStation } from "../../context/StationContext";
+import { useAuth } from "../../context/AuthContext";
 import { StationFilter } from "../../types";
 import { formatUtcTime } from "../../utils/formatters";
+import { ChangePasswordModal } from "../auth/ChangePasswordModal";
 import { cn } from "../../lib/utils";
 
 interface TopHeaderProps {
@@ -18,12 +24,16 @@ interface TopHeaderProps {
 
 export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => {
   const { selectedStation, setSelectedStation, kpiSummary, alertsList } = useStation();
+  const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Live ticking UTC clock
   const [currentTime, setCurrentTime] = useState<string>(formatUtcTime());
   const [stationDropdownOpen, setStationDropdownOpen] = useState<boolean>(false);
   const [notificationsOpen, setNotificationsOpen] = useState<boolean>(false);
+  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -194,7 +204,119 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
             </div>
           )}
         </div>
+
+        {/* User Account Capsule & Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setUserMenuOpen((prev) => !prev)}
+            className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900/80 p-1.5 hover:border-sky-500/50 hover:bg-slate-900 transition-all focus:outline-none"
+            aria-label="User account menu"
+            aria-expanded={userMenuOpen}
+          >
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-sky-400 to-indigo-600 text-xs font-bold text-slate-950 shadow-sm">
+              {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
+            </div>
+            <div className="hidden md:flex flex-col text-left">
+              <span className="text-xs font-semibold text-slate-200 leading-tight max-w-[110px] truncate">
+                {user?.name || "Station User"}
+              </span>
+              <span
+                className={cn(
+                  "text-[9px] font-mono font-bold leading-tight uppercase",
+                  user?.role === "ADMIN"
+                    ? "text-amber-400"
+                    : user?.role === "OPERATOR"
+                    ? "text-sky-400"
+                    : "text-emerald-400"
+                )}
+              >
+                {user?.role || "OPERATOR"}
+              </span>
+            </div>
+            <ChevronDown
+              className={cn(
+                "h-3 w-3 text-slate-400 transition-transform duration-200 hidden md:block",
+                userMenuOpen && "rotate-180"
+              )}
+            />
+          </button>
+
+          {/* User Dropdown Menu */}
+          {userMenuOpen && (
+            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-700/80 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in zoom-in-95">
+              <div className="px-3 py-2 border-b border-slate-800">
+                <div className="font-semibold text-xs text-slate-100 truncate">{user?.name}</div>
+                <div className="text-[10px] font-mono text-slate-400 truncate">{user?.email}</div>
+                <div className="mt-2 flex items-center gap-1.5">
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold border",
+                      user?.role === "ADMIN"
+                        ? "bg-amber-950/80 text-amber-300 border-amber-700/60"
+                        : user?.role === "OPERATOR"
+                        ? "bg-sky-950/80 text-sky-300 border-sky-700/60"
+                        : "bg-emerald-950/80 text-emerald-300 border-emerald-700/60"
+                    )}
+                  >
+                    <Shield className="h-2.5 w-2.5" />
+                    <span>{user?.role}</span>
+                  </span>
+                  <span className="text-[10px] text-emerald-400 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Active Session</span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="py-1">
+                {user?.role === "ADMIN" && (
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      navigate("/admin/users");
+                    }}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                  >
+                    <Shield className="h-3.5 w-3.5 text-amber-400" />
+                    <span>Manage Personnel</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    setChangePasswordOpen(true);
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                >
+                  <KeyRound className="h-3.5 w-3.5 text-sky-400" />
+                  <span>Change Password</span>
+                </button>
+              </div>
+
+              <div className="border-t border-slate-800 pt-1">
+                <button
+                  onClick={async () => {
+                    setUserMenuOpen(false);
+                    await logout();
+                    navigate("/login");
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-bold text-red-400 hover:bg-red-950/40 hover:text-red-300 transition-colors"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span>Sign Out of Station</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Change Password Dialog */}
+      <ChangePasswordModal
+        isOpen={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </header>
   );
 };

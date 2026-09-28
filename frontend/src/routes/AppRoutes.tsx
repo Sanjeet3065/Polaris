@@ -6,6 +6,10 @@ import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { ArchitectureOverviewPage } from "../pages/ArchitectureOverviewPage";
+import { LoginPage } from "../pages/LoginPage";
+import { UserManagementPage } from "../pages/admin/UserManagementPage";
+import { AuthAuditPage } from "../pages/admin/AuthAuditPage";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
   Box,
@@ -24,10 +28,15 @@ export const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      <Route element={<AppShell />}>
-        {/* Default route redirect to Overview */}
-        <Route path="/" element={<Navigate to="/overview" replace />} />
-        <Route path="/overview" element={<OverviewPage />} />
+      {/* Public Login Route */}
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* Protected Polar Operations Terminal */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppShell />}>
+          {/* Default route redirect to Overview */}
+          <Route path="/" element={<Navigate to="/overview" replace />} />
+          <Route path="/overview" element={<OverviewPage />} />
 
         {/* Polished Subsystem Placeholders for Future Phases */}
         <Route
@@ -215,9 +224,16 @@ export const AppRoutes: React.FC = () => {
         {/* System Settings & Diagnostics */}
         <Route path="/settings" element={<SettingsPage />} />
 
+        {/* Administration Routes - Restricted to ADMIN */}
+        <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+          <Route path="/admin/users" element={<UserManagementPage />} />
+          <Route path="/admin/auth-events" element={<AuthAuditPage />} />
+        </Route>
+
         {/* 404 Catch-All Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
-    </Routes>
-  );
+    </Route>
+  </Routes>
+);
 };
