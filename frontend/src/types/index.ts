@@ -4,22 +4,31 @@
  */
 
 export type StationCode = "MAITRI" | "BHARATI";
+export type StationFilter = "MAITRI" | "BHARATI" | "ALL";
+
+export type StationStatus = "OPERATIONAL" | "DEGRADED" | "WARNING" | "CRITICAL" | "OFFLINE";
+export type AlertSeverity = "INFO" | "WARNING" | "CRITICAL" | "EMERGENCY";
+export type BatteryStatus = "CHARGING" | "STABLE" | "DISCHARGING";
+export type EquipmentStatus = "HEALTHY" | "WARNING" | "CRITICAL" | "OFFLINE";
+
+export interface StationLocation {
+  lat: number;
+  lng: number;
+  altitudeMeters: number;
+  region: string;
+}
 
 export interface Station {
   id: string;
   code: StationCode;
   name: string;
   tagline: string;
-  location: {
-    lat: number;
-    lng: number;
-    altitudeMeters: number;
-    region: string;
-  };
+  location: StationLocation;
   commissionedYear: number;
-  operationalStatus: "ACTIVE" | "MAINTENANCE" | "EMERGENCY_MINIMAL";
+  operationalStatus: StationStatus;
   personnelCapacity: number;
   currentPersonnelCount: number;
+  systemHealthPercent: number;
 }
 
 export interface Building {
@@ -40,13 +49,14 @@ export interface Room {
 
 export interface Equipment {
   id: string;
-  roomId: string;
+  stationId: StationCode;
+  roomId?: string;
   name: string;
-  category: "GENERATOR" | "HVAC" | "WATER_MAKER" | "SOLAR_ARRAY" | "BATTERY_BANK" | "COMMUNICATION" | "LAB_ANALYZER";
-  status: "OPTIMAL" | "WARNING" | "CRITICAL" | "OFFLINE";
+  category: "POWER" | "HVAC" | "LIFE_SUPPORT" | "COMMUNICATION" | "WATER_SYSTEM" | "SCIENCE";
+  status: EquipmentStatus;
   healthScore: number; // 0 - 100
-  installedDate: string;
-  lastMaintainedDate: string;
+  lastChecked: string;
+  modelNumber?: string;
   digitalTwinModelRef?: string;
 }
 
@@ -58,9 +68,11 @@ export interface EnvironmentalTelemetry {
   atmosphericPressureHpa: number;
   windSpeedKmh: number;
   windDirectionDegrees: number;
+  windDirectionCompass: string;
   visibilityKm: number;
   solarRadiationWattsPerM2: number;
   snowfallMmPerHour: number;
+  status: "NORMAL" | "WARNING" | "CRITICAL";
 }
 
 export interface EnergyTelemetry {
@@ -68,9 +80,13 @@ export interface EnergyTelemetry {
   timestamp: string;
   solarGenerationKw: number;
   dieselGenerationKw: number;
-  totalLoadKw: number;
-  batteryStateOfChargePercent: number;
+  totalGenerationKw: number;
+  totalConsumptionKw: number;
+  netPowerBalanceKw: number;
+  batteryPercentage: number;
+  batteryStatus: BatteryStatus;
   batteryVoltageV: number;
+  fuelReservesPercent: number;
   fuelReservesLiters: number;
   fuelAutonomyDaysRemaining: number;
 }
@@ -78,13 +94,45 @@ export interface EnergyTelemetry {
 export interface Alert {
   id: string;
   stationCode: StationCode;
-  severity: "INFO" | "WARNING" | "CRITICAL" | "EMERGENCY";
+  severity: AlertSeverity;
   source: "ENVIRONMENT" | "ENERGY" | "EQUIPMENT" | "INVENTORY" | "LOGISTICS" | "COMMUNICATION" | "SYSTEM";
   title: string;
   description: string;
   status: "OPEN" | "ACKNOWLEDGED" | "RESOLVED";
   createdAt: string;
   acknowledgedAt?: string;
+}
+
+export interface OperationalEvent {
+  id: string;
+  timestamp: string;
+  timeFormatted: string;
+  eventType: "TELEMETRY" | "HEALTH_CHECK" | "BATTERY" | "INVENTORY" | "WEATHER" | "MAINTENANCE";
+  description: string;
+  status: "SUCCESS" | "INFO" | "WARNING" | "CRITICAL";
+  stationCode?: StationCode;
+}
+
+export interface HourlyPowerDataPoint {
+  time: string;
+  generation: number;
+  consumption: number;
+}
+
+export interface HourlyTemperatureDataPoint {
+  time: string;
+  temperature: number;
+  windSpeed: number;
+}
+
+export interface StationComparisonMetric {
+  metric: string;
+  unit: string;
+  maitriValue: number;
+  bharatiValue: number;
+  displayMaitri: string;
+  displayBharati: string;
+  benchmark: "higher-better" | "lower-better" | "neutral";
 }
 
 export type UserRole =

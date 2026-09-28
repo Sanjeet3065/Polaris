@@ -1,0 +1,99 @@
+import React from "react";
+import { CheckCircle2, AlertTriangle, AlertOctagon, PowerOff, ShieldAlert } from "lucide-react";
+import { StationStatus } from "../../types";
+import { cn } from "../../lib/utils";
+
+interface StatusBadgeProps {
+  status: StationStatus | "HEALTHY";
+  className?: string;
+  size?: "sm" | "md";
+  showDotOnly?: boolean;
+}
+
+export const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
+  className,
+  size = "md",
+  showDotOnly = false
+}) => {
+  const config = {
+    OPERATIONAL: {
+      label: "OPERATIONAL",
+      icon: CheckCircle2,
+      dotClass: "bg-emerald-400",
+      containerClass: "bg-emerald-950/70 text-emerald-300 border-emerald-800/60 shadow-aurora-glow",
+      symbol: "●"
+    },
+    HEALTHY: {
+      label: "HEALTHY",
+      icon: CheckCircle2,
+      dotClass: "bg-emerald-400",
+      containerClass: "bg-emerald-950/70 text-emerald-300 border-emerald-800/60 shadow-aurora-glow",
+      symbol: "●"
+    },
+    DEGRADED: {
+      label: "DEGRADED",
+      icon: AlertTriangle,
+      dotClass: "bg-amber-400",
+      containerClass: "bg-amber-950/70 text-amber-300 border-amber-800/60",
+      symbol: "▲"
+    },
+    WARNING: {
+      label: "WARNING",
+      icon: AlertTriangle,
+      dotClass: "bg-amber-400",
+      containerClass: "bg-amber-950/70 text-amber-300 border-amber-800/60",
+      symbol: "▲"
+    },
+    CRITICAL: {
+      label: "CRITICAL",
+      icon: AlertOctagon,
+      dotClass: "bg-red-400 animate-pulse",
+      containerClass: "bg-red-950/70 text-red-300 border-red-800/60 shadow-alert-glow",
+      symbol: "■"
+    },
+    OFFLINE: {
+      label: "OFFLINE",
+      icon: PowerOff,
+      dotClass: "bg-slate-500",
+      containerClass: "bg-slate-900 text-slate-400 border-slate-700",
+      symbol: "○"
+    }
+  }[status] || {
+    label: status,
+    icon: ShieldAlert,
+    dotClass: "bg-slate-400",
+    containerClass: "bg-slate-900 text-slate-400 border-slate-800",
+    symbol: "●"
+  };
+
+  const Icon = config.icon;
+
+  if (showDotOnly) {
+    return (
+      <span
+        title={config.label}
+        className={cn("inline-block h-2.5 w-2.5 rounded-full ring-2 ring-slate-950", config.dotClass, className)}
+      />
+    );
+  }
+
+  const sizeClasses = {
+    sm: "px-2 py-0.5 text-xs font-medium gap-1",
+    md: "px-2.5 py-1 text-xs font-semibold gap-1.5"
+  };
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full border transition-all duration-200 select-none",
+        sizeClasses[size],
+        config.containerClass,
+        className
+      )}
+    >
+      <Icon className={size === "sm" ? "h-3 w-3 shrink-0" : "h-3.5 w-3.5 shrink-0"} />
+      <span className="tracking-wide uppercase">{config.label}</span>
+    </span>
+  );
+};

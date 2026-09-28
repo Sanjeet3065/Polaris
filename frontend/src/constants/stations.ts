@@ -13,9 +13,10 @@ export const ANTARCTIC_STATIONS: Record<string, Station> = {
       region: "Larsemann Hills, East Antarctica"
     },
     commissionedYear: 2012,
-    operationalStatus: "ACTIVE",
+    operationalStatus: "OPERATIONAL",
     personnelCapacity: 47,
-    currentPersonnelCount: 23
+    currentPersonnelCount: 23,
+    systemHealthPercent: 94
   },
   MAITRI: {
     id: "station-maitri-02",
@@ -29,8 +30,9 @@ export const ANTARCTIC_STATIONS: Record<string, Station> = {
       region: "Schirmacher Oasis, Queen Maud Land"
     },
     commissionedYear: 1989,
-    operationalStatus: "ACTIVE",
+    operationalStatus: "OPERATIONAL",
     personnelCapacity: 25,
-    currentPersonnelCount: 18
+    currentPersonnelCount: 18,
+    systemHealthPercent: 98
   }
 };
