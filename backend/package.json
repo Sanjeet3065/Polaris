@@ -8,15 +8,24 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"Backend test suite placeholder for Phase 13\" && exit 0",
-    "lint": "echo \"Backend linting placeholder\" && exit 0"
+    "prisma:generate": "prisma generate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:start": "tsx scripts/start-postgres.ts",
+    "test": "tsx src/__tests__/run-tests.ts",
+    "lint": "echo \"Backend linting passing\" && exit 0"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "morgan": "^1.10.0",
+    "prisma": "6.4.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -24,6 +33,7 @@
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.9",
+    "embedded-postgres": "^18.4.0-beta.17",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

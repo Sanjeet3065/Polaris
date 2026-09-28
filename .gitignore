@@ -44,6 +44,8 @@ lerna-debug.log*
 *.sqlite
 *.sqlite3
 *.db
+backend/data/
+data/
 
 # Testing & Coverage
 coverage/

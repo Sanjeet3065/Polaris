@@ -1,0 +1,310 @@
+// ============================================================
+// POLARIS — Prisma Database Schema
+// Polar Operations & Logistics Automated Remote Intelligence System
+// Smart India Hackathon 2026 — Problem Statement: SIH26060
+// Ministry of Earth Sciences (MoES) / NCPOR
+// Target Stations: Maitri & Bharati
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum StationStatus {
+  OPERATIONAL
+  DEGRADED
+  WARNING
+  CRITICAL
+  OFFLINE
+}
+
+enum EquipmentCategory {
+  GENERATOR
+  HVAC
+  POWER_CONVERTER
+  COMMUNICATION
+  WATER_SYSTEM
+  BATTERY
+  FUEL_SYSTEM
+  OTHER
+}
+
+enum EquipmentStatus {
+  OPERATIONAL
+  DEGRADED
+  WARNING
+  CRITICAL
+  OFFLINE
+  MAINTENANCE
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum AlertStatus {
+  ACTIVE
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum InventoryStatus {
+  IN_STOCK
+  LOW_STOCK
+  OUT_OF_STOCK
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  INSPECTION
+  EMERGENCY
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TelemetryStatus {
+  NORMAL
+  WARNING
+  CRITICAL
+}
+
+// ============================================================
+// CORE ENTITIES
+// ============================================================
+
+/// Indian Antarctic Research Station (Maitri / Bharati)
+model Station {
+  id                    String                 @id @default(uuid())
+  code                  String                 @unique /// Unique station code: MAITRI, BHARATI
+  name                  String                 /// Official station name
+  description           String?                /// Detailed geographic & mission overview
+  tagline               String?                /// Station motto or subtitle
+  latitude              Float                  /// Decimal latitude coordinate (WGS84)
+  longitude             Float                  /// Decimal longitude coordinate (WGS84)
+  altitude              Float                  /// Altitude above sea level in meters
+  timezone              String                 /// Local operating timezone (e.g. UTC+05:00 / UTC+00:00)
+  status                StationStatus          @default(OPERATIONAL)
+  healthPercent         Float                  @default(100.0) /// Overall station composite health index (0 - 100)
+  commissionedYear      Int?                   /// Year the station was established/commissioned
+  personnelCapacity     Int?                   /// Total summer bed capacity
+  currentPersonnel      Int?                   /// Current active expedition members
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  // Relationships
+  telemetry             StationTelemetry[]
+  energyReadings        EnergyReading[]
+  environmentalReadings EnvironmentalReading[]
+  equipment             Equipment[]
+  alerts                Alert[]
+  events                OperationalEvent[]
+  inventory             InventoryItem[]
+
+  @@map("stations")
+}
+
+/// Periodic raw station telemetry observations (IoT / SCADA ingestion)
+model StationTelemetry {
+  id            String   @id @default(uuid())
+  stationId     String
+  station       Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  recordedAt    DateTime /// Timestamp of sensor measurement in UTC
+  temperature   Float    /// Ambient temperature in degrees Celsius (e.g. -31.4)
+  humidity      Float    /// Relative humidity percentage (0 - 100)
+  pressure      Float    /// Barometric pressure in hPa
+  windSpeed     Float    /// Wind speed in km/h
+  windDirection Float    /// Wind direction azimuth in degrees (0 - 360)
+  visibility    Float    /// Optical visibility distance in kilometers
+  createdAt     DateTime @default(now())
+
+  @@index([stationId, recordedAt])
+  @@map("station_telemetry")
+}
+
+/// Power generation, consumption, battery storage & fuel reserves
+model EnergyReading {
+  id                String   @id @default(uuid())
+  stationId         String
+  station           Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  recordedAt        DateTime /// Observation timestamp in UTC
+  generationKw      Float    /// Total active power generated in kW
+  solarKw           Float    @default(0) /// Solar photovoltaic generation in kW
+  dieselKw          Float    @default(0) /// Diesel generator power in kW
+  consumptionKw     Float    /// Total load consumed by station life support & labs in kW
+  netPowerKw        Float    /// Net power balance: generationKw - consumptionKw
+  batteryPercent    Float    /// Main battery bank state-of-charge percentage (0 - 100)
+  batteryVoltage    Float    /// Battery DC bus voltage in Volts
+  fuelPercent       Float    /// Station reserve fuel storage percentage (0 - 100)
+  fuelLiters        Float    @default(0) /// Usable fuel reserves in Liters
+  fuelDaysRemaining Float    @default(0) /// Autonomy days remaining at current burn rate
+  createdAt         DateTime @default(now())
+
+  @@index([stationId, recordedAt])
+  @@map("energy_readings")
+}
+
+/// Detailed atmospheric & microclimate readings
+model EnvironmentalReading {
+  id                   String          @id @default(uuid())
+  stationId            String
+  station              Station         @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  recordedAt           DateTime        /// Observation timestamp in UTC
+  temperature          Float           /// Ambient temperature in degrees Celsius
+  humidity             Float           /// Relative humidity percentage
+  pressure             Float           /// Barometric pressure in hPa
+  windSpeed            Float           /// Wind speed in km/h
+  windDirection        Float           /// Wind azimuth degrees (0 - 360)
+  windDirectionCompass String?         /// Cardinal direction (e.g. "SE", "NW")
+  visibility           Float           /// Visibility range in kilometers
+  solarRadiation       Float           @default(0) /// Solar irradiance in W/m²
+  snowfallRate         Float           @default(0) /// Snow accumulation rate in mm/h
+  status               TelemetryStatus @default(NORMAL)
+  createdAt            DateTime        @default(now())
+
+  @@index([stationId, recordedAt])
+  @@map("environmental_readings")
+}
+
+/// Critical mechanical, electrical, and communication machinery
+model Equipment {
+  id                 String              @id @default(uuid())
+  stationId          String
+  station            Station             @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  code               String              /// Station-unique equipment tag (e.g. MAITRI-GEN-01)
+  name               String              /// Common identifier (e.g. Primary Diesel Generator #1)
+  category           EquipmentCategory
+  status             EquipmentStatus     @default(OPERATIONAL)
+  healthPercent      Float               @default(100.0) /// Real-time calculated health score (0 - 100)
+  manufacturer       String?
+  model              String?
+  installedAt        DateTime?
+  lastServiceAt      DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  // Relationships
+  healthRecords      EquipmentHealth[]
+  maintenanceRecords MaintenanceRecord[]
+  alerts             Alert[]
+
+  @@unique([stationId, code])
+  @@index([stationId, status])
+  @@map("equipment")
+}
+
+/// Historical diagnostic measurements for predictive maintenance
+model EquipmentHealth {
+  id            String          @id @default(uuid())
+  equipmentId   String
+  equipment     Equipment       @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  recordedAt    DateTime        /// Diagnostic observation timestamp in UTC
+  healthPercent Float           /// Health rating percentage at time of observation
+  temperature   Float?          /// Operating temperature in degrees Celsius
+  vibration     Float?          /// Vibration index (mm/s RMS or G)
+  runtimeHours  Float?          /// Cumulative runtime hours
+  status        EquipmentStatus
+  notes         String?         /// Diagnostic notes or anomalous flags
+  createdAt     DateTime        @default(now())
+
+  @@index([equipmentId, recordedAt])
+  @@map("equipment_health")
+}
+
+/// System, hardware, and environmental operational alerts
+model Alert {
+  id             String        @id @default(uuid())
+  stationId      String
+  station        Station       @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  equipmentId    String?       /// Optional link to specific malfunctioning equipment
+  equipment      Equipment?    @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  severity       AlertSeverity
+  title          String        /// Brief alert headline
+  description    String        /// Detailed alert reason & context
+  status         AlertStatus   @default(ACTIVE)
+  source         String?       /// Originating subsystem (ENERGY, ENVIRONMENT, EQUIPMENT, etc.)
+  occurredAt     DateTime      /// Timestamp when anomaly occurred (UTC)
+  acknowledgedAt DateTime?     /// Timestamp when operator acknowledged (UTC)
+  resolvedAt     DateTime?     /// Timestamp when anomaly cleared (UTC)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([stationId, status])
+  @@index([stationId, severity])
+  @@index([occurredAt])
+  @@map("alerts")
+}
+
+/// Chronological mission events and audit timeline records
+model OperationalEvent {
+  id          String   @id @default(uuid())
+  stationId   String
+  station     Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  type        String   /// Event classification (TELEMETRY, HEALTH_CHECK, BATTERY, INVENTORY, WEATHER, MAINTENANCE)
+  title       String   /// Brief title of the log item
+  description String   /// Full description of the event
+  occurredAt  DateTime /// Event timestamp in UTC
+  metadata    String?  /// JSON string containing contextual parameters if needed
+  createdAt   DateTime @default(now())
+
+  @@index([stationId, occurredAt])
+  @@map("operational_events")
+}
+
+/// Station logistics, spare parts, critical reserves, and provisions
+model InventoryItem {
+  id              String          @id @default(uuid())
+  stationId       String
+  station         Station         @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  sku             String          /// Station-unique Stock Keeping Unit (e.g. FUEL-JET-A1)
+  name            String          /// Item name (e.g. Aviation Turbine Fuel / Jet A-1)
+  category        String          /// Category (Fuel, Spare Parts, Medical, Rations, Science)
+  quantity        Float           /// Current available stock quantity
+  unit            String          /// Unit of measurement (Liters, Units, Kg, Packs)
+  minimumQuantity Float           /// Safety threshold before triggering low-stock alert
+  status          InventoryStatus @default(IN_STOCK)
+  lastUpdatedAt   DateTime        @default(now())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([stationId, sku])
+  @@index([stationId, status])
+  @@map("inventory_items")
+}
+
+/// Equipment maintenance schedules, inspections, and repair logs
+model MaintenanceRecord {
+  id          String            @id @default(uuid())
+  equipmentId String
+  equipment   Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  title       String            /// Work order title
+  description String            /// Work order details & scope
+  type        MaintenanceType   @default(PREVENTIVE)
+  status      MaintenanceStatus @default(SCHEDULED)
+  scheduledAt DateTime          /// Planned maintenance window in UTC
+  startedAt   DateTime?         /// Actual start time in UTC
+  completedAt DateTime?         /// Actual completion time in UTC
+  notes       String?           /// Post-maintenance inspection notes & technician observations
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([equipmentId, status])
+  @@index([scheduledAt])
+  @@map("maintenance_records")
+}

@@ -3,10 +3,11 @@ import { healthService } from "../services/health.service";
 import { ApiResponse } from "../utils/apiResponse";
 
 export class HealthController {
-  public getHealth = (req: Request, res: Response, next: NextFunction): void => {
+  public getHealth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const health = healthService.getSystemHealth();
-      ApiResponse.success(res, health);
+      const health = await healthService.getSystemHealth();
+      const statusCode = health.status === "healthy" ? 200 : 503;
+      ApiResponse.success(res, health, statusCode);
     } catch (error) {
       next(error);
     }

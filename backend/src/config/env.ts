@@ -10,7 +10,9 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(5000),
   HOST: z.string().default("0.0.0.0"),
   CORS_ORIGIN: z.string().default("http://localhost:5173"),
-  DATABASE_URL: z.string().optional(),
+  DATABASE_URL: z
+    .string()
+    .default("postgresql://polaris_admin:polaris_secure_password@localhost:5432/polaris_db?schema=public"),
   JWT_SECRET: z.string().default("polaris_default_jwt_secret_phase0"),
   JWT_EXPIRES_IN: z.string().default("1h"),
   JWT_REFRESH_SECRET: z.string().default("polaris_default_refresh_secret_phase0"),

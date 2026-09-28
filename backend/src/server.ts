@@ -21,8 +21,10 @@ const startServer = (): void => {
   });
 
   // Graceful Shutdown Signals
-  const gracefulShutdown = (signal: string) => {
+  const gracefulShutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Shutting down POLARIS backend gracefully...`);
+    const { disconnectPrisma } = await import("./config/prisma");
+    await disconnectPrisma();
     server.close(() => {
       logger.info("HTTP server closed.");
       process.exit(0);
