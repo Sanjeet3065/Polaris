@@ -1,0 +1,89 @@
+version: "3.8"
+
+services:
+  # ========================================================
+  # Primary Relational & Time-Series Database
+  # ========================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: polaris_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-polaris_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-polaris_secure_password}
+      POSTGRES_DB: ${POSTGRES_DB:-polaris_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U polaris_admin -d polaris_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polaris_network
+
+  # ========================================================
+  # Node.js + Express + TypeScript API Backend & WebSockets
+  # ========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: polaris_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgresql://polaris_admin:polaris_secure_password@postgres:5432/polaris_db?schema=public
+      JWT_SECRET: ${JWT_SECRET:-polaris_super_secret_jwt_key_change_in_production_2026}
+      AI_SERVICE_URL: http://ai-service:8000
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - polaris_network
+
+  # ========================================================
+  # Python + FastAPI Predictive AI & Analytics Service
+  # ========================================================
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: ../docker/Dockerfile.ai
+    container_name: polaris_ai_service
+    restart: unless-stopped
+    environment:
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - polaris_network
+
+  # ========================================================
+  # React + Vite + TypeScript Frontend Application
+  # ========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: polaris_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - polaris_network
+
+networks:
+  polaris_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
