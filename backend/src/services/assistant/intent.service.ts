@@ -32,7 +32,13 @@ export class IntentService {
       "<script>",
       "show all tokens",
       "show all passwords",
-      "process.env"
+      "process.env",
+      "dan mode",
+      "jailbreak",
+      "disable security",
+      "bypass security",
+      "unrestricted mode",
+      "ignore station permissions"
     ];
 
     return injectionPatterns.some((pattern) => lower.includes(pattern));

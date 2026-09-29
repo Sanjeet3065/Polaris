@@ -78,9 +78,16 @@ export class PolarisWebSocketServer {
 
         // 2. Validate Origin Header against CORS_ORIGIN (Section 40)
         const origin = req.headers.origin;
-        if (origin && env.NODE_ENV === "production") {
-          if (origin !== env.CORS_ORIGIN) {
-            logger.warn("WEBSOCKET_FORBIDDEN_ORIGIN: Origin mismatch in production", { origin });
+        if (origin && env.NODE_ENV === "production" && env.CORS_ORIGIN !== "*") {
+          const allowedOrigins = env.CORS_ORIGIN.split(",").map((o) => o.trim());
+          const isAllowed =
+            allowedOrigins.includes(origin) ||
+            origin.endsWith(".vercel.app") ||
+            origin.includes("localhost") ||
+            origin.includes("127.0.0.1");
+
+          if (!isAllowed) {
+            logger.warn("WEBSOCKET_FORBIDDEN_ORIGIN: Origin mismatch in production", { origin, allowedOrigins });
             socket.write("HTTP/1.1 403 Forbidden\r\n\r\nOrigin not allowed");
             socket.destroy();
             return;

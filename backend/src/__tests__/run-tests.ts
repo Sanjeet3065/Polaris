@@ -19,6 +19,7 @@ import { runLogisticsInventoryTests } from "./logistics-inventory-tests";
 import { runAlertsIncidentsTests } from "./alerts-incidents-tests";
 import { runAnalyticsReportsTests } from "./analytics-reports-tests";
 import { runAssistantTests } from "./assistant-tests";
+import { runSecurityTests } from "./security-tests";
 
 interface TestReport {
   name: string;
@@ -272,6 +273,9 @@ async function runAllTests() {
 
   // Execute Phase 12 AI Operations Assistant Test Suite
   await runAssistantTests();
+
+  // Execute Phase 13 Security Hardening & Complete Verification Suite
+  await runSecurityTests();
 }
 
 runAllTests()

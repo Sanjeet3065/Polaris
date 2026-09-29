@@ -21,7 +21,22 @@ class StructuredLogger {
   private sanitize(data: unknown): unknown {
     if (!data || typeof data !== "object") return data;
 
-    const sensitiveKeys = ["password", "token", "jwt", "secret", "authorization", "apiKey", "key"];
+    const sensitiveKeys = [
+      "password",
+      "token",
+      "jwt",
+      "secret",
+      "authorization",
+      "apiKey",
+      "key",
+      "cookie",
+      "credential",
+      "hash",
+      "bearer",
+      "privatekey",
+      "database_url",
+      "gemini"
+    ];
 
     if (Array.isArray(data)) {
       return data.map((item) => this.sanitize(item));
