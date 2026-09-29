@@ -20,9 +20,27 @@ export const createApp = (): Application => {
   );
 
   // Cross-Origin Resource Sharing
+  const configuredOrigins = env.CORS_ORIGIN.split(",").map((o) => o.trim());
+
   app.use(
     cors({
-      origin: env.CORS_ORIGIN,
+      origin: (requestOrigin, callback) => {
+        // Allow server-to-server or non-browser tools (no origin)
+        if (!requestOrigin) return callback(null, true);
+        if (env.CORS_ORIGIN === "*") return callback(null, true);
+
+        // Check if origin matches configured list or *.vercel.app domain
+        const isAllowed =
+          configuredOrigins.includes(requestOrigin) ||
+          requestOrigin.endsWith(".vercel.app") ||
+          requestOrigin.includes("localhost") ||
+          requestOrigin.includes("127.0.0.1");
+
+        if (isAllowed) {
+          return callback(null, true);
+        }
+        return callback(new Error(`CORS policy blocked access from origin: ${requestOrigin}`));
+      },
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization", "X-Request-ID"]

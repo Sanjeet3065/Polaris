@@ -323,9 +323,10 @@ export class PolarisWebSocketClient {
   }
 
   private getWebSocketUrl(token: string): string {
-    const customUrl = import.meta.env.VITE_WS_URL;
+    const customUrl = import.meta.env.VITE_WS_URL || import.meta.env.VITE_SOCKET_URL;
     if (customUrl) {
-      return `${customUrl}?token=${encodeURIComponent(token)}`;
+      const formattedUrl = customUrl.replace(/^http/, "ws");
+      return `${formattedUrl}${formattedUrl.includes("/ws") ? "" : "/ws"}?token=${encodeURIComponent(token)}`;
     }
 
     const isSecure = window.location.protocol === "https:";
