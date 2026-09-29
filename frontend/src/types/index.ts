@@ -166,3 +166,30 @@ export interface ApiResponseEnvelope<T> {
     details?: unknown;
   };
 }
+
+// ============================================================
+// SIH DEMO MODE TYPES (Phase 16)
+// ============================================================
+
+export type DemoStatus = "IDLE" | "ACTIVE" | "COMPLETED";
+
+export interface DemoAct {
+  act: number;
+  label: string;
+  description: string;
+  startSeconds: number;
+}
+
+export interface DemoState {
+  status: DemoStatus;
+  startedAt: string | null;
+  currentAct: number;
+  actLabel: string;
+  actDescription: string;
+  actIcon: string;
+  elapsedSeconds: number;
+  progressPercent: number;
+  totalDurationSeconds: number;
+  narrative: string;
+}
+

@@ -12,6 +12,7 @@ import predictiveMaintenanceRoutes from "./predictiveMaintenance.routes";
 import analyticsRoutes from "./analytics.routes";
 import reportRoutes from "./report.routes";
 import assistantRoutes from "./assistant.routes";
+import demoRoutes from "./demo.routes";
 
 const router = Router();
 
@@ -53,6 +54,9 @@ router.use("/simulator", simulatorRoutes);
 
 // Mount System & Realtime Monitoring APIs
 router.use("/system", realtimeRoutes);
+
+// Mount SIH Demo Mode Orchestration APIs (Phase 16)
+router.use("/demo", demoRoutes);
 
 export default router;
 

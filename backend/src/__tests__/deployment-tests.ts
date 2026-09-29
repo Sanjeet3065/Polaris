@@ -48,8 +48,8 @@ export async function runDeploymentTests(): Promise<{ passed: number; total: num
     const health = await healthService.getSystemHealth();
     assert(health.service === "polaris-backend", "Expected service name to be polaris-backend");
     assert(health.status === "healthy" || health.status === "degraded", "Expected valid health status");
-    assert(health.database.status === "UP", "Expected database status UP");
-    assert(typeof health.database.latencyMs === "number", "Expected numeric latency");
+    assert(health.database?.status === "UP", "Expected database status UP");
+    assert(typeof health.database?.latencyMs === "number", "Expected numeric latency");
   });
 
   await test("DEP-02: Health check payload does NOT leak credentials, secrets, or internal paths", async () => {
@@ -113,15 +113,12 @@ export async function runDeploymentTests(): Promise<{ passed: number; total: num
     const fallbackResult = aiClient.computeInProcessFallback({
       equipmentId: "test-eq-1",
       equipmentCode: "MAITRI-GEN-01",
-      stationCode: "MAITRI",
+      equipmentCategory: "GENERATOR",
+      stationId: "MAITRI",
       featureVector: {
-        runtimeHours: 4500,
-        temperature: 68.5,
-        vibration: 2.1,
-        ambientTemp: -24.0,
-        loadPercent: 78.0,
-        maintenanceAgeDays: 45,
-        pressure: 980
+        currentRuntimeHours: 4500,
+        currentTemperature: 68.5,
+        currentVibration: 2.1
       }
     });
 
