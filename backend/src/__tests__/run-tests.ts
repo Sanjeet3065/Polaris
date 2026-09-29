@@ -16,6 +16,7 @@ import { runSimulatorTests } from "./simulator-tests";
 import { runWebSocketTests } from "./websocket-tests";
 import { runEnergyEnvironmentTests } from "./energy-environment-tests";
 import { runLogisticsInventoryTests } from "./logistics-inventory-tests";
+import { runAlertsIncidentsTests } from "./alerts-incidents-tests";
 
 interface TestReport {
   name: string;
@@ -260,6 +261,9 @@ async function runAllTests() {
 
   // Execute Phase 8 Logistics + Inventory Test Suite
   await runLogisticsInventoryTests();
+
+  // Execute Phase 9 Alerts + Incident Management Test Suite
+  await runAlertsIncidentsTests();
 }
 
 runAllTests()

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   X,
   Crosshair,
@@ -9,7 +10,8 @@ import {
   Zap,
   Gauge,
   Clock,
-  Building
+  Building,
+  ExternalLink
 } from "lucide-react";
 import { Equipment3DState, Equipment3DPosition } from "./types";
 import { StationCode, Alert } from "../../types";
@@ -179,10 +181,19 @@ export const EquipmentInfoPanel: React.FC<Props> = ({
         {/* Active Alerts for this Equipment */}
         {activeAlerts.length > 0 && (
           <div className="pt-2">
-            <h4 className="text-xs uppercase font-mono tracking-wider text-red-400 font-semibold mb-2 flex items-center gap-1.5">
-              <AlertCircle className="w-3.5 h-3.5" />
-              Active Subsystem Alerts ({activeAlerts.length})
-            </h4>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs uppercase font-mono tracking-wider text-red-400 font-semibold flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5" />
+                Active Alerts ({activeAlerts.length})
+              </h4>
+              <Link
+                to="/alerts"
+                className="text-[11px] text-sky-400 hover:text-sky-300 flex items-center gap-1 transition-colors"
+              >
+                <span>Command Center</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
             <div className="space-y-2">
               {activeAlerts.map((alt) => (
                 <div

@@ -49,14 +49,56 @@ enum EquipmentStatus {
 
 enum AlertSeverity {
   INFO
+  LOW
+  MEDIUM
+  HIGH
   WARNING
   CRITICAL
 }
 
 enum AlertStatus {
+  OPEN
   ACTIVE
   ACKNOWLEDGED
+  ESCALATED
   RESOLVED
+  SUPPRESSED
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  MITIGATING
+  RESOLVED
+  CLOSED
+}
+
+enum IncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentCategory {
+  POWER
+  ENERGY
+  ENVIRONMENT
+  EQUIPMENT
+  COMMUNICATION
+  INVENTORY
+  LOGISTICS
+  SAFETY
+  OPERATIONS
+  OTHER
+}
+
+enum IncidentImpact {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 
 enum InventoryStatus {
@@ -146,6 +188,7 @@ model Station {
   environmentalReadings EnvironmentalReading[]
   equipment             Equipment[]
   alerts                Alert[]
+  incidents             Incident[]
   events                OperationalEvent[]
   inventory             InventoryItem[]
   inventoryMovements    InventoryMovement[]
@@ -263,26 +306,117 @@ model EquipmentHealth {
 
 /// System, hardware, and environmental operational alerts
 model Alert {
-  id             String        @id @default(uuid())
-  stationId      String
-  station        Station       @relation(fields: [stationId], references: [id], onDelete: Cascade)
-  equipmentId    String?       /// Optional link to specific malfunctioning equipment
-  equipment      Equipment?    @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
-  severity       AlertSeverity
-  title          String        /// Brief alert headline
-  description    String        /// Detailed alert reason & context
-  status         AlertStatus   @default(ACTIVE)
-  source         String?       /// Originating subsystem (ENERGY, ENVIRONMENT, EQUIPMENT, etc.)
-  occurredAt     DateTime      /// Timestamp when anomaly occurred (UTC)
-  acknowledgedAt DateTime?     /// Timestamp when operator acknowledged (UTC)
-  resolvedAt     DateTime?     /// Timestamp when anomaly cleared (UTC)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id               String          @id @default(uuid())
+  stationId        String
+  station          Station         @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  equipmentId      String?         /// Optional link to specific malfunctioning equipment
+  equipment        Equipment?      @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  severity         AlertSeverity
+  title            String          /// Brief alert headline
+  description      String          /// Detailed alert reason & context
+  message          String?         /// Operational alert message
+  status           AlertStatus     @default(OPEN)
+  source           String?         /// Originating subsystem (ENERGY, ENVIRONMENT, EQUIPMENT, etc.)
+  sourceType       String?         /// Source classification
+  sourceId         String?         /// Source identifier (e.g. equipment code, SKU)
+  ruleCode         String?         /// Deduplication rule code (e.g. ENERGY_BATTERY_LOW)
+  triggerValue     Float?          /// Sensor / metric value that triggered the alert
+  thresholdValue   Float?          /// Threshold exceeded
+  unit             String?         /// Unit of measurement
+  occurredAt       DateTime        @default(now()) /// Timestamp when anomaly occurred (UTC)
+  firstDetectedAt  DateTime        @default(now())
+  lastDetectedAt   DateTime        @default(now())
+  acknowledgedAt   DateTime?       /// Timestamp when operator acknowledged (UTC)
+  acknowledgedBy   String?         /// Operator ID or name who acknowledged
+  resolvedAt       DateTime?       /// Timestamp when anomaly cleared (UTC)
+  resolvedBy       String?         /// Operator ID or SYSTEM
+  suppressedAt     DateTime?       /// Timestamp when alert suppressed (UTC)
+  suppressedBy     String?         /// Operator ID who suppressed
+  occurrenceCount  Int             @default(1)
+  metadata         String?         /// JSON string of contextual parameters
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  incidentAlerts   IncidentAlert[]
 
   @@index([stationId, status])
   @@index([stationId, severity])
+  @@index([stationId, ruleCode])
+  @@index([ruleCode, status])
   @@index([occurredAt])
+  @@index([lastDetectedAt])
   @@map("alerts")
+}
+
+/// High-level operational events requiring investigation, response, and resolution
+model Incident {
+  id                 String           @id @default(uuid())
+  stationId          String
+  station            Station          @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  incidentNumber     String           @unique /// e.g. INC-MAI-2026-001
+  title              String           /// Operational headline
+  description        String           /// Incident briefing & context
+  severity           IncidentSeverity @default(MEDIUM)
+  status             IncidentStatus   @default(OPEN)
+  category           IncidentCategory @default(OPERATIONS)
+  source             String?          /// Originating alert or subsystem
+  startedAt          DateTime         @default(now())
+  acknowledgedAt     DateTime?
+  resolvedAt         DateTime?
+  closedAt           DateTime?
+  assignedTo         String?          /// Assigned operator user ID
+  assignedUser       User?            @relation("IncidentAssignee", fields: [assignedTo], references: [id], onDelete: SetNull)
+  createdById        String?          /// Creating user ID or SYSTEM
+  createdBy          User?            @relation("IncidentCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  resolvedBy         String?          /// Resolving operator ID or name
+  closedBy           String?          /// Closing operator ID or name
+  impact             IncidentImpact   @default(MEDIUM)
+  rootCause          String?          /// Root cause analysis notes
+  resolutionSummary  String?          /// Summary of actions taken to resolve
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  alerts             IncidentAlert[]
+  notes              IncidentNote[]
+
+  @@index([stationId, status])
+  @@index([stationId, severity])
+  @@index([status])
+  @@index([category])
+  @@index([assignedTo])
+  @@index([startedAt])
+  @@map("incidents")
+}
+
+/// Explicit join relation linking alerts to higher-level operational incidents
+model IncidentAlert {
+  id          String   @id @default(uuid())
+  incidentId  String
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  alertId     String
+  alert       Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([incidentId, alertId])
+  @@index([incidentId])
+  @@index([alertId])
+  @@map("incident_alerts")
+}
+
+/// Operational notes and log entries attached to an incident
+model IncidentNote {
+  id          String   @id @default(uuid())
+  incidentId  String
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  authorId    String?
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorName  String?  /// Operator display name
+  content     String   /// Log text or investigation note
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([incidentId, createdAt])
+  @@map("incident_notes")
 }
 
 /// Chronological mission events and audit timeline records
@@ -444,6 +578,9 @@ model User {
   authEvents         AuthenticationEvent[]
   inventoryMovements InventoryMovement[]
   shipmentsCreated   Shipment[]
+  incidentsAssigned  Incident[]            @relation("IncidentAssignee")
+  incidentsCreated   Incident[]            @relation("IncidentCreator")
+  incidentNotes      IncidentNote[]
 
   @@index([email])
   @@index([role])

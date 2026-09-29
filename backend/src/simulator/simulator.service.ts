@@ -14,6 +14,7 @@ import { scenarioEngine } from "./scenarios/scenario.engine";
 import { simulationEngine } from "./engine/simulation.engine";
 import { telemetryPersistenceService } from "./persistence/telemetry-persistence.service";
 import { realtimeService } from "../realtime/realtime.service";
+import { alertEvaluationService } from "../services/alertEvaluation.service";
 import { logger } from "../utils/logger";
 import crypto from "crypto";
 
@@ -259,6 +260,11 @@ export class SimulatorService {
    * Evaluates telemetry metrics for alert transitions and publishes deduplicated alert events (Section 24)
    */
   private checkForAlertTransitions(cycle: GeneratedTelemetryCycle): void {
+    // Phase 9 Persistent & Deduplicated Alert Evaluation Engine
+    alertEvaluationService.evaluateTelemetryCycle(cycle).catch((err) => {
+      logger.error("[Simulator] Error in alert evaluation:", err);
+    });
+
     // 1. Extreme Wind Alert
     if (cycle.environmentalReading.windSpeed > 90) {
       realtimeService.publishAlert({

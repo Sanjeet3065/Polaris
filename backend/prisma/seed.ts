@@ -19,7 +19,11 @@ import {
   UserRole,
   StockMovementType,
   ShipmentStatus,
-  ShipmentPriority
+  ShipmentPriority,
+  IncidentStatus,
+  IncidentSeverity,
+  IncidentCategory,
+  IncidentImpact
 } from "@prisma/client";
 import { PasswordService } from "../src/utils/password";
 
@@ -486,54 +490,192 @@ async function main() {
   });
 
   // ------------------------------------------------------------
-  // 5. ALERTS (ACTIVE & ACKNOWLEDGED)
+  // 5. ALERTS (ACTIVE, ACKNOWLEDGED, ESCALATED, RESOLVED)
   // ------------------------------------------------------------
-  console.log("Seeding operational alerts...");
+  console.log("Seeding operational alerts (Phase 9)...");
 
-  await prisma.alert.createMany({
-    data: [
-      {
-        stationId: maitri.id,
-        equipmentId: mWater.id,
-        severity: AlertSeverity.WARNING,
-        title: "RO Water Intake Pre-Filter Differential Pressure High",
-        description: "Differential pressure across primary 5-micron pre-filter exceeded 1.8 bar threshold.",
-        status: AlertStatus.ACTIVE,
-        source: "WATER_SYSTEM",
-        occurredAt: hoursAgo(4)
-      },
-      {
-        stationId: maitri.id,
-        severity: AlertSeverity.INFO,
-        title: "Photovoltaic Solar Farm Winterization Mode Active",
-        description: "Solar array angle automatically tilted to 78° for maximum reflection mitigation.",
-        status: AlertStatus.ACKNOWLEDGED,
-        source: "ENERGY",
-        occurredAt: hoursAgo(18),
-        acknowledgedAt: hoursAgo(16)
-      },
-      {
-        stationId: bharati.id,
-        severity: AlertSeverity.WARNING,
-        title: "Katabatic Wind Warning Issued for Larsemann Hills",
-        description: "Coastal wind gusts forecasted to reach 65 km/h over next 6 hours.",
-        status: AlertStatus.ACTIVE,
-        source: "ENVIRONMENT",
-        occurredAt: hoursAgo(2)
-      },
-      {
-        stationId: bharati.id,
-        equipmentId: bGen1.id,
-        severity: AlertSeverity.INFO,
-        title: "CHP Generator #1 Periodic Lube Oil Sample Dispatched",
-        description: "Spectrometric oil analysis sample logged for upcoming supply ship transit.",
-        status: AlertStatus.RESOLVED,
-        source: "EQUIPMENT",
-        occurredAt: daysAgo(3),
-        acknowledgedAt: daysAgo(3),
-        resolvedAt: daysAgo(2)
-      }
-    ]
+  // Clear existing alerts to prevent conflict on re-seed
+  await prisma.incidentAlert.deleteMany({});
+  await prisma.incidentNote.deleteMany({});
+  await prisma.incident.deleteMany({});
+  await prisma.alert.deleteMany({});
+
+  const alert1 = await prisma.alert.create({
+    data: {
+      stationId: maitri.id,
+      equipmentId: mWater.id,
+      severity: AlertSeverity.WARNING,
+      title: "RO Water Intake Pre-Filter Differential Pressure High",
+      description: "Differential pressure across primary 5-micron pre-filter exceeded 1.8 bar threshold.",
+      message: "Differential pressure across primary 5-micron pre-filter exceeded 1.8 bar threshold.",
+      status: AlertStatus.ACTIVE,
+      source: "WATER_SYSTEM",
+      sourceType: "EQUIPMENT",
+      sourceId: "mWater",
+      ruleCode: "EQUIPMENT_PRESSURE_WARNING",
+      triggerValue: 1.95,
+      thresholdValue: 1.8,
+      unit: "bar",
+      occurrenceCount: 4,
+      occurredAt: hoursAgo(4),
+      firstDetectedAt: hoursAgo(4),
+      lastDetectedAt: hoursAgo(1)
+    }
+  });
+
+  const alert2 = await prisma.alert.create({
+    data: {
+      stationId: maitri.id,
+      severity: AlertSeverity.INFO,
+      title: "Photovoltaic Solar Farm Winterization Mode Active",
+      description: "Solar array angle automatically tilted to 78° for maximum reflection mitigation.",
+      message: "Solar array angle automatically tilted to 78° for maximum reflection mitigation.",
+      status: AlertStatus.ACKNOWLEDGED,
+      source: "ENERGY",
+      sourceType: "ENERGY",
+      ruleCode: "ENERGY_SOLAR_MODE",
+      occurrenceCount: 1,
+      occurredAt: hoursAgo(18),
+      firstDetectedAt: hoursAgo(18),
+      lastDetectedAt: hoursAgo(18),
+      acknowledgedAt: hoursAgo(16),
+      acknowledgedBy: "Vikram Malhotra"
+    }
+  });
+
+  const alert3 = await prisma.alert.create({
+    data: {
+      stationId: maitri.id,
+      equipmentId: mGen1.id,
+      severity: AlertSeverity.CRITICAL,
+      title: "Primary Generator #1 Core Overheat Critical",
+      description: "Internal cylinder head temperature exceeded 98.4°C under peak auxiliary heating load.",
+      message: "Internal cylinder head temperature exceeded 98.4°C under peak auxiliary heating load.",
+      status: AlertStatus.ESCALATED,
+      source: "EQUIPMENT",
+      sourceType: "EQUIPMENT",
+      sourceId: "MAITRI-GEN-01",
+      ruleCode: "EQUIPMENT_OVERHEAT_CRITICAL",
+      triggerValue: 98.4,
+      thresholdValue: 95.0,
+      unit: "°C",
+      occurrenceCount: 14,
+      occurredAt: hoursAgo(3),
+      firstDetectedAt: hoursAgo(3),
+      lastDetectedAt: hoursAgo(1)
+    }
+  });
+
+  const alert4 = await prisma.alert.create({
+    data: {
+      stationId: maitri.id,
+      severity: AlertSeverity.HIGH,
+      title: "Schirmacher Oasis Blizzard Warning",
+      description: "Katabatic surface wind gusts recorded at 88.5 km/h over Priyadarshini moraine.",
+      message: "Katabatic surface wind gusts recorded at 88.5 km/h over Priyadarshini moraine.",
+      status: AlertStatus.OPEN,
+      source: "ENVIRONMENT",
+      sourceType: "ENVIRONMENT",
+      sourceId: "windSpeed",
+      ruleCode: "ENV_WIND_HIGH",
+      triggerValue: 88.5,
+      thresholdValue: 80.0,
+      unit: "km/h",
+      occurrenceCount: 6,
+      occurredAt: hoursAgo(2),
+      firstDetectedAt: hoursAgo(2),
+      lastDetectedAt: hoursAgo(1)
+    }
+  });
+
+  const alert5 = await prisma.alert.create({
+    data: {
+      stationId: bharati.id,
+      severity: AlertSeverity.WARNING,
+      title: "Katabatic Wind Warning Issued for Larsemann Hills",
+      description: "Coastal wind gusts forecasted to reach 65 km/h over next 6 hours.",
+      message: "Coastal wind gusts forecasted to reach 65 km/h over next 6 hours.",
+      status: AlertStatus.ACTIVE,
+      source: "ENVIRONMENT",
+      sourceType: "ENVIRONMENT",
+      sourceId: "windSpeed",
+      ruleCode: "ENV_WIND_WARNING",
+      triggerValue: 65.0,
+      thresholdValue: 50.0,
+      unit: "km/h",
+      occurrenceCount: 2,
+      occurredAt: hoursAgo(2),
+      firstDetectedAt: hoursAgo(2),
+      lastDetectedAt: hoursAgo(1)
+    }
+  });
+
+  const alert6 = await prisma.alert.create({
+    data: {
+      stationId: bharati.id,
+      equipmentId: bGen1.id,
+      severity: AlertSeverity.INFO,
+      title: "CHP Generator #1 Periodic Lube Oil Sample Dispatched",
+      description: "Spectrometric oil analysis sample logged for upcoming supply ship transit.",
+      message: "Spectrometric oil analysis sample logged for upcoming supply ship transit.",
+      status: AlertStatus.RESOLVED,
+      source: "EQUIPMENT",
+      sourceType: "EQUIPMENT",
+      sourceId: "BHARATI-GEN-01",
+      ruleCode: "EQUIPMENT_SERVICE_SAMPLE",
+      occurrenceCount: 1,
+      occurredAt: daysAgo(3),
+      firstDetectedAt: daysAgo(3),
+      lastDetectedAt: daysAgo(3),
+      acknowledgedAt: daysAgo(3),
+      acknowledgedBy: "Vikram Malhotra",
+      resolvedAt: daysAgo(2),
+      resolvedBy: "Dr. Rajesh Sharma"
+    }
+  });
+
+  const alert7 = await prisma.alert.create({
+    data: {
+      stationId: bharati.id,
+      severity: AlertSeverity.CRITICAL,
+      title: "Katabatic Blizzard Gale Exceeded",
+      description: "Hurricane-force katabatic winds clocked at 126.2 km/h across Promontory hill ridge.",
+      message: "Hurricane-force katabatic winds clocked at 126.2 km/h across Promontory hill ridge.",
+      status: AlertStatus.ESCALATED,
+      source: "ENVIRONMENT",
+      sourceType: "ENVIRONMENT",
+      sourceId: "windSpeed",
+      ruleCode: "ENV_WIND_BLIZZARD_GALE",
+      triggerValue: 126.2,
+      thresholdValue: 120.0,
+      unit: "km/h",
+      occurrenceCount: 22,
+      occurredAt: hoursAgo(5),
+      firstDetectedAt: hoursAgo(5),
+      lastDetectedAt: hoursAgo(1)
+    }
+  });
+
+  const alert8 = await prisma.alert.create({
+    data: {
+      stationId: bharati.id,
+      severity: AlertSeverity.HIGH,
+      title: "Larsemann Hills Optical Whiteout Hazard",
+      description: "Severe optical blowing snow visibility restriction: 0.75 km.",
+      message: "Severe optical blowing snow visibility restriction: 0.75 km.",
+      status: AlertStatus.OPEN,
+      source: "ENVIRONMENT",
+      sourceType: "ENVIRONMENT",
+      sourceId: "visibility",
+      ruleCode: "ENV_VISIBILITY_WHITEOUT",
+      triggerValue: 0.75,
+      thresholdValue: 1.0,
+      unit: "km",
+      occurrenceCount: 7,
+      occurredAt: hoursAgo(3),
+      firstDetectedAt: hoursAgo(3),
+      lastDetectedAt: hoursAgo(1)
+    }
   });
 
   // ------------------------------------------------------------
@@ -1039,6 +1181,117 @@ async function main() {
       role: UserRole.VIEWER,
       isActive: true
     }
+  });
+
+  // ------------------------------------------------------------
+  // 11. OPERATIONAL INCIDENTS & LINKED ALERTS (PHASE 9)
+  // ------------------------------------------------------------
+  console.log("Seeding Phase 9 Operational Incidents & Notes...");
+
+  // Incident 1: Maitri Generator Overheating
+  const incident1 = await prisma.incident.create({
+    data: {
+      stationId: maitri.id,
+      incidentNumber: "INC-MAI-2026-001",
+      title: "Primary Diesel Generator #1 Core Overheat",
+      description: "Generator #1 head temperature reached 98.4°C during high thermal load; operator initiated auxiliary coolant loop.",
+      severity: IncidentSeverity.CRITICAL,
+      status: IncidentStatus.INVESTIGATING,
+      category: IncidentCategory.EQUIPMENT,
+      impact: IncidentImpact.HIGH,
+      source: "EQUIPMENT",
+      startedAt: hoursAgo(3),
+      acknowledgedAt: hoursAgo(2),
+      assignedTo: operatorUser.id,
+      createdById: operatorUser.id,
+      notes: {
+        create: [
+          {
+            authorId: operatorUser.id,
+            authorName: operatorUser.name,
+            content: "Thermal excursion confirmed via SCADA. Coolant pump pressure normal. Inspecting radiator bypass valve.",
+            createdAt: hoursAgo(2)
+          },
+          {
+            authorId: adminUser.id,
+            authorName: adminUser.name,
+            content: "Authorized switching life-support grid to auxiliary backup Generator #2 if temperature remains >95°C for 30 minutes.",
+            createdAt: hoursAgo(1)
+          }
+        ]
+      },
+      alerts: {
+        create: [
+          {
+            alertId: alert3.id
+          }
+        ]
+      }
+    }
+  });
+
+  // Incident 2: Bharati Katabatic Storm & Whiteout Condition
+  const incident2 = await prisma.incident.create({
+    data: {
+      stationId: bharati.id,
+      incidentNumber: "INC-BHA-2026-001",
+      title: "Severe Katabatic Storm & Optical Whiteout Condition",
+      description: "Sustained winds exceeding 126 km/h with optical visibility below 800m. Station outdoor perimeter lock initiated.",
+      severity: IncidentSeverity.CRITICAL,
+      status: IncidentStatus.MITIGATING,
+      category: IncidentCategory.ENVIRONMENT,
+      impact: IncidentImpact.CRITICAL,
+      source: "ENVIRONMENT",
+      startedAt: hoursAgo(5),
+      acknowledgedAt: hoursAgo(4),
+      assignedTo: adminUser.id,
+      createdById: adminUser.id,
+      notes: {
+        create: [
+          {
+            authorId: adminUser.id,
+            authorName: adminUser.name,
+            content: "Red storm alert broadcast to all expedition personnel. External traverses and field science operations halted.",
+            createdAt: hoursAgo(4)
+          },
+          {
+            authorId: operatorUser.id,
+            authorName: operatorUser.name,
+            content: "Emergency shelter survival packs verified. Satellite radome defroster heaters placed on continuous cycle.",
+            createdAt: hoursAgo(3)
+          }
+        ]
+      },
+      alerts: {
+        create: [
+          {
+            alertId: alert7.id
+          }
+        ]
+      }
+    }
+  });
+
+  // Operational Event Logs for Incidents
+  await prisma.operationalEvent.createMany({
+    data: [
+      {
+        stationId: maitri.id,
+        type: "INCIDENT",
+        title: "INCIDENT_CREATED: INC-MAI-2026-001",
+        description: "Primary Diesel Generator #1 Core Overheat escalated from Alert",
+        occurredAt: hoursAgo(3),
+        metadata: JSON.stringify({ incidentId: incident1.id, incidentNumber: incident1.incidentNumber })
+      },
+      {
+        stationId: bharati.id,
+        type: "INCIDENT",
+        title: "INCIDENT_CREATED: INC-BHA-2026-001",
+        description: "Severe Katabatic Storm & Optical Whiteout Condition escalated from Alert",
+        occurredAt: hoursAgo(5),
+        metadata: JSON.stringify({ incidentId: incident2.id, incidentNumber: incident2.incidentNumber })
+      }
+    ]
   });
 
   console.log("=================================================");

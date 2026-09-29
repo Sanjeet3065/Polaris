@@ -7,8 +7,11 @@ import { sequenceManager } from "./events/sequence.manager";
 import {
   EventEnvelope,
   REALTIME_EVENT_TYPES,
+  RealtimeEventType,
   TelemetryUpdatePayload,
   AlertTriggeredPayload,
+  AlertEventPayload,
+  IncidentEventPayload,
   ScenarioActivePayload,
   EquipmentUpdatePayload,
   StationStatusPayload,
@@ -158,6 +161,40 @@ export class RealtimeService {
 
     realtimeEventBus.publish(envelope);
     return true;
+  }
+
+  /**
+   * Publishes Phase 9 Alert Lifecycle Events (CREATED, UPDATED, ACKNOWLEDGED, ESCALATED, RESOLVED, SUPPRESSED)
+   */
+  public publishAlertEvent(type: RealtimeEventType, payload: AlertEventPayload): void {
+    const envelope: EventEnvelope<AlertEventPayload> = {
+      type,
+      eventId: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      stationId: payload.stationId,
+      stationCode: payload.stationCode,
+      sequence: sequenceManager.nextSequence(payload.stationCode),
+      data: payload
+    };
+
+    realtimeEventBus.publish(envelope);
+  }
+
+  /**
+   * Publishes Phase 9 Incident Lifecycle Events (CREATED, UPDATED, STATUS_CHANGED, ASSIGNED, RESOLVED, CLOSED)
+   */
+  public publishIncidentEvent(type: RealtimeEventType, payload: IncidentEventPayload): void {
+    const envelope: EventEnvelope<IncidentEventPayload> = {
+      type,
+      eventId: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      stationId: payload.stationId,
+      stationCode: payload.stationCode,
+      sequence: sequenceManager.nextSequence(payload.stationCode),
+      data: payload
+    };
+
+    realtimeEventBus.publish(envelope);
   }
 
   /**

@@ -13,11 +13,11 @@ import { AuthAuditPage } from "../pages/admin/AuthAuditPage";
 import { EnergyPage } from "../pages/EnergyPage";
 import { EnvironmentPage } from "../pages/EnvironmentPage";
 import { LogisticsPage } from "../pages/LogisticsPage";
+import { AlertsPage } from "../pages/AlertsPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
   Settings2,
-  TriangleAlert,
   Wrench,
   ChartNoAxesCombined,
   FileText
@@ -68,24 +68,7 @@ export const AppRoutes: React.FC = () => {
 
         <Route path="/logistics" element={<LogisticsPage />} />
 
-        <Route
-          path="/alerts"
-          element={
-            <PlaceholderPage
-              title="Alarms & Incident Triage"
-              subtitle="Automated threshold anomaly detection, incident response, and escalation"
-              description="Centralized mission-control alarm hub dispatching notifications on thermal excursions, power dips, generator overspeed, and satellite dropouts."
-              icon={TriangleAlert}
-              targetPhase={9}
-              plannedFeatures={[
-                "Multi-tiered alert severity classification (INFO, WARNING, CRITICAL, EMERGENCY)",
-                "Station operator acknowledgment and triage audit logging",
-                "Incident post-mortem reporting and corrective action tracking",
-                "Audio alarm cues and multi-channel notification dispatch"
-              ]}
-            />
-          }
-        />
+        <Route path="/alerts" element={<AlertsPage />} />
 
         <Route
           path="/maintenance"

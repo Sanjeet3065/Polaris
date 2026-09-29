@@ -1,4 +1,4 @@
-import { AlertSeverity, EquipmentCategory, EquipmentStatus, StationStatus, UserRole } from "@prisma/client";
+import { AlertSeverity, AlertStatus, EquipmentCategory, EquipmentStatus, IncidentCategory, IncidentImpact, IncidentSeverity, IncidentStatus, StationStatus, UserRole } from "@prisma/client";
 import { StationCode, ScenarioType } from "../../simulator/models/simulator.types";
 
 /**
@@ -7,6 +7,18 @@ import { StationCode, ScenarioType } from "../../simulator/models/simulator.type
 export const REALTIME_EVENT_TYPES = {
   TELEMETRY_UPDATE: "telemetry:update",
   ALERT_TRIGGERED: "alert:triggered",
+  ALERT_CREATED: "alert:created",
+  ALERT_UPDATED: "alert:updated",
+  ALERT_ACKNOWLEDGED: "alert:acknowledged",
+  ALERT_ESCALATED: "alert:escalated",
+  ALERT_RESOLVED: "alert:resolved",
+  ALERT_SUPPRESSED: "alert:suppressed",
+  INCIDENT_CREATED: "incident:created",
+  INCIDENT_UPDATED: "incident:updated",
+  INCIDENT_STATUS_CHANGED: "incident:status_changed",
+  INCIDENT_ASSIGNED: "incident:assigned",
+  INCIDENT_RESOLVED: "incident:resolved",
+  INCIDENT_CLOSED: "incident:closed",
   SCENARIO_ACTIVE: "scenario:active",
   STATION_STATUS: "station:status",
   EQUIPMENT_UPDATE: "equipment:update",
@@ -100,6 +112,52 @@ export interface AlertTriggeredPayload {
   category?: string;
   sourceEquipmentCode?: string;
   triggeredAt: string;
+}
+
+/**
+ * Phase 9 Operational Alert Event Payload
+ */
+export interface AlertEventPayload {
+  id: string;
+  stationId: string;
+  stationCode: StationCode;
+  severity: AlertSeverity;
+  status: AlertStatus;
+  title: string;
+  message: string;
+  ruleCode?: string;
+  sourceType?: string;
+  sourceId?: string;
+  triggerValue?: number;
+  thresholdValue?: number;
+  unit?: string;
+  occurrenceCount: number;
+  acknowledgedBy?: string;
+  acknowledgedAt?: string;
+  resolvedBy?: string;
+  resolvedAt?: string;
+  timestamp: string;
+}
+
+/**
+ * Phase 9 Operational Incident Event Payload
+ */
+export interface IncidentEventPayload {
+  id: string;
+  stationId: string;
+  stationCode: StationCode;
+  incidentNumber: string;
+  title: string;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  category: IncidentCategory;
+  impact?: IncidentImpact;
+  assignedTo?: string;
+  assignedUserName?: string;
+  startedAt: string;
+  resolvedAt?: string;
+  closedAt?: string;
+  timestamp: string;
 }
 
 /**

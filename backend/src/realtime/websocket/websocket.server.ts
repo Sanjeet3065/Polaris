@@ -334,18 +334,33 @@ export class PolarisWebSocketServer {
     );
     this.eventBusUnsubscribers.push(unsubTelemetry);
 
-    // 2. Alert Triggered Events
-    const unsubAlert = realtimeEventBus.subscribe(
+    // 2. Alert Triggered Events & Phase 9 Alert Lifecycle Events
+    const alertEventTypes = [
       REALTIME_EVENT_TYPES.ALERT_TRIGGERED,
-      (event: EventEnvelope) => {
+      REALTIME_EVENT_TYPES.ALERT_CREATED,
+      REALTIME_EVENT_TYPES.ALERT_UPDATED,
+      REALTIME_EVENT_TYPES.ALERT_ACKNOWLEDGED,
+      REALTIME_EVENT_TYPES.ALERT_ESCALATED,
+      REALTIME_EVENT_TYPES.ALERT_RESOLVED,
+      REALTIME_EVENT_TYPES.ALERT_SUPPRESSED,
+      REALTIME_EVENT_TYPES.INCIDENT_CREATED,
+      REALTIME_EVENT_TYPES.INCIDENT_UPDATED,
+      REALTIME_EVENT_TYPES.INCIDENT_STATUS_CHANGED,
+      REALTIME_EVENT_TYPES.INCIDENT_ASSIGNED,
+      REALTIME_EVENT_TYPES.INCIDENT_RESOLVED,
+      REALTIME_EVENT_TYPES.INCIDENT_CLOSED
+    ];
+
+    for (const evtType of alertEventTypes) {
+      const unsub = realtimeEventBus.subscribe(evtType, (event: EventEnvelope) => {
         if (event.stationCode) {
           webSocketBroadcastService.broadcastToStation(event.stationCode, event);
         } else {
           webSocketBroadcastService.broadcastToAll(event);
         }
-      }
-    );
-    this.eventBusUnsubscribers.push(unsubAlert);
+      });
+      this.eventBusUnsubscribers.push(unsub);
+    }
 
     // 3. Scenario Active Events
     const unsubScenario = realtimeEventBus.subscribe(
