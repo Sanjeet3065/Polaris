@@ -154,6 +154,12 @@ export interface User {
 export interface ApiResponseEnvelope<T> {
   success: boolean;
   data: T;
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
   error?: {
     code: string;
     message: string;

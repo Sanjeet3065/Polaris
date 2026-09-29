@@ -16,7 +16,10 @@ import {
   MaintenanceType,
   MaintenanceStatus,
   TelemetryStatus,
-  UserRole
+  UserRole,
+  StockMovementType,
+  ShipmentStatus,
+  ShipmentPriority
 } from "@prisma/client";
 import { PasswordService } from "../src/utils/password";
 
@@ -584,91 +587,391 @@ async function main() {
   });
 
   // ------------------------------------------------------------
+  // ------------------------------------------------------------
   // 7. INVENTORY ITEMS (ANTARCTIC STATION LOGISTICS)
   // ------------------------------------------------------------
   console.log("Seeding inventory and logistics items...");
 
-  await prisma.inventoryItem.createMany({
-    data: [
-      // Maitri Inventory
-      {
-        stationId: maitri.id,
-        sku: "MAITRI-FUEL-ATF",
-        name: "Aviation Turbine Fuel (Jet A-1 Polar Spec)",
-        category: "Fuel & Lubricants",
-        quantity: 81600.0,
-        unit: "Liters",
-        minimumQuantity: 30000.0,
-        status: InventoryStatus.IN_STOCK,
-        lastUpdatedAt: hoursAgo(4)
-      },
-      {
-        stationId: maitri.id,
-        sku: "MAITRI-RO-FILT-5M",
-        name: "5-Micron Spun Polypropylene RO Sediment Filter Cartridges",
-        category: "Spare Parts",
-        quantity: 14.0,
-        unit: "Units",
-        minimumQuantity: 20.0,
-        status: InventoryStatus.LOW_STOCK,
-        lastUpdatedAt: hoursAgo(6)
-      },
-      {
-        stationId: maitri.id,
-        sku: "MAITRI-RATION-DRY",
-        name: "Emergency Freeze-Dried Nutritional Ration Packs (6-Person / 30-Day)",
-        category: "Food & Rations",
-        quantity: 48.0,
-        unit: "Packs",
-        minimumQuantity: 25.0,
-        status: InventoryStatus.IN_STOCK,
-        lastUpdatedAt: daysAgo(5)
-      },
-      {
-        stationId: maitri.id,
-        sku: "MAITRI-MED-TRAUMA",
-        name: "Cold-Weather Trauma & Hyperthermia Treatment Kits",
-        category: "Medical Supplies",
-        quantity: 12.0,
-        unit: "Kits",
-        minimumQuantity: 6.0,
-        status: InventoryStatus.IN_STOCK,
-        lastUpdatedAt: daysAgo(12)
-      },
+  // Clean previous records if re-seeding
+  await prisma.shipmentItem.deleteMany();
+  await prisma.shipment.deleteMany();
+  await prisma.inventoryMovement.deleteMany();
+  await prisma.inventoryItem.deleteMany();
 
-      // Bharati Inventory
+  // Maitri Inventory Items
+  const mFuelAtf = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-FUEL-ATF",
+      name: "Aviation Turbine Fuel (Jet A-1 Polar Spec)",
+      category: "Fuel & Lubricants",
+      quantity: 81600.0,
+      unit: "Liters",
+      minimumQuantity: 30000.0,
+      criticalQuantity: 15000.0,
+      reservedQuantity: 5000.0,
+      storageLocation: "Maitri Bulk Fuel Farm (Tank 1 & 2)",
+      description: "Low-temperature aviation kerosene fuel with anti-icing additive MIL-DTL-83133.",
+      status: InventoryStatus.IN_STOCK,
+      lastUpdatedAt: hoursAgo(4)
+    }
+  });
+
+  const mFilterRo = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-RO-FILT-5M",
+      name: "5-Micron Spun Polypropylene RO Sediment Filter Cartridges",
+      category: "Spare Parts & Tools",
+      quantity: 14.0,
+      unit: "Units",
+      minimumQuantity: 20.0,
+      criticalQuantity: 5.0,
+      reservedQuantity: 0.0,
+      storageLocation: "Lake Priyadarshini Water Treatment Plant Bay 2",
+      description: "Primary pre-filter cartridges for potable water reverse osmosis purification unit.",
+      status: InventoryStatus.LOW_STOCK,
+      lastUpdatedAt: hoursAgo(6)
+    }
+  });
+
+  const mRation = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-RATION-DRY",
+      name: "Emergency Freeze-Dried Nutritional Ration Packs (6-Person / 30-Day)",
+      category: "Food & Rations",
+      quantity: 48.0,
+      unit: "Packs",
+      minimumQuantity: 25.0,
+      criticalQuantity: 10.0,
+      reservedQuantity: 0.0,
+      storageLocation: "Main Living Module Pantry Reserve",
+      description: "Vacuum-sealed high-calorie expedition dietary ration packs for winter-over personnel.",
+      status: InventoryStatus.IN_STOCK,
+      lastUpdatedAt: daysAgo(5)
+    }
+  });
+
+  const mTrauma = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-MED-TRAUMA",
+      name: "Cold-Weather Trauma & Hyperthermia Treatment Kits",
+      category: "Medical Supplies",
+      quantity: 12.0,
+      unit: "Kits",
+      minimumQuantity: 6.0,
+      criticalQuantity: 3.0,
+      reservedQuantity: 2.0,
+      storageLocation: "Station Surgery / Emergency Ward",
+      description: "Field emergency kits containing active rewarming blankets, suture supplies, and plasma volume expanders.",
+      status: InventoryStatus.IN_STOCK,
+      lastUpdatedAt: daysAgo(12)
+    }
+  });
+
+  const mOxygen = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-MED-O2",
+      name: "Medical Grade Oxygen Cylinders (High-Pressure 50L)",
+      category: "Medical Supplies",
+      quantity: 3.0,
+      unit: "Cylinders",
+      minimumQuantity: 10.0,
+      criticalQuantity: 4.0,
+      reservedQuantity: 1.0,
+      storageLocation: "Hospital Gas Manifold Store",
+      description: "Pressurized medical oxygen for life support and emergency hyperbaric treatment.",
+      status: InventoryStatus.CRITICAL,
+      lastUpdatedAt: hoursAgo(1)
+    }
+  });
+
+  const mWeatherBalloons = await prisma.inventoryItem.create({
+    data: {
+      stationId: maitri.id,
+      sku: "MAITRI-MET-BALLOON",
+      name: "High-Altitude Meteorological Radiosonde Sounding Balloons (800g)",
+      category: "Scientific Consumables",
+      quantity: 0.0,
+      unit: "Units",
+      minimumQuantity: 15.0,
+      criticalQuantity: 5.0,
+      reservedQuantity: 0.0,
+      storageLocation: "Meteorology Observation Hut A",
+      description: "Upper-air meteorological sounding balloons. Stock fully depleted pending sea voyage resupply.",
+      status: InventoryStatus.OUT_OF_STOCK,
+      lastUpdatedAt: hoursAgo(12)
+    }
+  });
+
+  // Bharati Inventory Items
+  const bFuelAtf = await prisma.inventoryItem.create({
+    data: {
+      stationId: bharati.id,
+      sku: "BHARATI-FUEL-ATF",
+      name: "Aviation Turbine Fuel (Jet A-1 Polar Spec)",
+      category: "Fuel & Lubricants",
+      quantity: 73200.0,
+      unit: "Liters",
+      minimumQuantity: 30000.0,
+      criticalQuantity: 15000.0,
+      reservedQuantity: 0.0,
+      storageLocation: "Bharati Double-Walled Fuel Farm (Tanks 1-4)",
+      description: "Dedicated polar diesel and turbine fuel reserves powering main cogeneration generators.",
+      status: InventoryStatus.IN_STOCK,
+      lastUpdatedAt: hoursAgo(2)
+    }
+  });
+
+  const bEngineOil = await prisma.inventoryItem.create({
+    data: {
+      stationId: bharati.id,
+      sku: "BHARATI-GEN-OIL-15W40",
+      name: "Polar Heavy Duty Synthetic Engine Oil 0W-40",
+      category: "Fuel & Lubricants",
+      quantity: 1200.0,
+      unit: "Liters",
+      minimumQuantity: 500.0,
+      criticalQuantity: 200.0,
+      reservedQuantity: 100.0,
+      storageLocation: "Powerhouse Lubricant Storage Bay",
+      description: "Synthetic engine lubricant engineered for low-temperature cold starts down to -50°C.",
+      status: InventoryStatus.IN_STOCK,
+      lastUpdatedAt: daysAgo(3)
+    }
+  });
+
+  const bSatLnb = await prisma.inventoryItem.create({
+    data: {
+      stationId: bharati.id,
+      sku: "BHARATI-SAT-LNB",
+      name: "Cryogenic Low-Noise Block Downconverter (X-Band)",
+      category: "Satellite & Telecom",
+      quantity: 2.0,
+      unit: "Units",
+      minimumQuantity: 3.0,
+      criticalQuantity: 1.0,
+      reservedQuantity: 0.0,
+      storageLocation: "Ground Station Radome Level 3",
+      description: "High-sensitivity X-Band RF downconverter receiving polar orbiting remote sensing satellites.",
+      status: InventoryStatus.LOW_STOCK,
+      lastUpdatedAt: daysAgo(7)
+    }
+  });
+
+  const bBatteryModule = await prisma.inventoryItem.create({
+    data: {
+      stationId: bharati.id,
+      sku: "BHARATI-BAT-MOD",
+      name: "480V LiFePO4 Energy Storage Replacement Battery Modules (50kWh)",
+      category: "Electrical & Batteries",
+      quantity: 1.0,
+      unit: "Units",
+      minimumQuantity: 4.0,
+      criticalQuantity: 2.0,
+      reservedQuantity: 0.0,
+      storageLocation: "BESS Battery Storage Vault",
+      description: "Station microgrid battery buffer module for solar peak shaving and transient backup.",
+      status: InventoryStatus.CRITICAL,
+      lastUpdatedAt: hoursAgo(8)
+    }
+  });
+
+  // ------------------------------------------------------------
+  // 8. POLAR SHIPMENTS & LOGISTICS VOYAGES (PHASE 8)
+  // ------------------------------------------------------------
+  console.log("Seeding Phase 8 polar shipments and cargo manifests...");
+
+  const shp1 = await prisma.shipment.create({
+    data: {
+      shipmentNumber: "POL-SHP-2026-01",
+      title: "45th Indian Scientific Expedition — Main Sea Voyage 1",
+      origin: "Cape Town Port / NCPOR Forward Logistics Hub",
+      destinationStationId: bharati.id,
+      destination: "Bharati Station (Promontory Wharf)",
+      status: ShipmentStatus.IN_TRANSIT,
+      priority: ShipmentPriority.HIGH,
+      carrier: "MV Vasiliy Golovnin (Polar Icebreaker / Cargo)",
+      plannedDeparture: daysAgo(18),
+      actualDeparture: daysAgo(17),
+      estimatedArrival: new Date(NOW.getTime() + 3 * 24 * 3600 * 1000), // In 3 days
+      notes: "Main summer expedition resupply vessel carrying bulk fuel drums, fresh provisions, and replacement BESS battery cells.",
+      items: {
+        create: [
+          {
+            itemId: bFuelAtf.id,
+            name: "Polar Diesel Fuel (Jet A-1 ISO Tank)",
+            category: "Fuel & Lubricants",
+            quantity: 50000.0,
+            unit: "Liters",
+            receivedQty: 0
+          },
+          {
+            itemId: bBatteryModule.id,
+            name: "LiFePO4 Replacement Battery Modules (50kWh)",
+            category: "Electrical & Batteries",
+            quantity: 4.0,
+            unit: "Units",
+            receivedQty: 0
+          },
+          {
+            name: "Hydroponic Nutrient Concentrate & Fresh Seeds",
+            category: "Food & Rations",
+            quantity: 250.0,
+            unit: "Kg",
+            receivedQty: 0
+          }
+        ]
+      }
+    }
+  });
+
+  const shp2 = await prisma.shipment.create({
+    data: {
+      shipmentNumber: "POL-SHP-2026-02",
+      title: "Larsemann-to-Schirmacher Winter Traverse Convoy",
+      origin: "Bharati Station",
+      destinationStationId: maitri.id,
+      destination: "Maitri Station",
+      status: ShipmentStatus.PLANNED,
+      priority: ShipmentPriority.NORMAL,
+      carrier: "PistenBully 300 Polar Traverse Convoy (3 Sledges)",
+      plannedDeparture: new Date(NOW.getTime() + 10 * 24 * 3600 * 1000),
+      estimatedArrival: new Date(NOW.getTime() + 18 * 24 * 3600 * 1000),
+      notes: "Overland tracked vehicle convoy transferring specialized seismic calibration instruments and medical trauma replenishment.",
+      items: {
+        create: [
+          {
+            name: "Broadband Seismometer Sensors & Thermal Insulators",
+            category: "Scientific Consumables",
+            quantity: 4.0,
+            unit: "Units",
+            receivedQty: 0
+          },
+          {
+            itemId: mFilterRo.id,
+            name: "5-Micron RO Filter Cartridge Packs",
+            category: "Spare Parts & Tools",
+            quantity: 20.0,
+            unit: "Units",
+            receivedQty: 0
+          }
+        ]
+      }
+    }
+  });
+
+  const shp3 = await prisma.shipment.create({
+    data: {
+      shipmentNumber: "POL-SHP-2026-03",
+      title: "DROMLAN Early Season Air Bridge — Heavy Airlift",
+      origin: "Cape Town International Airport (CPT)",
+      destinationStationId: maitri.id,
+      destination: "Maitri Station (Novo Blue Ice Runway)",
+      status: ShipmentStatus.RECEIVED,
+      priority: ShipmentPriority.CRITICAL,
+      carrier: "IL-76TD-90VD Polar Strategic Transport",
+      plannedDeparture: daysAgo(20),
+      actualDeparture: daysAgo(20),
+      estimatedArrival: daysAgo(14),
+      actualArrival: daysAgo(14),
+      notes: "Priority intercontinental air flight delivering urgent medical supplies and replacement RO components prior to runway melt season.",
+      items: {
+        create: [
+          {
+            itemId: mTrauma.id,
+            name: "Emergency Hypothermia Treatment Kits",
+            category: "Medical Supplies",
+            quantity: 6.0,
+            unit: "Kits",
+            receivedQty: 6.0
+          },
+          {
+            name: "Caterpillar 3406 Diesel Alternator Stator Assembly",
+            category: "Spare Parts & Tools",
+            quantity: 1.0,
+            unit: "Units",
+            receivedQty: 1.0
+          }
+        ]
+      }
+    }
+  });
+
+  // ------------------------------------------------------------
+  // 9. INVENTORY LEDGER MOVEMENTS (PHASE 8 AUDIT TRAIL)
+  // ------------------------------------------------------------
+  console.log("Seeding Phase 8 historical inventory movements...");
+
+  await prisma.inventoryMovement.createMany({
+    data: [
       {
-        stationId: bharati.id,
-        sku: "BHARATI-FUEL-ATF",
-        name: "Aviation Turbine Fuel (Jet A-1 Polar Spec)",
-        category: "Fuel & Lubricants",
-        quantity: 73200.0,
-        unit: "Liters",
-        minimumQuantity: 30000.0,
-        status: InventoryStatus.IN_STOCK,
-        lastUpdatedAt: hoursAgo(2)
-      },
-      {
-        stationId: bharati.id,
-        sku: "BHARATI-GEN-OIL-15W40",
-        name: "Polar Heavy Duty Synthetic Engine Oil 0W-40",
-        category: "Fuel & Lubricants",
+        itemId: mFuelAtf.id,
+        stationId: maitri.id,
+        type: StockMovementType.CONSUMED,
         quantity: 1200.0,
-        unit: "Liters",
-        minimumQuantity: 500.0,
-        status: InventoryStatus.IN_STOCK,
-        lastUpdatedAt: daysAgo(3)
+        previousStock: 82800.0,
+        newStock: 81600.0,
+        source: "Maitri Bulk Fuel Farm",
+        destination: "Cogeneration Generator 1 & 2 Day Tanks",
+        reference: "WO-PWR-2026-088",
+        reason: "Daily scheduled powerhouse fuel replenishment",
+        createdAt: hoursAgo(4)
       },
       {
-        stationId: bharati.id,
-        sku: "BHARATI-SAT-LNB",
-        name: "Cryogenic Low-Noise Block Downconverter (X-Band)",
-        category: "Scientific & Telecom",
+        itemId: mFilterRo.id,
+        stationId: maitri.id,
+        type: StockMovementType.CONSUMED,
         quantity: 2.0,
-        unit: "Units",
-        minimumQuantity: 3.0,
-        status: InventoryStatus.LOW_STOCK,
-        lastUpdatedAt: daysAgo(7)
+        previousStock: 16.0,
+        newStock: 14.0,
+        source: "Lake Priyadarshini RO Plant Bay 2",
+        destination: "Potable Water Production Rack",
+        reference: "WO-WTR-2026-014",
+        reason: "Scheduled bi-weekly sediment pre-filter replacement",
+        createdAt: hoursAgo(6)
+      },
+      {
+        itemId: mTrauma.id,
+        stationId: maitri.id,
+        type: StockMovementType.RECEIVED,
+        quantity: 6.0,
+        previousStock: 6.0,
+        newStock: 12.0,
+        source: "Cape Town Airport (CPT)",
+        destination: "Station Surgery",
+        reference: "POL-SHP-2026-03",
+        reason: "Airlift delivery intake from IL-76TD-90VD flight",
+        createdAt: daysAgo(14)
+      },
+      {
+        itemId: bFuelAtf.id,
+        stationId: bharati.id,
+        type: StockMovementType.CONSUMED,
+        quantity: 950.0,
+        previousStock: 74150.0,
+        newStock: 73200.0,
+        source: "Bharati Fuel Farm",
+        destination: "Volvo Penta Generator 1",
+        reference: "WO-PWR-2026-102",
+        reason: "Station continuous thermal & electric cogeneration",
+        createdAt: hoursAgo(2)
+      },
+      {
+        itemId: bEngineOil.id,
+        stationId: bharati.id,
+        type: StockMovementType.CONSUMED,
+        quantity: 50.0,
+        previousStock: 1250.0,
+        newStock: 1200.0,
+        source: "Powerhouse Lubricant Bay",
+        destination: "Generator 2 Sump Overhaul",
+        reference: "WO-PWR-2026-095",
+        reason: "500-hour oil and filter preventive maintenance",
+        createdAt: daysAgo(3)
       }
     ]
   });

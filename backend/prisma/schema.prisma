@@ -62,7 +62,33 @@ enum AlertStatus {
 enum InventoryStatus {
   IN_STOCK
   LOW_STOCK
+  CRITICAL
   OUT_OF_STOCK
+}
+
+enum StockMovementType {
+  RECEIVED
+  CONSUMED
+  TRANSFERRED
+  ADJUSTED
+  RESERVED
+  RELEASED
+}
+
+enum ShipmentStatus {
+  PLANNED
+  READY
+  IN_TRANSIT
+  ARRIVED
+  RECEIVED
+  CANCELLED
+}
+
+enum ShipmentPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
 }
 
 enum MaintenanceType {
@@ -122,6 +148,8 @@ model Station {
   alerts                Alert[]
   events                OperationalEvent[]
   inventory             InventoryItem[]
+  inventoryMovements    InventoryMovement[]
+  incomingShipments     Shipment[]             @relation("StationIncomingShipments")
 
   @@map("stations")
 }
@@ -275,23 +303,103 @@ model OperationalEvent {
 
 /// Station logistics, spare parts, critical reserves, and provisions
 model InventoryItem {
-  id              String          @id @default(uuid())
-  stationId       String
-  station         Station         @relation(fields: [stationId], references: [id], onDelete: Cascade)
-  sku             String          /// Station-unique Stock Keeping Unit (e.g. FUEL-JET-A1)
-  name            String          /// Item name (e.g. Aviation Turbine Fuel / Jet A-1)
-  category        String          /// Category (Fuel, Spare Parts, Medical, Rations, Science)
-  quantity        Float           /// Current available stock quantity
-  unit            String          /// Unit of measurement (Liters, Units, Kg, Packs)
-  minimumQuantity Float           /// Safety threshold before triggering low-stock alert
-  status          InventoryStatus @default(IN_STOCK)
-  lastUpdatedAt   DateTime        @default(now())
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id               String              @id @default(uuid())
+  stationId        String
+  station          Station             @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  sku              String              /// Station-unique Stock Keeping Unit (e.g. FUEL-JET-A1)
+  name             String              /// Item name (e.g. Aviation Turbine Fuel / Jet A-1)
+  category         String              /// Category (Fuel, Spare Parts, Medical, Rations, Science)
+  quantity         Float               /// Current available stock quantity
+  unit             String              /// Unit of measurement (Liters, Units, Kg, Packs)
+  minimumQuantity  Float               /// Safety threshold before triggering low-stock alert
+  criticalQuantity Float?              /// Critical reserve threshold before triggering emergency alert
+  reservedQuantity Float               @default(0.0) /// Stock allocated or reserved for active operations
+  storageLocation  String?             /// Physical storage location (e.g. Cold Storage Bay 2, Fuel Farm Tank 1)
+  description      String?             /// Technical specifications or operational notes
+  status           InventoryStatus     @default(IN_STOCK)
+  lastUpdatedAt    DateTime            @default(now())
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  movements        InventoryMovement[]
+  shipmentItems    ShipmentItem[]
 
   @@unique([stationId, sku])
   @@index([stationId, status])
   @@map("inventory_items")
+}
+
+/// Chronological ledger of all inventory movements and stock adjustments
+model InventoryMovement {
+  id            String            @id @default(uuid())
+  itemId        String
+  item          InventoryItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  stationId     String
+  station       Station           @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  type          StockMovementType
+  quantity      Float             /// Absolute quantity delta
+  previousStock Float             /// Stock balance prior to this movement
+  newStock      Float             /// Stock balance resulting from this movement
+  source        String?           /// Origin location, external supply hub, or sending station
+  destination   String?           /// Consuming department, destination base, or storage bay
+  reference     String?           /// Associated shipment number, requisition ID, or work order
+  reason        String?           /// Justification or operational context
+  userId        String?           /// User who recorded or authorized the movement
+  user          User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt     DateTime          @default(now())
+
+  @@index([itemId, createdAt])
+  @@index([stationId, createdAt])
+  @@index([type])
+  @@map("inventory_movements")
+}
+
+/// Arctic supply movements, polar shipping manifests, and resupply voyages
+model Shipment {
+  id                   String           @id @default(uuid())
+  shipmentNumber       String           @unique /// Unique identifier: POL-SHP-2026-01
+  title                String           /// e.g. 45th ISEA Summer Resupply — MV Vasiliy Golovnin
+  origin               String           /// e.g. Cape Town Port / NCPOR Goa Hub
+  destinationStationId String?          /// Antarctic station destination if applicable
+  destinationStation   Station?         @relation("StationIncomingShipments", fields: [destinationStationId], references: [id], onDelete: SetNull)
+  destination          String           /// Destination label (e.g. Bharati Station, Maitri Station)
+  status               ShipmentStatus   @default(PLANNED)
+  priority             ShipmentPriority @default(NORMAL)
+  plannedDeparture     DateTime?
+  actualDeparture      DateTime?
+  estimatedArrival     DateTime?
+  actualArrival        DateTime?
+  carrier              String?          /// e.g. MV Vasiliy Golovnin, IL-76TD-90VD, PistenBully 300
+  notes                String?
+  createdById          String?
+  createdBy            User?            @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  items                ShipmentItem[]
+
+  @@index([destinationStationId, status])
+  @@index([status])
+  @@index([priority])
+  @@map("shipments")
+}
+
+/// Line items / cargo manifests attached to a polar shipment
+model ShipmentItem {
+  id          String         @id @default(uuid())
+  shipmentId  String
+  shipment    Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  itemId      String?        /// Matched inventory catalog item ID if pre-linked
+  item        InventoryItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+  name        String         /// Cargo description
+  category    String         /// Category
+  quantity    Float          /// Total manifests quantity
+  unit        String         /// Unit of measurement
+  receivedQty Float          @default(0.0) /// Quantity physically verified at station receiving
+  createdAt   DateTime       @default(now())
+
+  @@index([shipmentId])
+  @@map("shipment_items")
 }
 
 /// Equipment maintenance schedules, inspections, and repair logs
@@ -332,8 +440,10 @@ model User {
   updatedAt    DateTime  @updatedAt
 
   // Relationships
-  sessions   Session[]
-  authEvents AuthenticationEvent[]
+  sessions           Session[]
+  authEvents         AuthenticationEvent[]
+  inventoryMovements InventoryMovement[]
+  shipmentsCreated   Shipment[]
 
   @@index([email])
   @@index([role])

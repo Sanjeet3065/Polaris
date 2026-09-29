@@ -4,6 +4,8 @@ import stationRoutes from "./station.routes";
 import authRoutes from "./auth.routes";
 import simulatorRoutes from "../simulator/simulator.routes";
 import realtimeRoutes from "./realtime.routes";
+import inventoryRoutes from "./inventory.routes";
+import logisticsRoutes from "./logistics.routes";
 
 const router = Router();
 
@@ -15,6 +17,12 @@ router.use("/auth", authRoutes);
 
 // Mount Stations Data APIs
 router.use("/stations", stationRoutes);
+
+// Mount Logistics & Polar Shipments APIs
+router.use("/logistics", logisticsRoutes);
+
+// Mount Inventory Management APIs
+router.use("/inventory", inventoryRoutes);
 
 // Mount Sensor / IoT Telemetry Simulator APIs
 router.use("/simulator", simulatorRoutes);

@@ -12,11 +12,11 @@ import { UserManagementPage } from "../pages/admin/UserManagementPage";
 import { AuthAuditPage } from "../pages/admin/AuthAuditPage";
 import { EnergyPage } from "../pages/EnergyPage";
 import { EnvironmentPage } from "../pages/EnvironmentPage";
+import { LogisticsPage } from "../pages/LogisticsPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
   Settings2,
-  Boxes,
   TriangleAlert,
   Wrench,
   ChartNoAxesCombined,
@@ -66,24 +66,7 @@ export const AppRoutes: React.FC = () => {
           }
         />
 
-        <Route
-          path="/logistics"
-          element={
-            <PlaceholderPage
-              title="Logistics & Antarctic Inventory"
-              subtitle="Fuel reserves, consumables, polar shipping manifests, and supply requests"
-              description="Operational logistics tracker for Antarctic bulk fuel farms, freeze-dried ration stores, scientific supplies, and resupply vessels."
-              icon={Boxes}
-              targetPhase={8}
-              plannedFeatures={[
-                "Double-walled bulk Arctic Jet A-1 fuel farm inventory tracking",
-                "Days of Winter Autonomy predictive depletion calculator",
-                "Expedition cargo manifest reconciliation (MV Vasiliy Golovnin)",
-                "Digital supply requisition and approval workflow for station leaders"
-              ]}
-            />
-          }
-        />
+        <Route path="/logistics" element={<LogisticsPage />} />
 
         <Route
           path="/alerts"
