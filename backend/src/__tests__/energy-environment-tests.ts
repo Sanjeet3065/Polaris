@@ -27,7 +27,7 @@ import {
   evaluateOverallEnvironmentStatus,
   ENERGY_THRESHOLDS,
   ENVIRONMENT_THRESHOLDS
-} from "../../../frontend/src/utils/thresholds";
+} from "../utils/thresholds";
 
 interface TestReport {
   name: string;
