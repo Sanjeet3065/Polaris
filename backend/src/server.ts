@@ -3,6 +3,7 @@ import { createApp } from "./app";
 import { env } from "./config/env";
 import { logger } from "./utils/logger";
 import { webSocketManager } from "./websocket/socketHandler";
+import { simulatorService } from "./simulator/simulator.service";
 
 const startServer = (): void => {
   const app = createApp();
@@ -11,18 +12,27 @@ const startServer = (): void => {
   // Initialize WebSocket architecture hook
   webSocketManager.initialize(server);
 
-  server.listen(env.PORT, env.HOST, () => {
+  server.listen(env.PORT, env.HOST, async () => {
     logger.info("POLARIS Backend Server initialized successfully", {
       port: env.PORT,
       host: env.HOST,
       environment: env.NODE_ENV,
       healthEndpoint: `http://${env.HOST}:${env.PORT}/api/v1/health`
     });
+
+    if (env.SIMULATOR_ENABLED) {
+      logger.info("Auto-starting POLARIS sensor simulator as configured in env");
+      await simulatorService.start({
+        intervalMs: env.SIMULATOR_INTERVAL_MS,
+        noiseLevel: env.SIMULATOR_NOISE_LEVEL
+      });
+    }
   });
 
   // Graceful Shutdown Signals
   const gracefulShutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Shutting down POLARIS backend gracefully...`);
+    simulatorService.stop();
     const { disconnectPrisma } = await import("./config/prisma");
     await disconnectPrisma();
     server.close(() => {

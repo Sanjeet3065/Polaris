@@ -8,10 +8,11 @@ import { alertService } from "../services/alert.service";
 import { eventService } from "../services/event.service";
 import { inventoryService } from "../services/inventory.service";
 import { maintenanceService } from "../services/maintenance.service";
-import { healthService } from "../services/health.service";
 import { historyQuerySchema, paginationQuerySchema } from "../validators/station.validator";
 import { ApiError } from "../utils/apiError";
+import { healthService } from "../services/health.service";
 import { runAuthTests } from "./auth-tests";
+import { runSimulatorTests } from "./simulator-tests";
 
 interface TestReport {
   name: string;
@@ -244,6 +245,9 @@ async function runAllTests() {
 
   // Execute Phase 3 Auth & RBAC Test Suite
   await runAuthTests();
+
+  // Execute Phase 4 Sensor & IoT Simulator Test Suite
+  await runSimulatorTests();
 }
 
 runAllTests()

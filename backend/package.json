@@ -16,6 +16,8 @@
     "db:studio": "prisma studio",
     "db:start": "tsx scripts/start-postgres.ts",
     "test": "tsx src/__tests__/run-tests.ts",
+    "simulator:tick": "tsx scripts/manual-tick.ts",
+    "simulator:test": "tsx src/__tests__/simulator-tests.ts",
     "lint": "echo \"Backend linting passing\" && exit 0"
   },
   "dependencies": {

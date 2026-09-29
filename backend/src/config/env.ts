@@ -2,8 +2,10 @@ import dotenv from "dotenv";
 import path from "path";
 import { z } from "zod";
 
-// Load environment variables from .env if present
+// Load environment variables from .env if present (supporting both monorepo root and backend dir)
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+dotenv.config({ path: path.resolve(process.cwd(), "backend/.env") });
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -22,7 +24,11 @@ const envSchema = z.object({
   SEED_ADMIN_EMAIL: z.string().email().default("admin@polaris.local"),
   SEED_ADMIN_PASSWORD: z.string().default("Polaris@Admin2026!"),
   AI_SERVICE_URL: z.string().default("http://localhost:8000"),
-  SOCKET_URL: z.string().default("http://localhost:5000")
+  SOCKET_URL: z.string().default("http://localhost:5000"),
+  SIMULATOR_ENABLED: z.preprocess((val) => val === "true" || val === true, z.boolean()).default(false),
+  SIMULATOR_INTERVAL_MS: z.coerce.number().min(500).max(3600000).default(5000),
+  SIMULATOR_NOISE_LEVEL: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
+  SIMULATOR_DEFAULT_SCENARIO: z.string().default("NORMAL")
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -30,6 +36,11 @@ const parsedEnv = envSchema.safeParse(process.env);
 if (!parsedEnv.success) {
   console.error("❌ Invalid environment variables configuration:", parsedEnv.error.format());
   process.exit(1);
+}
+
+// Ensure process.env has DATABASE_URL for Prisma runtime
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = parsedEnv.data.DATABASE_URL;
 }
 
 export const env = parsedEnv.data;

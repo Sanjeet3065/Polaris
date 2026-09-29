@@ -2,6 +2,7 @@ import { Router } from "express";
 import healthRoutes from "./health.routes";
 import stationRoutes from "./station.routes";
 import authRoutes from "./auth.routes";
+import simulatorRoutes from "../simulator/simulator.routes";
 
 const router = Router();
 
@@ -13,6 +14,9 @@ router.use("/auth", authRoutes);
 
 // Mount Stations Data APIs
 router.use("/stations", stationRoutes);
+
+// Mount Sensor / IoT Telemetry Simulator APIs
+router.use("/simulator", simulatorRoutes);
 
 export default router;
 
