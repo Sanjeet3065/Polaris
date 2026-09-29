@@ -6,13 +6,13 @@ import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { ArchitectureOverviewPage } from "../pages/ArchitectureOverviewPage";
+import { DigitalTwinPage } from "../pages/DigitalTwinPage";
 import { LoginPage } from "../pages/LoginPage";
 import { UserManagementPage } from "../pages/admin/UserManagementPage";
 import { AuthAuditPage } from "../pages/admin/AuthAuditPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
-  Box,
   Zap,
   Wind,
   Settings2,
@@ -38,25 +38,8 @@ export const AppRoutes: React.FC = () => {
           <Route path="/" element={<Navigate to="/overview" replace />} />
           <Route path="/overview" element={<OverviewPage />} />
 
-        {/* Polished Subsystem Placeholders for Future Phases */}
-        <Route
-          path="/digital-twin"
-          element={
-            <PlaceholderPage
-              title="3D Digital Twin Subsystem"
-              subtitle="Spatial Three.js & React Three Fiber Antarctic station twin"
-              description="Interactive 3D representation of station infrastructure, physical buildings, equipment placement, and live thermal heatmaps mapped to application entity IDs."
-              icon={Box}
-              targetPhase={6}
-              plannedFeatures={[
-                "Maitri & Bharati photorealistic 3D structural cutaways",
-                "Mesh-to-equipment telemetry binding (clicking 3D generator opens diagnostics)",
-                "Dynamic thermal and HVAC duct airflow gradient heatmaps",
-                "Polar night and Blizzard particle environmental skybox simulation"
-              ]}
-            />
-          }
-        />
+        {/* Phase 6 — Interactive 3D Digital Twin Subsystem */}
+        <Route path="/digital-twin" element={<DigitalTwinPage />} />
 
         <Route
           path="/energy"

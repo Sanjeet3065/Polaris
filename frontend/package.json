@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Frontend test suite placeholder for Phase 13\" && exit 0",
+    "test:digital-twin": "tsx src/__tests__/digital-twin-tests.ts",
     "lint": "echo \"Frontend linting placeholder\" && exit 0"
   },
   "dependencies": {
