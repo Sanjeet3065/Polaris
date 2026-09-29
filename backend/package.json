@@ -26,6 +26,7 @@
     "test:phase12": "tsx src/__tests__/assistant-runner.ts",
     "test:phase13": "tsx src/__tests__/security-runner.ts",
     "test:security": "tsx src/__tests__/security-runner.ts",
+    "test:phase15": "tsx src/__tests__/deployment-tests-runner.ts",
     "lint": "echo \"Backend linting passing\" && exit 0"
   },
   "dependencies": {

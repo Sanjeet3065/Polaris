@@ -65,3 +65,7 @@ Desktop.ini
 # Kilo/Temporary agent cache
 .kilo/
 scratch/
+
+# Deployment & Hosting metadata
+.vercel/
+

@@ -6,6 +6,7 @@ import { env } from "./config/env";
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
+import { healthController } from "./controllers/health.controller";
 import apiRoutes from "./routes";
 
 export const createApp = (): Application => {
@@ -57,6 +58,9 @@ export const createApp = (): Application => {
 
   // Primary API Router (v1)
   app.use("/api/v1", apiRoutes);
+
+  // Root Health Probe (compatible with container orchestrators)
+  app.get("/health", healthController.getHealth);
 
   // Root Welcome & Architecture Info
   app.get("/", (req, res) => {

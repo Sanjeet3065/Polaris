@@ -1,49 +1,45 @@
 version: "3.8"
 
 # ============================================================
-# POLARIS — Production & Local Docker Compose Stack
+# POLARIS — Dedicated Production Docker Compose Stack
 # Polar Operations & Logistics Automated Remote Intelligence System
 # SIH 2026 - Problem Statement ID: SIH26060
 # ============================================================
 
 services:
   # ------------------------------------------------------------
-  # 1. Primary Relational & Time-Series Database (PostgreSQL 16)
+  # 1. PostgreSQL 16 Enterprise Relational & Time-Series Store
   # ------------------------------------------------------------
   postgres:
     image: postgres:16-alpine
-    container_name: polaris_postgres
-    restart: unless-stopped
+    container_name: polaris_prod_postgres
+    restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-polaris_admin}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-polaris_secure_password}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password must be provided in production}
       POSTGRES_DB: ${POSTGRES_DB:-polaris_db}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_prod_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-polaris_admin} -d ${POSTGRES_DB:-polaris_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 15s
     networks:
-      - polaris_network
+      - polaris_prod_network
 
   # ------------------------------------------------------------
-  # 2. Python + FastAPI Predictive AI & Diagnostics Service
+  # 2. Python FastAPI Predictive Analytics & Diagnostics Microservice
   # ------------------------------------------------------------
   ai-service:
     build:
       context: ./ai-service
       dockerfile: Dockerfile
-    container_name: polaris_ai_service
-    restart: unless-stopped
+    container_name: polaris_prod_ai_service
+    restart: always
     environment:
       PORT: 8000
-    ports:
-      - "8000:8000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 15s
@@ -51,31 +47,31 @@ services:
       retries: 3
       start_period: 10s
     networks:
-      - polaris_network
+      - polaris_prod_network
 
   # ------------------------------------------------------------
-  # 3. Node.js + Express + TypeScript API Backend & WebSockets
+  # 3. Node.js + Express API Backend & Persistent WebSocket Engine
   # ------------------------------------------------------------
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: polaris_backend
-    restart: unless-stopped
+    container_name: polaris_prod_backend
+    restart: always
     environment:
       NODE_ENV: production
       PORT: 5000
       HOST: 0.0.0.0
-      DATABASE_URL: postgresql://${POSTGRES_USER:-polaris_admin}:${POSTGRES_PASSWORD:-polaris_secure_password}@postgres:5432/${POSTGRES_DB:-polaris_db}?schema=public
-      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-polaris_super_secret_jwt_access_key_change_in_production_2026}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-polaris_admin}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-polaris_db}?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?JWT access secret must be provided in production}
       JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}
-      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-polaris_super_secret_refresh_token_key_change_in_production_2026}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT refresh secret must be provided in production}
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
       AI_SERVICE_URL: http://ai-service:8000
-      CORS_ORIGIN: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:80,http://frontend:80}
+      CORS_ORIGIN: ${CORS_ORIGINS:?CORS origins must be configured in production}
       SIMULATOR_ENABLED: ${SIMULATOR_ENABLED:-true}
       SIMULATOR_INTERVAL_MS: ${SIMULATOR_INTERVAL_MS:-5000}
-      WEBSOCKET_ENABLED: ${WEBSOCKET_ENABLED:-true}
+      WEBSOCKET_ENABLED: "true"
       RUN_MIGRATIONS: "true"
       SEED_DATABASE: ${SEED_ON_STARTUP:-false}
     ports:
@@ -92,23 +88,23 @@ services:
       retries: 4
       start_period: 15s
     networks:
-      - polaris_network
+      - polaris_prod_network
 
   # ------------------------------------------------------------
-  # 4. React + Vite + TypeScript Frontend Application (Nginx)
+  # 4. React + Vite Static Frontend Application (Nginx Alpine)
   # ------------------------------------------------------------
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: ${VITE_API_URL:-http://localhost:5000/api/v1}
-        VITE_WS_URL: ${VITE_WS_URL:-ws://localhost:5000/ws}
+        VITE_API_URL: ${VITE_API_URL:-/api/v1}
+        VITE_WS_URL: ${VITE_WS_URL:-/ws}
         VITE_STATION_DEFAULT: ${VITE_STATION_DEFAULT:-BHARATI}
-    container_name: polaris_frontend
-    restart: unless-stopped
+    container_name: polaris_prod_frontend
+    restart: always
     ports:
-      - "${FRONTEND_PORT:-5173}:80"
+      - "${PROD_HTTP_PORT:-80}:80"
     depends_on:
       backend:
         condition: service_healthy
@@ -119,14 +115,14 @@ services:
       retries: 3
       start_period: 10s
     networks:
-      - polaris_network
+      - polaris_prod_network
 
 networks:
-  polaris_network:
-    name: polaris_network
+  polaris_prod_network:
+    name: polaris_prod_network
     driver: bridge
 
 volumes:
-  postgres_data:
-    name: polaris_postgres_data
+  postgres_prod_data:
+    name: polaris_postgres_prod_data
     driver: local
