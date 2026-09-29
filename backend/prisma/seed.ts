@@ -23,7 +23,9 @@ import {
   IncidentStatus,
   IncidentSeverity,
   IncidentCategory,
-  IncidentImpact
+  IncidentImpact,
+  RiskBand,
+  DataQuality
 } from "@prisma/client";
 import { PasswordService } from "../src/utils/password";
 
@@ -314,6 +316,34 @@ async function main() {
             status: MaintenanceStatus.SCHEDULED,
             scheduledAt: new Date("2026-10-15T08:00:00.000Z"),
             notes: "Scheduled ahead of Austral summer intensive science season."
+          }
+        ]
+      }
+    }
+  });
+
+  const mGen2 = await prisma.equipment.create({
+    data: {
+      stationId: maitri.id,
+      code: "MAITRI-GEN-02",
+      name: "Secondary Diesel Generator #2",
+      category: EquipmentCategory.GENERATOR,
+      status: EquipmentStatus.OPERATIONAL,
+      healthPercent: 88.0,
+      manufacturer: "Caterpillar",
+      model: "CAT C15 400kW",
+      installedAt: new Date("2018-02-15T00:00:00.000Z"),
+      lastServiceAt: daysAgo(20),
+      healthRecords: {
+        create: [
+          {
+            recordedAt: hoursAgo(2),
+            healthPercent: 88.0,
+            temperature: 79.4,
+            vibration: 1.4,
+            runtimeHours: 6410.0,
+            status: EquipmentStatus.OPERATIONAL,
+            notes: "Secondary generator tested on load bank. Nominal performance."
           }
         ]
       }
@@ -1292,6 +1322,248 @@ async function main() {
         metadata: JSON.stringify({ incidentId: incident2.id, incidentNumber: incident2.incidentNumber })
       }
     ]
+  });
+
+  // ------------------------------------------------------------
+  // 10. AI PREDICTIVE MAINTENANCE (PHASE 10 SEED DATA)
+  // Notice: Clearly marked as synthetic demo predictions for POLARIS SIH evaluation
+  // ------------------------------------------------------------
+  console.log("Seeding AI Predictive Maintenance snapshots (Phase 10)...");
+  await prisma.maintenancePrediction.deleteMany({});
+
+  // Maitri: Generator 01 (HIGH RISK - progressive degradation)
+  // Historical snapshots (3 days ago, 2 days ago, 1 day ago) for Trend Chart
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mGen1.id,
+      stationId: maitri.id,
+      healthScore: 78.0,
+      riskScore: 42.0,
+      riskBand: RiskBand.MODERATE,
+      estimatedRulHours: 624.0,
+      estimatedRulDays: 26.0,
+      confidence: 84.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Mild Temperature Rise", category: "THERMAL", severity: "MEDIUM", impactPercent: 20, description: "Operating at 84°C (+4°C over baseline)" }
+      ]),
+      recommendation: "Continue routine monitoring and verify lube oil levels.",
+      generatedAt: daysAgo(3),
+      expiresAt: daysAgo(2)
+    }
+  });
+
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mGen1.id,
+      stationId: maitri.id,
+      healthScore: 70.0,
+      riskScore: 58.0,
+      riskBand: RiskBand.MODERATE,
+      estimatedRulHours: 432.0,
+      estimatedRulDays: 18.0,
+      confidence: 86.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Elevated Core Temperature", category: "THERMAL", severity: "HIGH", impactPercent: 35, description: "Core coolant temperature rose to 91°C" },
+        { factor: "Negative Health Trend", category: "HEALTH_TREND", severity: "MEDIUM", impactPercent: 25, description: "Health index declined by 8% over 48 hours" }
+      ]),
+      recommendation: "Review radiator airflow and inspect secondary coolant loop.",
+      generatedAt: daysAgo(1),
+      expiresAt: hoursAgo(12)
+    }
+  });
+
+  // Current Prediction: Maitri Gen 01 (Health: 61, Risk: 74, HIGH)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mGen1.id,
+      stationId: maitri.id,
+      healthScore: 61.0,
+      riskScore: 74.0,
+      riskBand: RiskBand.HIGH,
+      estimatedRulHours: 348.0,
+      estimatedRulDays: 14.5,
+      confidence: 88.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Critical Core Temperature Rise", category: "THERMAL", severity: "CRITICAL", impactPercent: 40, description: "Continuous operating temperature at 96.2°C exceeding critical threshold" },
+        { factor: "Active Overheat Alerts", category: "ALERT", severity: "CRITICAL", impactPercent: 30, description: "2 high/critical alerts logged in 24 hours" },
+        { factor: "Active Operational Incident", category: "INCIDENT", severity: "HIGH", impactPercent: 20, description: "Linked to active incident INC-MAI-2026-001" },
+        { factor: "Mechanical Vibration Drift", category: "VIBRATION", severity: "MEDIUM", impactPercent: 10, description: "Vibration amplitude at 3.1 mm/s (+106% of baseline)" }
+      ]),
+      recommendation: "HIGH RISK WARNING: Schedule generator inspection within 48-72 hours. Inspect coolant bypass thermostat and heat exchanger fins.",
+      generatedAt: hoursAgo(1),
+      expiresAt: new Date(NOW.getTime() + 2 * 3600 * 1000)
+    }
+  });
+
+  // Maitri: Generator 02 (Health: 88, Risk: 22, GUARDED)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mGen2.id,
+      stationId: maitri.id,
+      healthScore: 88.0,
+      riskScore: 22.0,
+      riskBand: RiskBand.GUARDED,
+      estimatedRulHours: 1152.0,
+      estimatedRulDays: 48.0,
+      confidence: 91.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "30d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Nominal Operating State", category: "TELEMETRY", severity: "INFO", impactPercent: 5, description: "Operating at 79.4°C and 1.4 mm/s vibration within optimal envelope" }
+      ]),
+      recommendation: "GUARDED STATUS: Equipment operates normally. Maintain planned borescope inspection schedule.",
+      generatedAt: hoursAgo(2),
+      expiresAt: new Date(NOW.getTime() + 4 * 3600 * 1000)
+    }
+  });
+
+  // Maitri: Battery Bank (Health: 53, Risk: 81, CRITICAL)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mBattery.id,
+      stationId: maitri.id,
+      healthScore: 53.0,
+      riskScore: 81.0,
+      riskBand: RiskBand.CRITICAL,
+      estimatedRulHours: 108.0,
+      estimatedRulDays: 4.5,
+      confidence: 89.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "7d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Cell Voltage Imbalance", category: "LOAD", severity: "CRITICAL", impactPercent: 45, description: "String #3 terminal voltage sagging under 30 kW discharge load" },
+        { factor: "Accelerated Capacity Fade", category: "HEALTH_TREND", severity: "HIGH", impactPercent: 35, description: "State of health declined from 68% to 53% over previous 10 days" },
+        { factor: "Critical Low Charge Warnings", category: "ALERT", severity: "HIGH", impactPercent: 20, description: "Low SoC events logged during polar blizzard peak loading" }
+      ]),
+      recommendation: "CRITICAL ADVISORY: Immediately prioritize engineering dispatch. Perform individual cell impedance testing and isolate degrading String #3 module.",
+      generatedAt: hoursAgo(1),
+      expiresAt: new Date(NOW.getTime() + 2 * 3600 * 1000)
+    }
+  });
+
+  // Maitri: RO Water Plant (Health: 74, Risk: 42, MODERATE)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mWater.id,
+      stationId: maitri.id,
+      healthScore: 74.0,
+      riskScore: 42.0,
+      riskBand: RiskBand.MODERATE,
+      estimatedRulHours: 528.0,
+      estimatedRulDays: 22.0,
+      confidence: 82.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Filter Differential Pressure", category: "TELEMETRY", severity: "MEDIUM", impactPercent: 40, description: "Pre-filter pressure at 1.95 bar exceeding normal 1.5 bar threshold" },
+        { factor: "High Vibration Warning", category: "VIBRATION", severity: "MEDIUM", impactPercent: 30, description: "High pressure feed pump vibration at 2.7 mm/s" }
+      ]),
+      recommendation: "MODERATE NOTICE: Schedule pre-filter membrane backwash and replace 5-micron spun cartridges within 5 days.",
+      generatedAt: hoursAgo(3),
+      expiresAt: new Date(NOW.getTime() + 3 * 3600 * 1000)
+    }
+  });
+
+  // Maitri: Habitation HVAC (Health: 96, Risk: 12, LOW)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: mHvac.id,
+      stationId: maitri.id,
+      healthScore: 96.0,
+      riskScore: 12.0,
+      riskBand: RiskBand.LOW,
+      estimatedRulHours: 2280.0,
+      estimatedRulDays: 95.0,
+      confidence: 94.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "30d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Nominal Air Handling Operation", category: "TELEMETRY", severity: "INFO", impactPercent: 5, description: "All telemetry parameters well within polar operational specifications" }
+      ]),
+      recommendation: "Continue routine polar telemetry monitoring. No immediate maintenance intervention indicated.",
+      generatedAt: hoursAgo(2),
+      expiresAt: new Date(NOW.getTime() + 6 * 3600 * 1000)
+    }
+  });
+
+  // Bharati: Cleanroom Lab HVAC (Health: 76, Risk: 43, MODERATE)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: bHvac.id,
+      stationId: bharati.id,
+      healthScore: 76.0,
+      riskScore: 43.0,
+      riskBand: RiskBand.MODERATE,
+      estimatedRulHours: 672.0,
+      estimatedRulDays: 28.0,
+      confidence: 85.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "HEPA Differential Pressure Creep", category: "TELEMETRY", severity: "MEDIUM", impactPercent: 35, description: "HEPA filter pressure drop has increased by 18% over the past 30 days" },
+        { factor: "Blower Motor Duty Cycle", category: "LOAD", severity: "LOW", impactPercent: 20, description: "Continuous fan operation during exterior whiteout gale" }
+      ]),
+      recommendation: "MODERATE NOTICE: Inspect laboratory pre-filters and schedule HEPA differential pressure audit.",
+      generatedAt: hoursAgo(2),
+      expiresAt: new Date(NOW.getTime() + 4 * 3600 * 1000)
+    }
+  });
+
+  // Bharati: ISRO Earth Station Tracking Antenna (Health: 69, Risk: 64, HIGH)
+  await prisma.maintenancePrediction.create({
+    data: {
+      equipmentId: bSatCom.id,
+      stationId: bharati.id,
+      healthScore: 69.0,
+      riskScore: 64.0,
+      riskBand: RiskBand.HIGH,
+      estimatedRulHours: 432.0,
+      estimatedRulDays: 18.0,
+      confidence: 87.0,
+      dataQuality: DataQuality.GOOD,
+      predictionHorizon: "14d",
+      modelName: "polaris-degradation-baseline-v1",
+      modelVersion: "1.0.0",
+      featureVersion: "1.0",
+      topFactors: JSON.stringify([
+        { factor: "Elevation Drive Servo Torque Rise", category: "LOAD", severity: "HIGH", impactPercent: 40, description: "Antenna elevation gear motor torque drawing +35% above calm weather baseline" },
+        { factor: "Extreme Blizzard Wind Stress", category: "TELEMETRY", severity: "HIGH", impactPercent: 30, description: "Subjected to 110+ km/h katabatic gales on Larsemann Hills promontory" },
+        { factor: "De-icing Heating Element Fault", category: "ALERT", severity: "MEDIUM", impactPercent: 20, description: "Sector B radome heating element intermittent circuit flag" }
+      ]),
+      recommendation: "HIGH RISK WARNING: Schedule antenna pedestal mechanical inspection when winds abate below 50 km/h. Inspect elevation gearbox lubrication.",
+      generatedAt: hoursAgo(1),
+      expiresAt: new Date(NOW.getTime() + 2 * 3600 * 1000)
+    }
   });
 
   console.log("=================================================");

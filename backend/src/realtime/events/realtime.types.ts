@@ -25,7 +25,9 @@ export const REALTIME_EVENT_TYPES = {
   SYSTEM_STATUS: "system:status",
   STATION_SNAPSHOT: "station:snapshot",
   HEARTBEAT_PING: "heartbeat:ping",
-  HEARTBEAT_PONG: "heartbeat:pong"
+  HEARTBEAT_PONG: "heartbeat:pong",
+  MAINTENANCE_PREDICTION_UPDATED: "maintenance:prediction_updated",
+  MAINTENANCE_WORK_ORDER_CREATED: "maintenance:work_order_created"
 } as const;
 
 export type RealtimeEventType = (typeof REALTIME_EVENT_TYPES)[keyof typeof REALTIME_EVENT_TYPES];

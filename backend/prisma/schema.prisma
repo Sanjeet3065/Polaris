@@ -159,6 +159,20 @@ enum UserRole {
   VIEWER
 }
 
+enum RiskBand {
+  LOW
+  GUARDED
+  MODERATE
+  HIGH
+  CRITICAL
+}
+
+enum DataQuality {
+  GOOD
+  LIMITED
+  INSUFFICIENT
+}
+
 // ============================================================
 // CORE ENTITIES
 // ============================================================
@@ -193,6 +207,7 @@ model Station {
   inventory             InventoryItem[]
   inventoryMovements    InventoryMovement[]
   incomingShipments     Shipment[]             @relation("StationIncomingShipments")
+  predictions           MaintenancePrediction[]
 
   @@map("stations")
 }
@@ -280,6 +295,7 @@ model Equipment {
   healthRecords      EquipmentHealth[]
   maintenanceRecords MaintenanceRecord[]
   alerts             Alert[]
+  predictions        MaintenancePrediction[]
 
   @@unique([stationId, code])
   @@index([stationId, status])
@@ -555,6 +571,39 @@ model MaintenanceRecord {
   @@index([equipmentId, status])
   @@index([scheduledAt])
   @@map("maintenance_records")
+}
+
+/// AI predictive maintenance evaluation, health index, risk score, and RUL estimation (Phase 10)
+model MaintenancePrediction {
+  id                 String       @id @default(uuid())
+  equipmentId        String
+  equipment          Equipment    @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  stationId          String
+  station            Station      @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  healthScore        Float        /// Operational health score (0 - 100)
+  riskScore          Float        /// Predictive maintenance risk score (0 - 100)
+  riskBand           RiskBand     @default(LOW)
+  estimatedRulHours  Float?       /// Estimated remaining useful life in hours (nullable)
+  estimatedRulDays   Float?       /// Estimated remaining useful life in days (nullable)
+  confidence         Float        /// Prediction confidence percentage (0 - 100)
+  dataQuality        DataQuality  @default(GOOD)
+  predictionHorizon  String       @default("14d") /// e.g. "7d", "14d", "30d"
+  modelName          String       @default("polaris-degradation-baseline-v1")
+  modelVersion       String       @default("1.0.0")
+  featureVersion     String       @default("1.0")
+  topFactors         String       /// JSON string array of { factor: string, impact: number, category: string }
+  recommendation     String       /// Actionable advisory recommendation
+  telemetrySnapshot  String?      /// JSON string snapshot of key telemetry metrics at prediction time
+  generatedAt        DateTime     @default(now())
+  expiresAt          DateTime     /// Cache validity and staleness window
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([equipmentId, generatedAt])
+  @@index([stationId, riskBand])
+  @@index([generatedAt])
+  @@index([riskBand])
+  @@map("maintenance_predictions")
 }
 
 // ============================================================

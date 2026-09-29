@@ -2,11 +2,12 @@ from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.schemas.health import HealthResponse
+from app.api.prediction import router as prediction_router
 
 app = FastAPI(
     title="POLARIS AI Inference & Prediction Service",
-    description="Predictive maintenance, energy demand forecasting, and operational anomaly detection for Antarctic Research Stations",
-    version="0.1.0",
+    description="Predictive maintenance, health scoring, failure risk assessment, and explainable degradation analysis for Antarctic Research Stations (Maitri & Bharati)",
+    version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -20,6 +21,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount Predictive Maintenance API router
+app.include_router(prediction_router)
+
+
 @app.get(
     "/health",
     response_model=HealthResponse,
@@ -31,8 +36,9 @@ def get_health() -> HealthResponse:
         service="polaris-ai",
         status="healthy",
         timestamp=datetime.now(timezone.utc).isoformat(),
-        version="0.1.0"
+        version="1.0.0"
     )
+
 
 @app.get(
     "/",
@@ -41,14 +47,19 @@ def get_health() -> HealthResponse:
 def root():
     return {
         "service": "polaris-ai",
-        "description": "POLARIS AI Engine Foundation (Phase 0)",
+        "description": "POLARIS AI Engine — Phase 10 Predictive Maintenance",
         "capabilities": [
-            "Equipment Remaining Useful Life (RUL) Prediction",
-            "Energy Consumption & Demand Forecasting",
-            "Battery Depletion Curve Modeling",
-            "Fuel Tank Depletion & Replenishment Optimization",
-            "Antarctic Weather Anomaly Detection"
+            "Equipment Health Scoring (0-100)",
+            "Predictive Maintenance Risk Assessment (0-100)",
+            "Remaining Useful Life (RUL) Linear & Weibull Degradation Extrapolation",
+            "Explainable Factor Attribution & Telemetry Deltas",
+            "Deterministic Polar Engineering Advisory Recommendations"
         ],
-        "healthEndpoint": "/health",
-        "docs": "/docs"
+        "endpoints": {
+            "predict": "/predict",
+            "predictBatch": "/predict/batch",
+            "validateFeatures": "/validate-features",
+            "health": "/health",
+            "docs": "/docs"
+        }
     }

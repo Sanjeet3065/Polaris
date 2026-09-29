@@ -41,6 +41,9 @@ export interface Equipment3DState {
   hasActiveAlert?: boolean;
   activeAlertSeverity?: AlertSeverity;
   activeAlertTitle?: string;
+  riskScore?: number;
+  riskBand?: "LOW" | "GUARDED" | "MODERATE" | "HIGH" | "CRITICAL";
+  estimatedRulDays?: number | null;
 }
 
 export interface Station3DState {

@@ -17,6 +17,8 @@ import { runWebSocketTests } from "./websocket-tests";
 import { runEnergyEnvironmentTests } from "./energy-environment-tests";
 import { runLogisticsInventoryTests } from "./logistics-inventory-tests";
 import { runAlertsIncidentsTests } from "./alerts-incidents-tests";
+import { runAnalyticsReportsTests } from "./analytics-reports-tests";
+import { runAssistantTests } from "./assistant-tests";
 
 interface TestReport {
   name: string;
@@ -264,6 +266,12 @@ async function runAllTests() {
 
   // Execute Phase 9 Alerts + Incident Management Test Suite
   await runAlertsIncidentsTests();
+
+  // Execute Phase 11 Analytics + Reports Test Suite
+  await runAnalyticsReportsTests();
+
+  // Execute Phase 12 AI Operations Assistant Test Suite
+  await runAssistantTests();
 }
 
 runAllTests()

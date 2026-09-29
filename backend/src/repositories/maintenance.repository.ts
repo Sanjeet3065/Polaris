@@ -82,6 +82,37 @@ export class MaintenanceRepository {
       handleDbError(error, "MaintenanceRecord");
     }
   }
+
+  /**
+   * Creates a new maintenance work order record
+   */
+  async create(data: Prisma.MaintenanceRecordUncheckedCreateInput): Promise<MaintenanceRecord> {
+    try {
+      return await prisma.maintenanceRecord.create({
+        data,
+        include: {
+          equipment: true
+        }
+      });
+    } catch (error) {
+      handleDbError(error, "MaintenanceRecordCreate");
+    }
+  }
+
+  /**
+   * Retrieves recent maintenance history for an equipment asset
+   */
+  async findByEquipmentId(equipmentId: string, limit: number = 10): Promise<MaintenanceRecord[]> {
+    try {
+      return await prisma.maintenanceRecord.findMany({
+        where: { equipmentId },
+        orderBy: [{ scheduledAt: "desc" }, { createdAt: "desc" }],
+        take: limit
+      });
+    } catch (error) {
+      handleDbError(error, "MaintenanceRecordEquipmentHistory");
+    }
+  }
 }
 
 export const maintenanceRepository = new MaintenanceRepository();

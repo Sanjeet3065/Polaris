@@ -180,3 +180,27 @@ The application is fully containerized using **Docker Compose**:
 - `polaris_backend`: Node.js 20 Alpine container.
 - `polaris_ai`: Python 3.11 Slim container with Uvicorn.
 - `polaris_postgres`: PostgreSQL 16 Alpine with persistent named volumes.
+
+---
+
+## 12. Analytics & Reporting Architecture (Phase 11)
+
+The Phase 11 Analytics & Reporting subsystem processes historical multi-domain operational data into actionable intelligence:
+- **Dedicated Domain Services**: Energy, Environment, Equipment, Maintenance (Phase 10 integration), Alerts, Incidents, Logistics, and Station Comparison.
+- **Deterministic Summaries**: Automated executive summaries generated via deterministic templates (preserving the Phase 12 AI Assistant boundary).
+- **Report Generation & Export**: 9 standard operational report templates with CSV raw export and print-ready HTML/PDF formatting.
+- **Data Quality Assurance**: Telemetry completeness scoring (`GOOD` $\ge 90\%$, `LIMITED` $50\% - 89.9\%$, `POOR` $< 50\%$) with explicit data gap detection.
+- **RBAC & Station Isolation**: Strict role-scoped access control preventing unauthorized multi-station data exposure.
+
+---
+
+## 13. AI Operations Assistant Architecture (Phase 12)
+
+The Phase 12 AI Operations Assistant delivers natural-language conversational intelligence over actual POLARIS data:
+- **Zero Hallucination / Grounded Execution**: Answers are derived strictly from 21 allowlisted operational tools and PostgreSQL records.
+- **No Autonomous Station Control**: Advisory and informational only. Write operations produce an amber `ProposedAction` card requiring explicit operator confirmation via native module workflows.
+- **Anti-Injection & Security Defense**: Pre-execution input sanitization blocks prompt overrides, secret dumps, and unauthorized SQL generation.
+- **Pluggable Provider System**: Swappable abstraction supporting deterministic zero-token instant synthesis (`DeterministicAiProvider`) or Google Gemini (`GeminiProvider`) with automatic fallback.
+- **Real-Time Streaming**: Server-Sent Events (SSE) `/assistant/chat/stream` delivering incremental tokens, source citations, data freshness badges, and tool audit logs.
+- **Station Isolation & RBAC**: Station permissions and user roles (`ADMIN`, `OPERATOR`, `VIEWER`) are strictly enforced server-side.
+

@@ -19,6 +19,7 @@ import {
   UserCheck,
   Users,
   ShieldAlert,
+  Bot,
   X
 } from "lucide-react";
 import { Tooltip } from "../ui/Tooltip";
@@ -59,7 +60,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: "Alerts", path: "/alerts", icon: TriangleAlert, badge: kpiSummary.totalAlerts },
     { name: "Maintenance", path: "/maintenance", icon: Wrench },
     { name: "Analytics", path: "/analytics", icon: ChartNoAxesCombined },
-    { name: "Reports", path: "/reports", icon: FileText }
+    { name: "Reports", path: "/reports", icon: FileText },
+    { name: "AI Assistant", path: "/assistant", icon: Bot }
   ];
 
   const adminNavigation: NavItem[] = [

@@ -14,13 +14,14 @@ import { EnergyPage } from "../pages/EnergyPage";
 import { EnvironmentPage } from "../pages/EnvironmentPage";
 import { LogisticsPage } from "../pages/LogisticsPage";
 import { AlertsPage } from "../pages/AlertsPage";
+import { MaintenancePage } from "../pages/MaintenancePage";
+import { AnalyticsPage } from "../pages/AnalyticsPage";
+import { ReportsPage } from "../pages/ReportsPage";
+import { AssistantPage } from "../pages/AssistantPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
-  Settings2,
-  Wrench,
-  ChartNoAxesCombined,
-  FileText
+  Settings2
 } from "lucide-react";
 
 export const AppRoutes: React.FC = () => {
@@ -70,62 +71,13 @@ export const AppRoutes: React.FC = () => {
 
         <Route path="/alerts" element={<AlertsPage />} />
 
-        <Route
-          path="/maintenance"
-          element={
-            <PlaceholderPage
-              title="Maintenance & Work Orders"
-              subtitle="Preventive, corrective, and AI-predicted work order management"
-              description="Structured engineering work order system coordinating scheduled overhauls, emergency winter repairs, and technician work orders."
-              icon={Wrench}
-              targetPhase={10}
-              plannedFeatures={[
-                "Automated run-hour preventive overhaul scheduling",
-                "Digital work order assignment for station engineers",
-                "Maintenance spare parts deduction and inventory linking",
-                "Detailed inspection checklists and sign-off audit trail"
-              ]}
-            />
-          }
-        />
+        <Route path="/maintenance" element={<MaintenancePage />} />
 
-        <Route
-          path="/analytics"
-          element={
-            <PlaceholderPage
-              title="Polar Analytics & Scientific Trends"
-              subtitle="Longitudinal climate analytics, energy regressions, and operational KPIs"
-              description="Advanced analytics studio for exploring multi-year polar operational trends, equipment failure rates, and environmental correlations."
-              icon={ChartNoAxesCombined}
-              targetPhase={11}
-              plannedFeatures={[
-                "Seasonal fuel consumption vs. degree-days heating regression",
-                "Longitudinal microclimate record aggregation",
-                "Mean Time Between Failures (MTBF) tracking for station assets",
-                "Cross-station operational efficiency benchmarking"
-              ]}
-            />
-          }
-        />
+        <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
 
-        <Route
-          path="/reports"
-          element={
-            <PlaceholderPage
-              title="Compliance Reports & Operational Logs"
-              subtitle="Official MoES / NCPOR governance, audit logs, and PDF generation"
-              description="Automated reporting suite generating regulatory monthly logs, Antarctic Treaty environmental compliance documentation, and power statements."
-              icon={FileText}
-              targetPhase={11}
-              plannedFeatures={[
-                "One-click monthly station summary PDF generation",
-                "Antarctic environmental stewardship compliance logs",
-                "Annual fuel and carbon emission accountability reports",
-                "Exportable telemetry CSV/JSON bundles for research scientists"
-              ]}
-            />
-          }
-        />
+        {/* Phase 12 — AI Operations Assistant */}
+        <Route path="/assistant" element={<AssistantPage />} />
 
         {/* Phase 0 Architecture Overview Page Preserved */}
         <Route

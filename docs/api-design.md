@@ -82,7 +82,33 @@ All HTTP services communicate over **JSON REST APIs** prefixed with `/api/v1/`.
 * `PATCH /api/v1/alerts/:id/acknowledge`: Operator acknowledgment.
 * `POST /api/v1/incidents`: Formalize an escalated incident report.
 
-### AI Predictions & Reports
+### AI Predictions & Maintenance (Phase 10)
 * `GET  /api/v1/predictions/rul/:equipmentId`: Remaining useful life prediction from AI service.
 * `GET  /api/v1/predictions/fuel-autonomy?station=BHARATI`: Winter fuel autonomy forecast.
-* `GET  /api/v1/reports/compliance?month=2026-06`: Generate MoES/NCPOR monthly status PDF/JSON.
+* `GET  /api/v1/predictions`: List equipment maintenance predictions and risk assessments.
+
+### Analytics & Reports (Phase 11)
+* `GET  /api/v1/analytics/overview`: Top 10 KPI grid, executive summary, neutral trends.
+* `GET  /api/v1/analytics/energy`: Power generation vs. consumption, battery SoC, fuel reserves, solar split.
+* `GET  /api/v1/analytics/environment`: Meteorological time-series, katabatic wind gusts, Blizzard threshold breaches.
+* `GET  /api/v1/analytics/equipment`: Fleet health distribution, equipment diagnostic inventory, risk scores.
+* `GET  /api/v1/analytics/maintenance`: Phase 10 AI predictive integration, risk bands, RUL histograms, work orders.
+* `GET  /api/v1/analytics/alerts`: Alarm lifecycle statuses, severity breakdown, top recurring rules, MTTA/MTTR latencies.
+* `GET  /api/v1/analytics/incidents`: Incident lifecycle, category distributions, resolution durations, linked alerts.
+* `GET  /api/v1/analytics/logistics`: Stock depletion, immutable inventory movements, resupply shipments.
+* `GET  /api/v1/analytics/stations`: Neutral side-by-side benchmark comparison (Maitri vs. Bharati).
+* `GET  /api/v1/reports`: List generated operational reports.
+* `GET  /api/v1/reports/types`: List available standardized report template descriptors.
+* `GET  /api/v1/reports/:id`: Retrieve single generated report with complete payload.
+* `POST /api/v1/reports/generate`: Generate a new report using selected template and time window.
+* `GET  /api/v1/reports/:id/export?format=csv|html`: Export report as raw tabular CSV or print-ready HTML/PDF.
+
+### AI Operations Assistant (Phase 12)
+* `POST   /api/v1/assistant/chat`: Natural language query with tool execution and grounded answer response.
+* `POST   /api/v1/assistant/chat/stream`: Real-time Server-Sent Events (SSE) streaming response with token emissions.
+* `GET    /api/v1/assistant/conversations`: List user's active briefing sessions.
+* `GET    /api/v1/assistant/conversations/:id`: Retrieve specific conversation thread with full message history.
+* `DELETE /api/v1/assistant/conversations/:id`: Terminate and remove conversation session.
+* `GET    /api/v1/assistant/suggestions?station=MAITRI`: Retrieve context-aware quick prompt suggestions.
+
+
