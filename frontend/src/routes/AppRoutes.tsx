@@ -10,11 +10,11 @@ import { DigitalTwinPage } from "../pages/DigitalTwinPage";
 import { LoginPage } from "../pages/LoginPage";
 import { UserManagementPage } from "../pages/admin/UserManagementPage";
 import { AuthAuditPage } from "../pages/admin/AuthAuditPage";
+import { EnergyPage } from "../pages/EnergyPage";
+import { EnvironmentPage } from "../pages/EnvironmentPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
 import {
-  Zap,
-  Wind,
   Settings2,
   Boxes,
   TriangleAlert,
@@ -41,43 +41,11 @@ export const AppRoutes: React.FC = () => {
         {/* Phase 6 — Interactive 3D Digital Twin Subsystem */}
         <Route path="/digital-twin" element={<DigitalTwinPage />} />
 
-        <Route
-          path="/energy"
-          element={
-            <PlaceholderPage
-              title="Energy & Microgrid Management"
-              subtitle="Solar PV arrays, diesel cogeneration, and battery bank distribution"
-              description="Full-scale station microgrid telemetry tracking power generation, consumption loads, sub-zero battery storage dynamics, and fuel farm burn rates."
-              icon={Zap}
-              targetPhase={7}
-              plannedFeatures={[
-                "Autonomous load shedding and priority grid circuit control",
-                "Solar generation forecasting vs. diesel generator throttling",
-                "Sub-zero Lithium-Iron-Phosphate battery degradation curve tracking",
-                "Cogeneration thermal heat recovery metrics for living modules"
-              ]}
-            />
-          }
-        />
+        {/* Phase 7 — Energy & Microgrid Management */}
+        <Route path="/energy" element={<EnergyPage />} />
 
-        <Route
-          path="/environment"
-          element={
-            <PlaceholderPage
-              title="Environmental & Climate Telemetry"
-              subtitle="Extreme microclimate monitoring, Katabatic winds, and blizzard detection"
-              description="High-frequency outdoor environmental sensor feeds capturing ambient temperature, atmospheric pressure swings, and Katabatic blizzard wind dynamics."
-              icon={Wind}
-              targetPhase={7}
-              plannedFeatures={[
-                "Automated Weather Station (AWS) telemetry from Schirmacher Oasis & Larsemann Hills",
-                "Barometric pressure rapid-drop blizzard early warning system",
-                "Ultrasonic snow depth and accumulation rate sensors",
-                "Solar irradiance and UV radiation index instrumentation"
-              ]}
-            />
-          }
-        />
+        {/* Phase 7 — Environmental & Climate Telemetry */}
+        <Route path="/environment" element={<EnvironmentPage />} />
 
         <Route
           path="/equipment"

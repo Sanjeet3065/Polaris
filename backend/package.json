@@ -19,6 +19,7 @@
     "simulator:tick": "tsx scripts/manual-tick.ts",
     "simulator:test": "tsx src/__tests__/simulator-tests.ts",
     "websocket:test": "tsx src/__tests__/websocket-tests.ts",
+    "test:phase7": "tsx src/__tests__/energy-environment-tests.ts",
     "lint": "echo \"Backend linting passing\" && exit 0"
   },
   "dependencies": {

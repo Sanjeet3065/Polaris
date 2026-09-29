@@ -7,7 +7,8 @@ import {
   HourlyPowerDataPoint,
   HourlyTemperatureDataPoint,
   Equipment,
-  Alert
+  Alert,
+  BatteryStatus
 } from "../types";
 import { MOCK_STATIONS } from "../data/stations";
 import { MOCK_ENVIRONMENT } from "../data/telemetry";
@@ -51,6 +52,8 @@ interface StationContextValue {
   stationInfo: Station;
   environment: EnvironmentalTelemetry;
   energy: EnergyTelemetry;
+  liveEnergyByStation: Record<string, EnergyTelemetry>;
+  liveEnvironmentByStation: Record<string, EnvironmentalTelemetry>;
   hourlyPower: HourlyPowerDataPoint[];
   temperatureTrend: {
     trendLabel: string;
@@ -149,14 +152,22 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
           ...prev,
           [code]: {
             ...prev[code],
+            stationCode: code as "MAITRI" | "BHARATI",
             temperatureCelsius: payload.environment.temperature,
+            humidityPercentage: payload.environment.humidity,
             relativeHumidityPercent: payload.environment.humidity,
+            atmosphericPressureHpa: payload.environment.pressure,
             barometricPressureHpa: payload.environment.pressure,
+            windSpeedKmh: payload.environment.windSpeed,
             windSpeedKmH: payload.environment.windSpeed,
             windDirectionCompass: payload.environment.windDirectionCompass,
             windDirectionDegrees: payload.environment.windDirection,
+            visibilityKm: payload.environment.visibility,
             opticalVisibilityKm: payload.environment.visibility,
+            solarRadiationWattsPerM2: payload.environment.solarRadiation,
             solarIrradianceWm2: payload.environment.solarRadiation,
+            snowfallMmPerHour: payload.environment.snowfallRate,
+            status: payload.environment.temperature < -50 || payload.environment.windSpeed > 80 ? "CRITICAL" : payload.environment.windSpeed > 50 ? "WARNING" : "NORMAL",
             timestamp: payload.timestamp
           }
         }));
@@ -171,16 +182,22 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
             ...prev,
             [code]: {
               ...prev[code],
+              stationCode: code as "MAITRI" | "BHARATI",
               totalGenerationKw: payload.energy.generationKw,
+              solarGenerationKw: payload.energy.solarKw,
               solarPhotovoltaicKw: payload.energy.solarKw,
+              dieselGenerationKw: payload.energy.dieselKw,
               dieselGeneratorKw: payload.energy.dieselKw,
               totalConsumptionKw: payload.energy.consumptionKw,
               netPowerBalanceKw: payload.energy.netPowerKw,
               batteryPercentage: payload.energy.batteryPercent,
+              batteryVoltageV: payload.energy.batteryVoltage,
               batteryBusVoltage: payload.energy.batteryVoltage,
               batteryStatus,
               fuelReservesPercent: payload.energy.fuelPercent,
+              fuelReservesLiters: payload.energy.fuelLiters,
               fuelReserveLiters: payload.energy.fuelLiters,
+              fuelAutonomyDaysRemaining: payload.energy.fuelDaysRemaining,
               estimatedFuelDaysRemaining: payload.energy.fuelDaysRemaining,
               timestamp: payload.timestamp
             }
@@ -324,8 +341,84 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return base;
   }, [selectedStation, stationHealthOverrides]);
 
-  const environment = useMemo(() => liveEnvironment[selectedStation] || MOCK_ENVIRONMENT[selectedStation], [liveEnvironment, selectedStation]);
-  const energy = useMemo(() => liveEnergy[selectedStation] || MOCK_ENERGY[selectedStation], [liveEnergy, selectedStation]);
+  const environment: EnvironmentalTelemetry = useMemo(() => {
+    if (selectedStation === "ALL") {
+      const m = liveEnvironment.MAITRI || MOCK_ENVIRONMENT.MAITRI;
+      const b = liveEnvironment.BHARATI || MOCK_ENVIRONMENT.BHARATI;
+      const avgTemp = Number(((m.temperatureCelsius + b.temperatureCelsius) / 2).toFixed(1));
+      const mHum = m.humidityPercentage ?? (m as any).relativeHumidityPercent ?? 70;
+      const bHum = b.humidityPercentage ?? (b as any).relativeHumidityPercent ?? 70;
+      const mPress = m.atmosphericPressureHpa ?? (m as any).barometricPressureHpa ?? 980;
+      const bPress = b.atmosphericPressureHpa ?? (b as any).barometricPressureHpa ?? 980;
+      const mWind = m.windSpeedKmh ?? (m as any).windSpeedKmH ?? 40;
+      const bWind = b.windSpeedKmh ?? (b as any).windSpeedKmH ?? 40;
+      const mVis = m.visibilityKm ?? (m as any).opticalVisibilityKm ?? 15;
+      const bVis = b.visibilityKm ?? (b as any).opticalVisibilityKm ?? 15;
+      const mRad = m.solarRadiationWattsPerM2 ?? (m as any).solarIrradianceWm2 ?? 130;
+      const bRad = b.solarRadiationWattsPerM2 ?? (b as any).solarIrradianceWm2 ?? 130;
+
+      return {
+        stationCode: "BHARATI" as const,
+        timestamp: m.timestamp || b.timestamp,
+        temperatureCelsius: avgTemp,
+        humidityPercentage: Math.round((mHum + bHum) / 2),
+        relativeHumidityPercent: Math.round((mHum + bHum) / 2),
+        atmosphericPressureHpa: Math.round((mPress + bPress) / 2),
+        barometricPressureHpa: Math.round((mPress + bPress) / 2),
+        windSpeedKmh: Math.round(Math.max(mWind, bWind)),
+        windSpeedKmH: Math.round(Math.max(mWind, bWind)),
+        windDirectionDegrees: 135,
+        windDirectionCompass: "SE",
+        visibilityKm: Number(((mVis + bVis) / 2).toFixed(1)),
+        opticalVisibilityKm: Number(((mVis + bVis) / 2).toFixed(1)),
+        solarRadiationWattsPerM2: Math.round((mRad + bRad) / 2),
+        solarIrradianceWm2: Math.round((mRad + bRad) / 2),
+        snowfallMmPerHour: 1.0,
+        status: avgTemp < -50 || Math.max(mWind, bWind) > 80 ? "CRITICAL" : Math.max(mWind, bWind) > 50 ? "WARNING" : "NORMAL"
+      } as EnvironmentalTelemetry;
+    }
+    return liveEnvironment[selectedStation] || MOCK_ENVIRONMENT[selectedStation];
+  }, [liveEnvironment, selectedStation]);
+
+  const energy: EnergyTelemetry = useMemo(() => {
+    if (selectedStation === "ALL") {
+      const m = liveEnergy.MAITRI || MOCK_ENERGY.MAITRI;
+      const b = liveEnergy.BHARATI || MOCK_ENERGY.BHARATI;
+      const gen = m.totalGenerationKw + b.totalGenerationKw;
+      const con = m.totalConsumptionKw + b.totalConsumptionKw;
+      const solar = (m.solarGenerationKw ?? (m as any).solarPhotovoltaicKw ?? 0) + (b.solarGenerationKw ?? (b as any).solarPhotovoltaicKw ?? 0);
+      const diesel = (m.dieselGenerationKw ?? (m as any).dieselGeneratorKw ?? 0) + (b.dieselGenerationKw ?? (b as any).dieselGeneratorKw ?? 0);
+      const mVolt = m.batteryVoltageV ?? (m as any).batteryBusVoltage ?? 490;
+      const bVolt = b.batteryVoltageV ?? (b as any).batteryBusVoltage ?? 490;
+      const mLit = m.fuelReservesLiters ?? (m as any).fuelReserveLiters ?? 0;
+      const bLit = b.fuelReservesLiters ?? (b as any).fuelReserveLiters ?? 0;
+      const mDays = m.fuelAutonomyDaysRemaining ?? (m as any).estimatedFuelDaysRemaining ?? 200;
+      const bDays = b.fuelAutonomyDaysRemaining ?? (b as any).estimatedFuelDaysRemaining ?? 200;
+
+      return {
+        stationCode: "BHARATI" as const,
+        timestamp: m.timestamp || b.timestamp,
+        solarGenerationKw: solar,
+        solarPhotovoltaicKw: solar,
+        dieselGenerationKw: diesel,
+        dieselGeneratorKw: diesel,
+        totalGenerationKw: gen,
+        totalConsumptionKw: con,
+        netPowerBalanceKw: gen - con,
+        batteryPercentage: Math.round((m.batteryPercentage + b.batteryPercentage) / 2),
+        batteryStatus: (gen - con > 2 ? "CHARGING" : gen - con < -2 ? "DISCHARGING" : "STABLE") as BatteryStatus,
+        batteryVoltageV: Number(((mVolt + bVolt) / 2).toFixed(1)),
+        batteryBusVoltage: Number(((mVolt + bVolt) / 2).toFixed(1)),
+        fuelReservesPercent: Math.round((m.fuelReservesPercent + b.fuelReservesPercent) / 2),
+        fuelReservesLiters: mLit + bLit,
+        fuelReserveLiters: mLit + bLit,
+        fuelAutonomyDaysRemaining: Math.round((mDays + bDays) / 2),
+        estimatedFuelDaysRemaining: Math.round((mDays + bDays) / 2)
+      } as EnergyTelemetry;
+    }
+    return liveEnergy[selectedStation] || MOCK_ENERGY[selectedStation];
+  }, [liveEnergy, selectedStation]);
+
   const hourlyPower = useMemo(() => livePowerTrend[selectedStation] || MOCK_HOURLY_POWER[selectedStation], [livePowerTrend, selectedStation]);
   const temperatureTrend = useMemo(() => ({
     ...MOCK_TEMPERATURE_TRENDS[selectedStation],
@@ -375,6 +468,8 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
     stationInfo,
     environment,
     energy,
+    liveEnergyByStation: liveEnergy,
+    liveEnvironmentByStation: liveEnvironment,
     hourlyPower,
     temperatureTrend,
     equipmentList,

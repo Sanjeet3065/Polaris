@@ -14,6 +14,7 @@ import { healthService } from "../services/health.service";
 import { runAuthTests } from "./auth-tests";
 import { runSimulatorTests } from "./simulator-tests";
 import { runWebSocketTests } from "./websocket-tests";
+import { runEnergyEnvironmentTests } from "./energy-environment-tests";
 
 interface TestReport {
   name: string;
@@ -252,6 +253,9 @@ async function runAllTests() {
 
   // Execute Phase 5 Real-Time WebSocket Test Suite
   await runWebSocketTests();
+
+  // Execute Phase 7 Energy + Environment Monitoring Test Suite
+  await runEnergyEnvironmentTests();
 }
 
 runAllTests()
