@@ -4,13 +4,15 @@ import { env } from "./config/env";
 import { logger } from "./utils/logger";
 import { webSocketManager } from "./websocket/socketHandler";
 import { simulatorService } from "./simulator/simulator.service";
+import { realtimeService } from "./realtime/realtime.service";
 
 const startServer = (): void => {
   const app = createApp();
   const server = http.createServer(app);
 
-  // Initialize WebSocket architecture hook
+  // Initialize WebSocket real-time monitoring server
   webSocketManager.initialize(server);
+  realtimeService.initialize(server);
 
   server.listen(env.PORT, env.HOST, async () => {
     logger.info("POLARIS Backend Server initialized successfully", {
@@ -33,6 +35,7 @@ const startServer = (): void => {
   const gracefulShutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Shutting down POLARIS backend gracefully...`);
     simulatorService.stop();
+    await realtimeService.shutdown();
     const { disconnectPrisma } = await import("./config/prisma");
     await disconnectPrisma();
     server.close(() => {

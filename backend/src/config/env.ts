@@ -28,7 +28,12 @@ const envSchema = z.object({
   SIMULATOR_ENABLED: z.preprocess((val) => val === "true" || val === true, z.boolean()).default(false),
   SIMULATOR_INTERVAL_MS: z.coerce.number().min(500).max(3600000).default(5000),
   SIMULATOR_NOISE_LEVEL: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
-  SIMULATOR_DEFAULT_SCENARIO: z.string().default("NORMAL")
+  SIMULATOR_DEFAULT_SCENARIO: z.string().default("NORMAL"),
+  WEBSOCKET_ENABLED: z.preprocess((val) => val === "true" || val === true, z.boolean()).default(true),
+  WEBSOCKET_HEARTBEAT_INTERVAL_MS: z.coerce.number().min(1000).max(300000).default(30000),
+  WEBSOCKET_CONNECTION_TIMEOUT_MS: z.coerce.number().min(2000).max(600000).default(60000),
+  WEBSOCKET_MAX_CONNECTIONS: z.coerce.number().min(1).max(10000).default(100),
+  WEBSOCKET_MAX_MESSAGE_SIZE: z.coerce.number().min(1024).max(1048576).default(65536)
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

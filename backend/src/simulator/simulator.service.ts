@@ -5,14 +5,17 @@ import {
   SimulatorStatus,
   ManualTickSummary,
   ScenarioDefinition,
-  ActiveScenario
+  ActiveScenario,
+  GeneratedTelemetryCycle
 } from "./models/simulator.types";
 import { SIMULATOR_LIMITS } from "./config/simulator.config";
 import { SCENARIO_CATALOG } from "./scenarios/scenario.definitions";
 import { scenarioEngine } from "./scenarios/scenario.engine";
 import { simulationEngine } from "./engine/simulation.engine";
 import { telemetryPersistenceService } from "./persistence/telemetry-persistence.service";
+import { realtimeService } from "../realtime/realtime.service";
 import { logger } from "../utils/logger";
+import crypto from "crypto";
 
 export interface SimulatorStartOptions {
   intervalMs?: number;
@@ -169,6 +172,15 @@ export class SimulatorService {
         if (persistToDb) {
           await telemetryPersistenceService.persistCycle(cycle);
         }
+
+        // Phase 5: Publish telemetry domain event after successful generation & persistence (Sections 22 & 23)
+        realtimeService.publishTelemetryCycle(cycle);
+
+        // Check for threshold anomalies and publish alert:triggered (Section 24)
+        this.checkForAlertTransitions(cycle);
+
+        // Publish equipment:update for any equipment in non-optimal status (Section 26)
+        this.checkForEquipmentUpdates(cycle);
       } catch (stationError) {
         logger.error(`SIMULATOR_ERROR: Failure generating or persisting telemetry for station ${code}`, stationError as Error, {
           station: code,
@@ -208,14 +220,124 @@ export class SimulatorService {
     intensity?: number,
     durationSeconds?: number
   ): ActiveScenario {
-    return scenarioEngine.startScenario(stationCode, type, intensity, durationSeconds);
+    const scenario = scenarioEngine.startScenario(stationCode, type, intensity, durationSeconds);
+    const def = SCENARIO_CATALOG[scenario.type];
+    realtimeService.publishScenario({
+      scenario: scenario.type,
+      stationCode: scenario.stationCode,
+      intensity: scenario.intensity,
+      status: "STARTED",
+      startTimestamp: scenario.startedAt.toISOString(),
+      elapsedSeconds: 0,
+      affectedSubsystem: def?.targetDomain || "STATION",
+      diagnosticNote: def?.description || "Active anomaly scenario"
+    });
+    return scenario;
   }
 
   /**
    * Stops an active scenario for a station
    */
   stopScenario(stationCode: StationCode): boolean {
-    return scenarioEngine.stopScenario(stationCode);
+    const stopped = scenarioEngine.stopScenario(stationCode);
+    if (stopped) {
+      realtimeService.publishScenario({
+        scenario: "NORMAL",
+        stationCode,
+        intensity: 0,
+        status: "STOPPED",
+        startTimestamp: new Date().toISOString(),
+        elapsedSeconds: 0,
+        affectedSubsystem: "BASELINE_RESTORED",
+        diagnosticNote: "Scenario deactivated. Returning to baseline telemetry."
+      });
+    }
+    return stopped;
+  }
+
+  /**
+   * Evaluates telemetry metrics for alert transitions and publishes deduplicated alert events (Section 24)
+   */
+  private checkForAlertTransitions(cycle: GeneratedTelemetryCycle): void {
+    // 1. Extreme Wind Alert
+    if (cycle.environmentalReading.windSpeed > 90) {
+      realtimeService.publishAlert({
+        id: crypto.randomUUID(),
+        stationCode: cycle.stationCode,
+        stationId: cycle.stationId,
+        severity: cycle.environmentalReading.windSpeed > 120 ? "CRITICAL" : "WARNING",
+        title: "Katabatic Blizzard Gale",
+        message: `Dangerous wind velocity recorded at ${cycle.environmentalReading.windSpeed.toFixed(1)} km/h`,
+        category: "ENVIRONMENTAL",
+        triggeredAt: cycle.timestamp.toISOString()
+      });
+    }
+
+    // 2. Critical Low Battery Alert
+    if (cycle.energyReading.batteryPercent < 25) {
+      realtimeService.publishAlert({
+        id: crypto.randomUUID(),
+        stationCode: cycle.stationCode,
+        stationId: cycle.stationId,
+        severity: "CRITICAL",
+        title: "Battery Bank Depleted",
+        message: `Energy storage reserves critical: ${cycle.energyReading.batteryPercent.toFixed(1)}% SoC remaining`,
+        category: "ENERGY",
+        triggeredAt: cycle.timestamp.toISOString()
+      });
+    }
+
+    // 3. Low Fuel Storage Alert
+    if (cycle.energyReading.fuelPercent < 20) {
+      realtimeService.publishAlert({
+        id: crypto.randomUUID(),
+        stationCode: cycle.stationCode,
+        stationId: cycle.stationId,
+        severity: "CRITICAL",
+        title: "Fuel Reserve Low",
+        message: `Diesel fuel capacity down to ${cycle.energyReading.fuelPercent.toFixed(1)}% (${cycle.energyReading.fuelDaysRemaining.toFixed(0)} days)`,
+        category: "LIFE_SUPPORT",
+        triggeredAt: cycle.timestamp.toISOString()
+      });
+    }
+
+    // 4. Equipment Warning / Critical Alerts
+    for (const eh of cycle.equipmentHealth) {
+      if (eh.status === "WARNING" || eh.status === "CRITICAL") {
+        realtimeService.publishAlert({
+          id: crypto.randomUUID(),
+          stationCode: cycle.stationCode,
+          stationId: cycle.stationId,
+          severity: eh.status === "CRITICAL" ? "CRITICAL" : "WARNING",
+          title: `Equipment ${eh.equipmentId.slice(0, 8)} Anomaly`,
+          message: eh.notes || `Elevated thermal (${eh.temperature}°C) or vibration (${eh.vibration} mm/s) signature`,
+          category: "EQUIPMENT",
+          sourceEquipmentCode: eh.equipmentId,
+          triggeredAt: cycle.timestamp.toISOString()
+        });
+      }
+    }
+  }
+
+  /**
+   * Publishes granular equipment state update events (Section 26)
+   */
+  private checkForEquipmentUpdates(cycle: GeneratedTelemetryCycle): void {
+    for (const eh of cycle.equipmentHealth) {
+      if (eh.status !== "OPERATIONAL") {
+        realtimeService.publishEquipment({
+          equipmentId: eh.equipmentId,
+          stationCode: cycle.stationCode,
+          status: eh.status,
+          healthPercent: eh.healthPercent,
+          temperature: eh.temperature,
+          vibration: eh.vibration,
+          runtimeHours: eh.runtimeHours,
+          notes: eh.notes,
+          timestamp: cycle.timestamp.toISOString()
+        });
+      }
+    }
   }
 
   /**

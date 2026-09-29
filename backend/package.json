@@ -18,6 +18,7 @@
     "test": "tsx src/__tests__/run-tests.ts",
     "simulator:tick": "tsx scripts/manual-tick.ts",
     "simulator:test": "tsx src/__tests__/simulator-tests.ts",
+    "websocket:test": "tsx src/__tests__/websocket-tests.ts",
     "lint": "echo \"Backend linting passing\" && exit 0"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.0",
     "prisma": "6.4.1",
+    "ws": "^8.22.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -41,6 +43,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.9",
+    "@types/ws": "^8.18.1",
     "embedded-postgres": "^18.4.0-beta.17",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"

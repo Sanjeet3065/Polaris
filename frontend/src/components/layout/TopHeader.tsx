@@ -23,7 +23,7 @@ interface TopHeaderProps {
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => {
-  const { selectedStation, setSelectedStation, kpiSummary, alertsList } = useStation();
+  const { selectedStation, setSelectedStation, kpiSummary, alertsList, realtimeStatus, isStale } = useStation();
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -151,6 +151,37 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
 
       {/* Right: Operational Status, Live UTC, Notifications, Avatar */}
       <div className="flex items-center gap-2 sm:gap-4">
+        {/* Real-time WebSocket connection indicator */}
+        <div
+          className={cn(
+            "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold transition-colors",
+            realtimeStatus === "LIVE" && !isStale && "border border-cyan-800/60 bg-cyan-950/60 text-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.3)]",
+            realtimeStatus === "LIVE" && isStale && "border border-amber-800/60 bg-amber-950/60 text-amber-300",
+            realtimeStatus === "RECONNECTING" && "border border-amber-800/60 bg-amber-950/60 text-amber-300",
+            realtimeStatus === "OFFLINE" && "border border-rose-900/60 bg-rose-950/60 text-rose-400"
+          )}
+          title={`WebSocket Status: ${realtimeStatus}${isStale ? " (Telemetry Stale)" : ""}`}
+        >
+          <span
+            className={cn(
+              "h-2 w-2 rounded-full",
+              realtimeStatus === "LIVE" && !isStale && "bg-cyan-400 animate-pulse",
+              realtimeStatus === "LIVE" && isStale && "bg-amber-400",
+              realtimeStatus === "RECONNECTING" && "bg-amber-400 animate-ping",
+              realtimeStatus === "OFFLINE" && "bg-rose-500"
+            )}
+          />
+          <span className="tracking-wider">
+            {realtimeStatus === "LIVE"
+              ? isStale
+                ? "STALE"
+                : "LIVE"
+              : realtimeStatus === "RECONNECTING"
+              ? "RECONNECTING"
+              : "OFFLINE"}
+          </span>
+        </div>
+
         {/* System operational pill */}
         <div className="hidden md:flex items-center gap-1.5 rounded-full border border-emerald-800/60 bg-emerald-950/60 px-2.5 py-1 text-xs font-bold text-emerald-300 shadow-aurora-glow">
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
