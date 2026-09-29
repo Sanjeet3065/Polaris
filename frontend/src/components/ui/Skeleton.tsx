@@ -38,3 +38,30 @@ export const ChartSkeleton: React.FC = () => {
     </div>
   );
 };
+
+export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({
+  rows = 5,
+  columns = 4
+}) => {
+  return (
+    <div className="rounded-xl border border-slate-800 bg-polar-900/60 overflow-hidden p-4 space-y-3">
+      <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-7 w-24 rounded-lg" />
+      </div>
+      <div className="space-y-2.5">
+        {Array.from({ length: rows }).map((_, rIdx) => (
+          <div key={rIdx} className="flex items-center gap-3">
+            {Array.from({ length: columns }).map((_, cIdx) => (
+              <Skeleton
+                key={cIdx}
+                className={cIdx === 0 ? "h-4 w-1/3" : "h-4 flex-1"}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+

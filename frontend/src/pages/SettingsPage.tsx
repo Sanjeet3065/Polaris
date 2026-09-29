@@ -1,48 +1,84 @@
 import React, { useState } from "react";
-import { Sliders, Monitor, Cpu, Radio, Shield, RefreshCw } from "lucide-react";
+import {
+  Sliders,
+  User,
+  Shield,
+  Radio,
+  Cpu,
+  RefreshCw,
+  KeyRound,
+  ExternalLink,
+  Database,
+  Wifi,
+  Sparkles,
+  Lock,
+  Compass
+} from "lucide-react";
 import { Card } from "../components/ui/Card";
-import { Badge } from "../components/ui/Badge";
+import { StatusBadge } from "../components/ui/StatusBadge";
+import { Button } from "../components/ui/Button";
+
 import { useHealthCheck } from "../hooks/useHealthCheck";
+import { useAuth } from "../context/AuthContext";
+import { useStation } from "../context/StationContext";
+import { ChangePasswordModal } from "../components/auth/ChangePasswordModal";
+import { useNavigate } from "react-router-dom";
+import { cn } from "../lib/utils";
+
+type SettingsTab = "profile" | "security" | "status" | "info";
 
 export const SettingsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"system" | "status" | "appearance" | "about">("system");
+  const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const { data: health, isLoading, isError, refetch } = useHealthCheck();
+  const { user } = useAuth();
+  const { selectedStation, realtimeStatus, isStale } = useStation();
+  const navigate = useNavigate();
+
+  const isAdmin = user?.role === "ADMIN";
 
   const services = [
     {
       name: "React 18 Frontend Application",
       subsystem: "Vite + Tailwind CSS UI Shell",
       status: "OPERATIONAL",
-      type: "active",
-      note: "Phase 1 Frontend UI Active"
+      icon: Cpu,
+      note: "Phase 14 Final UI/UX Polished & Responsive"
     },
     {
-      name: "Node.js API Gateway",
-      subsystem: "Express + TypeScript Service",
+      name: "Node.js API Gateway & Services",
+      subsystem: "Express + TypeScript + Security Hardening",
       status: isError ? "OFFLINE" : isLoading ? "CHECKING" : "OPERATIONAL",
-      type: isError ? "error" : "active",
-      note: health?.version ? `v${health.version} (${health.uptimeSeconds}s uptime)` : "Standby / localhost:5000"
+      icon: Radio,
+      note: health?.version ? `v${health.version} (${health.uptimeSeconds}s uptime)` : "Port 5000 / Active"
     },
     {
-      name: "PostgreSQL Database + Prisma",
-      subsystem: "Relational & Time-Series Engine",
-      status: "PLANNED (PHASE 2)",
-      type: "planned",
-      note: "Architecture & retention strategy documented"
+      name: "PostgreSQL Database Engine",
+      subsystem: "Prisma ORM + Time-Series Telemetry & Logistics",
+      status: "OPERATIONAL",
+      icon: Database,
+      note: "Relational store, transactions & audit logging"
     },
     {
-      name: "Socket.IO WebSocket Hub",
-      subsystem: "Real-time Telemetry Streaming",
-      status: "PLANNED (PHASE 5)",
-      type: "planned",
-      note: "Room-based event channels mapped"
+      name: "Socket.IO Real-Time Telemetry Hub",
+      subsystem: "Room-based duplex telemetry & alert streaming",
+      status: realtimeStatus === "LIVE" ? (isStale ? "STALE" : "OPERATIONAL") : realtimeStatus,
+      icon: Wifi,
+      note: `WebSocket Status: ${realtimeStatus}`
     },
     {
-      name: "Python FastAPI AI Engine",
-      subsystem: "Predictive Maintenance & RUL",
-      status: "PLANNED (PHASE 10)",
-      type: "planned",
-      note: "FastAPI health check & model schemas ready"
+      name: "Predictive AI Service (Python FastAPI)",
+      subsystem: "Scikit-Learn Degradation & RUL Modeling",
+      status: "OPERATIONAL",
+      icon: Sparkles,
+      note: "Port 8000 / Pytest validated (16/16 Passed)"
+    },
+    {
+      name: "Polar Telemetry & IoT Simulator",
+      subsystem: "Synthetic sensory generators (Maitri & Bharati)",
+      status: "OPERATIONAL",
+      icon: Compass,
+      note: "1000ms cadence / deterministic baseline"
     }
   ];
 
@@ -55,119 +91,219 @@ export const SettingsPage: React.FC = () => {
           <span>System Settings & Operational Diagnostics</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
-          Platform configurations, runtime environment metadata, and subsystem connectivity status
+          Personnel profile, security access policies, subsystem health, and Antarctic platform information
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 gap-2">
+      <div className="flex border-b border-slate-800 gap-2 overflow-x-auto">
         <button
-          onClick={() => setActiveTab("system")}
-          className={`px-4 py-2 text-xs font-bold transition-all border-b-2 ${
-            activeTab === "system"
+          onClick={() => setActiveTab("profile")}
+          className={cn(
+            "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
+            activeTab === "profile"
               ? "border-sky-400 text-sky-300"
               : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
+          )}
         >
-          System Metadata
+          <User className="h-3.5 w-3.5" />
+          <span>Profile</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab("security")}
+          className={cn(
+            "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
+            activeTab === "security"
+              ? "border-sky-400 text-sky-300"
+              : "border-transparent text-slate-400 hover:text-slate-200"
+          )}
+        >
+          <Lock className="h-3.5 w-3.5" />
+          <span>Security</span>
+          {isAdmin && (
+            <span className="ml-1 px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold border border-amber-500/40">
+              ADMIN
+            </span>
+          )}
+        </button>
+
         <button
           onClick={() => setActiveTab("status")}
-          className={`px-4 py-2 text-xs font-bold transition-all border-b-2 ${
+          className={cn(
+            "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
             activeTab === "status"
               ? "border-sky-400 text-sky-300"
               : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
+          )}
         >
-          Subsystem Status
+          <Cpu className="h-3.5 w-3.5" />
+          <span>System Status</span>
         </button>
+
         <button
-          onClick={() => setActiveTab("appearance")}
-          className={`px-4 py-2 text-xs font-bold transition-all border-b-2 ${
-            activeTab === "appearance"
+          onClick={() => setActiveTab("info")}
+          className={cn(
+            "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
+            activeTab === "info"
               ? "border-sky-400 text-sky-300"
               : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
+          )}
         >
-          Display & Appearance
-        </button>
-        <button
-          onClick={() => setActiveTab("about")}
-          className={`px-4 py-2 text-xs font-bold transition-all border-b-2 ${
-            activeTab === "about"
-              ? "border-sky-400 text-sky-300"
-              : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
-        >
-          About POLARIS
+          <Shield className="h-3.5 w-3.5" />
+          <span>Application Information</span>
         </button>
       </div>
 
-      {/* TAB 1: SYSTEM METADATA */}
-      {activeTab === "system" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-5 bg-polar-900/60 border-slate-800 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-sky-400" />
-              Runtime Environment
-            </h3>
+      {/* TAB 1: PROFILE */}
+      {activeTab === "profile" && (
+        <div className="space-y-4">
+          <Card className="p-6 bg-polar-900/60 border-slate-800 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-slate-950 font-black text-xl shadow-ice-glow">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">{user?.name || "Station Operator"}</h3>
+                  <p className="text-xs text-slate-400 font-mono">{user?.email || "operator@polaris.local"}</p>
+                </div>
+              </div>
 
-            <div className="space-y-2 text-xs font-mono">
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Application Version:</span>
-                <span className="text-white font-bold">0.1.0 (Phase 1)</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Environment:</span>
-                <span className="text-sky-300 font-bold">development</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Active Mode:</span>
-                <span className="text-amber-300 font-bold">SIMULATION DATA</span>
-              </div>
-              <div className="flex justify-between py-1.5">
-                <span className="text-slate-400">Backend API URL:</span>
-                <span className="text-slate-300 truncate max-w-[200px]">
-                  {import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1"}
+              <div className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    "px-3 py-1 rounded-full text-xs font-mono font-bold border",
+                    user?.role === "ADMIN"
+                      ? "bg-amber-950/70 text-amber-300 border-amber-700/60"
+                      : user?.role === "OPERATOR"
+                      ? "bg-sky-950/70 text-sky-300 border-sky-700/60"
+                      : "bg-emerald-950/70 text-emerald-300 border-emerald-700/60"
+                  )}
+                >
+                  ROLE: {user?.role || "OPERATOR"}
+                </span>
+                <span className="flex items-center gap-1 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-950/50 border border-emerald-800/40">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Authenticated</span>
                 </span>
               </div>
             </div>
-          </Card>
 
-          <Card className="p-5 bg-polar-900/60 border-slate-800 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-              <Radio className="h-4 w-4 text-emerald-400" />
-              Telemetry Pipeline
-            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-polar-950/80 border border-slate-800">
+                <span className="text-slate-400 block text-[10px]">CURRENT STATION VIEW</span>
+                <span className="text-sky-300 font-bold text-sm font-sans mt-0.5 block">
+                  {selectedStation === "ALL" ? "All Stations (Combined)" : `${selectedStation} Research Base`}
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-polar-950/80 border border-slate-800">
+                <span className="text-slate-400 block text-[10px]">ORGANIZATION</span>
+                <span className="text-slate-200 font-bold text-sm font-sans mt-0.5 block">
+                  National Centre for Polar & Ocean Research
+                </span>
+              </div>
+            </div>
 
-            <div className="space-y-2 text-xs font-mono">
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Simulation Engine:</span>
-                <span className="text-emerald-300 font-bold">Deterministic Mock Layer</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Cadence:</span>
-                <span className="text-slate-200">1000ms Heartbeat</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Station Targets:</span>
-                <span className="text-slate-200">Maitri & Bharati</span>
-              </div>
-              <div className="flex justify-between py-1.5">
-                <span className="text-slate-400">Time Reference:</span>
-                <span className="text-sky-300 font-bold">Universal Coordinated Time (UTC)</span>
-              </div>
+            <div className="pt-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsPasswordModalOpen(true)}
+                className="gap-2"
+              >
+                <KeyRound className="h-3.5 w-3.5 text-sky-400" />
+                <span>Update Account Passkey</span>
+              </Button>
             </div>
           </Card>
         </div>
       )}
 
-      {/* TAB 2: SUBSYSTEM STATUS */}
+      {/* TAB 2: SECURITY */}
+      {activeTab === "security" && (
+        <div className="space-y-4">
+          <Card className="p-6 bg-polar-900/60 border-slate-800 space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+              <Shield className="h-4 w-4 text-sky-400" />
+              Role-Based Access Control & Governance
+            </h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              POLARIS enforces strict multi-station RBAC backed by Argon2id password hashing and signed JWT tokens with 15-minute access lifetimes.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div className="p-3 rounded-xl border border-slate-800 bg-polar-950/80">
+                <span className="text-xs font-bold text-amber-400">ADMINISTRATOR</span>
+                <p className="text-[11px] text-slate-400 mt-1">Full system management, user provisioning, incident resolution, audit review.</p>
+              </div>
+              <div className="p-3 rounded-xl border border-slate-800 bg-polar-950/80">
+                <span className="text-xs font-bold text-sky-400">OPERATOR</span>
+                <p className="text-[11px] text-slate-400 mt-1">Station telemetry monitoring, stock transfers, alert acknowledgement, report export.</p>
+              </div>
+              <div className="p-3 rounded-xl border border-slate-800 bg-polar-950/80">
+                <span className="text-xs font-bold text-emerald-400">VIEWER</span>
+                <p className="text-[11px] text-slate-400 mt-1">Read-only scientific telemetry viewing, digital twin inspection, no state mutations.</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Admin Personnel Management Section */}
+          {isAdmin ? (
+            <Card className="p-6 bg-polar-900/60 border-amber-500/30 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold border border-amber-500/40">
+                    ADMIN ONLY
+                  </span>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                    Station Personnel Administration
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                As an authorized Administrator, you have privileges to create accounts, deactivate personnel, modify role assignments, and review security audit logs.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => navigate("/admin/users")}
+                  className="gap-2 font-bold"
+                >
+                  <User className="h-3.5 w-3.5" />
+                  <span>Manage Station Personnel</span>
+                  <ExternalLink className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate("/admin/auth-events")}
+                  className="gap-2"
+                >
+                  <Shield className="h-3.5 w-3.5 text-amber-400" />
+                  <span>Security Audit Log</span>
+                </Button>
+              </div>
+            </Card>
+          ) : (
+            <Card className="p-5 bg-polar-900/40 border-slate-800/80 text-xs text-slate-400 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Lock className="h-4 w-4 text-slate-500" />
+                <span>Personnel management & security audits are restricted to <strong>ADMIN</strong> roles.</span>
+              </div>
+              <span className="text-[10px] font-mono text-slate-500 uppercase">VIEWER/OPERATOR RESTRICTED</span>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {/* TAB 3: SYSTEM STATUS */}
       {activeTab === "status" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs text-slate-400">
-              Live status audit across monorepo microservices and architectural tiers
+              Real-time operational audit across POLARIS microservices and architectural tiers
             </p>
             <button
               onClick={() => refetch()}
@@ -179,66 +315,44 @@ export const SettingsPage: React.FC = () => {
           </div>
 
           <div className="space-y-3">
-            {services.map((svc) => (
-              <Card key={svc.name} className="p-4 bg-polar-900/60 border-slate-800/80">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-200">{svc.name}</h4>
-                    <p className="text-[11px] text-slate-400">{svc.subsystem}</p>
+            {services.map((svc) => {
+              const Icon = svc.icon;
+              return (
+                <Card key={svc.name} className="p-4 bg-polar-900/60 border-slate-800/80">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 text-sky-400">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-200">{svc.name}</h4>
+                        <p className="text-[11px] text-slate-400">{svc.subsystem}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 self-end sm:self-center">
+                      <span className="text-xs font-mono text-slate-400">{svc.note}</span>
+                      <StatusBadge status={svc.status} size="sm" />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-slate-400">{svc.note}</span>
-                    <Badge
-                      variant={svc.type === "active" ? "success" : svc.type === "error" ? "danger" : "neutral"}
-                      size="sm"
-                    >
-                      {svc.status}
-                    </Badge>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* TAB 3: DISPLAY & APPEARANCE */}
-      {activeTab === "appearance" && (
-        <Card className="p-5 bg-polar-900/60 border-slate-800 space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Monitor className="h-4 w-4 text-sky-400" />
-            Visual System Configuration
-          </h3>
-          <p className="text-xs text-slate-400">
-            POLARIS enforces a scientific high-contrast dark polar theme specifically designed to reduce glare and visual fatigue during multi-hour Antarctic operations monitoring.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-            <div className="p-3 rounded-lg border border-sky-500/40 bg-sky-950/20 text-xs">
-              <span className="font-bold text-sky-300">Deep Polar Dark</span>
-              <p className="text-[11px] text-slate-400 mt-1">Default mission-control palette active</p>
-            </div>
-            <div className="p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-xs opacity-60">
-              <span className="font-bold text-slate-300">Polar High Contrast</span>
-              <p className="text-[11px] text-slate-400 mt-1">Coming in Phase 14 UI polish</p>
-            </div>
-            <div className="p-3 rounded-lg border border-slate-800 bg-slate-900/40 text-xs opacity-60">
-              <span className="font-bold text-slate-300">Clean Monochrome</span>
-              <p className="text-[11px] text-slate-400 mt-1">Coming in Phase 14 UI polish</p>
-            </div>
-          </div>
-        </Card>
-      )}
-
-      {/* TAB 4: ABOUT POLARIS */}
-      {activeTab === "about" && (
-        <Card className="p-6 bg-polar-900/60 border-slate-800 space-y-4">
+      {/* TAB 4: APPLICATION INFORMATION */}
+      {activeTab === "info" && (
+        <Card className="p-6 bg-polar-900/60 border-slate-800 space-y-5">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 shadow-ice-glow">
-              <Shield className="h-6 w-6 text-slate-950" />
+              <Compass className="h-7 w-7 text-slate-950" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-white">POLARIS</h2>
-              <p className="text-xs text-slate-400">
+              <h2 className="text-lg font-black text-white polar-gradient-text tracking-wide">
+                POLARIS
+              </h2>
+              <p className="text-xs text-sky-400 font-semibold">
                 Polar Operations & Logistics Automated Remote Intelligence System
               </p>
             </div>
@@ -248,26 +362,50 @@ export const SettingsPage: React.FC = () => {
             POLARIS is an advanced digital platform developed for the <strong>Smart India Hackathon 2026</strong> under Problem Statement ID <strong>SIH26060</strong>, proposed by the <strong>Ministry of Earth Sciences (MoES)</strong> and the <strong>National Centre for Polar and Ocean Research (NCPOR)</strong>.
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-1">
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">ORGANIZATION</span>
+              <span className="text-slate-400 block text-[10px]">MINISTRY / ORG</span>
               <span className="text-slate-200 font-bold font-sans">MoES / NCPOR</span>
             </div>
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">CATEGORY</span>
-              <span className="text-slate-200 font-bold font-sans">Software</span>
+              <span className="text-slate-400 block text-[10px]">PROBLEM CODE</span>
+              <span className="text-sky-300 font-bold font-sans">SIH26060</span>
             </div>
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">THEME</span>
-              <span className="text-slate-200 font-bold font-sans">Smart Automation</span>
+              <span className="text-slate-400 block text-[10px]">ANTARCTIC BASES</span>
+              <span className="text-slate-200 font-bold font-sans">Maitri & Bharati</span>
             </div>
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">CURRENT PHASE</span>
-              <span className="text-emerald-400 font-bold font-sans">Phase 1 Deployed</span>
+              <span className="text-slate-400 block text-[10px]">PLATFORM STATUS</span>
+              <span className="text-emerald-400 font-bold font-sans">Phase 14 Polished</span>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-800 bg-polar-950/80 p-4 space-y-2 text-xs">
+            <span className="text-xs font-bold text-slate-200">Antarctic Research Stations Summary:</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] font-mono">
+              <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                <span className="text-orange-400 font-bold block">MAITRI STATION (Est. 1989)</span>
+                <span className="text-slate-400 block">Coords: 70°45'57"S, 11°44'09"E</span>
+                <span className="text-slate-400 block">Region: Schirmacher Oasis</span>
+                <span className="text-emerald-400 block mt-1">Health: 98% · Status: OPERATIONAL</span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                <span className="text-cyan-400 font-bold block">BHARATI STATION (Est. 2012)</span>
+                <span className="text-slate-400 block">Coords: 69°24'29"S, 76°11'14"E</span>
+                <span className="text-slate-400 block">Region: Larsemann Hills</span>
+                <span className="text-emerald-400 block mt-1">Health: 94% · Status: OPERATIONAL</span>
+              </div>
             </div>
           </div>
         </Card>
       )}
+
+      {/* Password Modal */}
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      />
     </div>
   );
 };

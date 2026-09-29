@@ -74,6 +74,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: "Settings", path: "/settings", icon: Sliders }
   ];
 
+  // Close mobile sidebar on Escape key
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onCloseMobile();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileOpen, onCloseMobile]);
+
   const renderNavLink = (item: NavItem) => {
     const Icon = item.icon;
     const content = (
@@ -82,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClick={onCloseMobile}
         className={({ isActive }) =>
           cn(
-            "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-150 relative",
+            "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-150 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50",
             isActive
               ? "bg-sky-500/15 text-sky-300 border border-sky-500/30 shadow-ice-glow"
               : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200 border border-transparent"
@@ -96,6 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 "h-4 w-4 shrink-0 transition-colors",
                 isActive ? "text-sky-400" : "text-slate-400 group-hover:text-slate-200"
               )}
+              aria-hidden="true"
             />
             {!collapsed && <span className="truncate">{item.name}</span>}
             {!collapsed && item.badge !== undefined && item.badge > 0 && (
@@ -104,7 +117,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </span>
             )}
             {isActive && (
-              <span className="absolute -left-2 h-4 w-1 rounded-r-full bg-sky-400" />
+              <>
+                <span className="sr-only">(current page)</span>
+                <span className="absolute -left-2 h-4 w-1 rounded-r-full bg-sky-400" />
+              </>
             )}
           </>
         )}
@@ -135,14 +151,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Container */}
       <aside
+        aria-label="Polar Operations Navigation"
         className={cn(
           "fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r border-slate-800/80 bg-polar-950/95 backdrop-blur-xl transition-all duration-300 ease-in-out",
           collapsed ? "w-16" : "w-64",
           // Mobile state
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Sidebar Header */}
+
         <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800/80">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 shadow-ice-glow">

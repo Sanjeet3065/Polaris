@@ -12,21 +12,26 @@ export const NotFoundPage: React.FC = () => {
           <RadioTower className="h-8 w-8 animate-pulse" />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <span className="font-mono text-xs font-bold uppercase tracking-widest text-sky-400">
-            Error 404 · Navigation Out of Bounds
+            POLARIS · Antarctic Mission Control
           </span>
-          <h1 className="text-2xl font-black text-white tracking-tight">Signal Lost</h1>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            The requested polar control module or telemetry route could not be located on the high-latitude station network.
+          <div className="text-5xl font-black text-white tracking-tight font-mono">
+            404
+          </div>
+          <h1 className="text-lg font-bold text-slate-200">
+            Station route not found.
+          </h1>
+          <p className="text-xs text-slate-400 leading-relaxed max-w-sm mx-auto">
+            The requested polar control path or telemetry module does not exist on the Antarctic station network.
           </p>
         </div>
 
         <div className="pt-2">
           <Link to="/overview">
-            <Button variant="primary" size="md" className="w-full">
+            <Button variant="primary" size="md" className="w-full font-bold">
               <Home className="h-4 w-4" />
-              <span>Return to Station Overview</span>
+              <span>Return to Overview</span>
             </Button>
           </Link>
         </div>

@@ -23,5 +23,20 @@ export default defineConfig({
         ws: true
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-three": ["three", "@react-three/fiber", "@react-three/drei"],
+          "vendor-charts": ["recharts"],
+          "vendor-query": ["@tanstack/react-query", "axios"],
+          "vendor-icons": ["lucide-react"]
+        }
+      }
+    }
   }
 });
+

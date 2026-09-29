@@ -2,9 +2,9 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AppShell } from "../components/layout/AppShell";
 import { OverviewPage } from "../pages/OverviewPage";
-import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
+
 import { ArchitectureOverviewPage } from "../pages/ArchitectureOverviewPage";
 import { DigitalTwinPage } from "../pages/DigitalTwinPage";
 import { LoginPage } from "../pages/LoginPage";
@@ -18,11 +18,10 @@ import { MaintenancePage } from "../pages/MaintenancePage";
 import { AnalyticsPage } from "../pages/AnalyticsPage";
 import { ReportsPage } from "../pages/ReportsPage";
 import { AssistantPage } from "../pages/AssistantPage";
+import { EquipmentPage } from "../pages/EquipmentPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useStation } from "../context/StationContext";
-import {
-  Settings2
-} from "lucide-react";
+
 
 export const AppRoutes: React.FC = () => {
   const { selectedStation, setSelectedStation } = useStation();
@@ -48,24 +47,8 @@ export const AppRoutes: React.FC = () => {
         {/* Phase 7 — Environmental & Climate Telemetry */}
         <Route path="/environment" element={<EnvironmentPage />} />
 
-        <Route
-          path="/equipment"
-          element={
-            <PlaceholderPage
-              title="Machinery & Equipment Fleet"
-              subtitle="Station asset health indices, vibration telemetry, and life-support monitoring"
-              description="Continuous diagnostic registry of all active machinery including Caterpillar/Volvo diesel generators, HVAC air handling units, and water desalination plants."
-              icon={Settings2}
-              targetPhase={10}
-              plannedFeatures={[
-                "Vibration RMS spectral analysis and bearing wear monitoring",
-                "Exhaust gas temperature and lube oil pressure telemetry",
-                "Water desalination and Lake Priyadarshini meltwater pump status",
-                "C-Band and VSAT satellite tracking terminal telemetry"
-              ]}
-            />
-          }
-        />
+        <Route path="/equipment" element={<EquipmentPage />} />
+
 
         <Route path="/logistics" element={<LogisticsPage />} />
 

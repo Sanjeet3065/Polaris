@@ -5,12 +5,12 @@ import {
   ChevronDown,
   Bell,
   Clock,
-  Radio,
   User,
   LogOut,
   KeyRound,
   Shield
 } from "lucide-react";
+
 import { useStation } from "../../context/StationContext";
 import { useAuth } from "../../context/AuthContext";
 import { StationFilter } from "../../types";
@@ -80,17 +80,17 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
       <div className="relative">
         <button
           onClick={() => setStationDropdownOpen((prev) => !prev)}
-          className="flex items-center gap-2 rounded-lg border border-sky-500/30 bg-slate-900/90 px-3 py-1.5 text-xs font-bold text-sky-200 shadow-sm hover:border-sky-400 hover:bg-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+          className="flex items-center gap-2 rounded-xl border border-sky-500/30 bg-slate-900/90 px-3 py-1.5 text-xs font-bold text-sky-200 shadow-sm hover:border-sky-400 hover:bg-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/40"
           aria-expanded={stationDropdownOpen}
           aria-haspopup="true"
         >
-          <Radio className="h-3.5 w-3.5 text-sky-400 animate-pulse" />
-          <span>
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="tracking-wide">
             {selectedStation === "ALL"
-              ? "ALL STATIONS"
+              ? "ALL STATIONS (96% Avg)"
               : selectedStation === "MAITRI"
-              ? "MAITRI STATION"
-              : "BHARATI STATION"}
+              ? "MAITRI (98% Health)"
+              : "BHARATI (94% Health)"}
           </span>
           <ChevronDown
             className={cn(
@@ -102,52 +102,78 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
 
         {stationDropdownOpen && (
           <div
-            className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 rounded-xl border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in zoom-in-95"
+            className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 rounded-xl border border-slate-700/80 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in zoom-in-95"
             role="menu"
           >
+            <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold border-b border-slate-800 mb-1">
+              Select Antarctic Research Base
+            </div>
+
             <button
               onClick={() => handleSelectStation("MAITRI")}
               className={cn(
-                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left",
                 selectedStation === "MAITRI"
-                  ? "bg-sky-500/20 text-sky-300"
+                  ? "bg-sky-500/20 text-sky-300 border border-sky-500/30"
                   : "text-slate-300 hover:bg-slate-800 hover:text-white"
               )}
               role="menuitem"
             >
-              <span>Maitri Station</span>
-              <span className="text-[10px] font-mono text-emerald-400">98% Health</span>
+              <div>
+                <div className="font-bold flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span>MAITRI</span>
+                </div>
+                <span className="text-[10px] text-emerald-400 font-mono">● OPERATIONAL</span>
+              </div>
+              <span className="text-xs font-mono font-bold text-emerald-400">Health 98%</span>
             </button>
+
             <button
               onClick={() => handleSelectStation("BHARATI")}
               className={cn(
-                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left mt-1",
                 selectedStation === "BHARATI"
-                  ? "bg-sky-500/20 text-sky-300"
+                  ? "bg-sky-500/20 text-sky-300 border border-sky-500/30"
                   : "text-slate-300 hover:bg-slate-800 hover:text-white"
               )}
               role="menuitem"
             >
-              <span>Bharati Station</span>
-              <span className="text-[10px] font-mono text-sky-400">94% Health</span>
+              <div>
+                <div className="font-bold flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span>BHARATI</span>
+                </div>
+                <span className="text-[10px] text-emerald-400 font-mono">● OPERATIONAL</span>
+              </div>
+              <span className="text-xs font-mono font-bold text-sky-400">Health 94%</span>
             </button>
+
             <div className="my-1 border-t border-slate-800" />
+
             <button
               onClick={() => handleSelectStation("ALL")}
               className={cn(
-                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left",
                 selectedStation === "ALL"
-                  ? "bg-sky-500/20 text-sky-300"
+                  ? "bg-sky-500/20 text-sky-300 border border-sky-500/30"
                   : "text-slate-300 hover:bg-slate-800 hover:text-white"
               )}
               role="menuitem"
             >
-              <span>All Stations (Combined)</span>
-              <span className="text-[10px] font-mono text-slate-400">2 Bases</span>
+              <div>
+                <div className="font-bold flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+                  <span>ALL BASES</span>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono">Combined Fleet Overview</span>
+              </div>
+              <span className="text-xs font-mono font-bold text-slate-300">2 Stations</span>
             </button>
           </div>
         )}
       </div>
+
 
       {/* Right: Operational Status, Live UTC, Notifications, Avatar */}
       <div className="flex items-center gap-2 sm:gap-4">

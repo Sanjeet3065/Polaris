@@ -103,24 +103,46 @@ export const ChatMessageItem: React.FC<Props> = ({ message }) => {
           {/* Formatted Text Body */}
           <div className="whitespace-pre-wrap space-y-1.5 text-slate-200">{message.content}</div>
 
-          {/* Proposed Action Warning Box (Phase 12 Safety Guard) */}
+          {/* Proposed Action Warning Box (Phase 12 Human-In-The-Loop Safety Guard) */}
           {message.proposedAction && (
-            <div className="mt-3.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 space-y-1.5">
-              <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[11px]">
-                <ShieldAlert className="w-4 h-4" />
-                <span>Operator Confirmation Required</span>
+            <div className="mt-3.5 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[11px] uppercase tracking-wide">
+                  <ShieldAlert className="w-4 h-4 shrink-0" />
+                  <span>PROPOSED ACTION</span>
+                </div>
+                <span className="text-[10px] font-mono text-amber-300/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
+                  Human-In-The-Loop Required
+                </span>
               </div>
-              <p className="text-[11px] text-amber-200/90 leading-normal">
+
+              <div className="text-[11px] text-amber-100 font-semibold bg-amber-950/40 p-2 rounded-lg border border-amber-500/20">
+                ⚠ No action has been taken yet.
+              </div>
+
+              <p className="text-[11px] text-amber-200/90 leading-relaxed">
                 {message.proposedAction.confirmationPrompt}
               </p>
-              <div className="pt-1">
+
+              <div className="pt-1 flex flex-wrap items-center gap-2">
                 <Link
                   to={message.proposedAction.moduleRoute}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10px] font-bold transition-all"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/25 hover:bg-amber-500/35 text-amber-200 border border-amber-500/50 text-xs font-bold transition-all"
                 >
-                  <span>Open Target Module to Confirm</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <span>Confirm in Module</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById(`proposed-action-${message.id}`);
+                    if (el) el.style.display = "none";
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-medium transition-colors"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}
