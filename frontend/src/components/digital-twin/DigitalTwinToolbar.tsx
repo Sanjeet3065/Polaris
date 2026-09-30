@@ -24,103 +24,106 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
   onToggleLayer
 }) => {
   return (
-    <div className="bg-slate-950/85 backdrop-blur-md border border-slate-800/80 rounded-xl p-2.5 shadow-xl flex flex-wrap items-center gap-3 text-xs text-slate-200 pointer-events-auto">
+    <div className="bg-polar-950/90 backdrop-blur-xl border border-polar-750 rounded-xl p-1.5 sm:p-2 shadow-hud flex items-center gap-1.5 sm:gap-2.5 text-xs text-slate-200 pointer-events-auto max-w-[calc(100vw-32px)] overflow-x-auto">
       {/* Camera Presets */}
-      <div className="flex items-center bg-slate-900/90 rounded-lg p-1 border border-slate-800">
+      <div className="flex items-center bg-polar-900 rounded-lg p-0.5 sm:p-1 border border-polar-750 shrink-0">
         <button
           onClick={() => onSetPreset("default")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-medium transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "default"
-              ? "bg-cyan-600 text-white shadow-sm"
-              : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Reset to default isometric angle"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset</span>
+          <span className="hidden sm:inline">Reset</span>
+          <span className="sm:hidden text-[10px]">RST</span>
         </button>
 
         <button
           onClick={() => onSetPreset("top")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-medium transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "top"
-              ? "bg-cyan-600 text-white shadow-sm"
-              : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Top-down structural cutaway view"
         >
           <Maximize2 className="w-3.5 h-3.5" />
-          <span>Top View</span>
+          <span className="hidden sm:inline">Top</span>
+          <span className="sm:hidden text-[10px]">TOP</span>
         </button>
 
         <button
           onClick={() => onSetPreset("station")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-medium transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "station"
-              ? "bg-cyan-600 text-white shadow-sm"
-              : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Wide operational station perimeter view"
         >
           <Eye className="w-3.5 h-3.5" />
-          <span>Station View</span>
+          <span className="hidden sm:inline">Station</span>
+          <span className="sm:hidden text-[10px]">BASE</span>
         </button>
       </div>
 
-      <div className="h-4 w-px bg-slate-800" />
+      <div className="h-4 w-px bg-polar-750 shrink-0" />
 
       {/* Layer Toggles */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 shrink-0 font-mono text-[11px]">
         <button
           onClick={() => onToggleLayer("buildings")}
-          className={`flex items-center gap-1 px-2 py-1.5 rounded-md transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.buildings
-              ? "bg-slate-800 text-cyan-400 border border-cyan-500/30 font-semibold"
-              : "text-slate-500 hover:text-slate-400"
+              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Building Shells"
         >
           <Building className="w-3.5 h-3.5" />
-          <span>Buildings</span>
+          <span className="hidden md:inline">Buildings</span>
         </button>
 
         <button
           onClick={() => onToggleLayer("equipment")}
-          className={`flex items-center gap-1 px-2 py-1.5 rounded-md transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.equipment
-              ? "bg-slate-800 text-cyan-400 border border-cyan-500/30 font-semibold"
-              : "text-slate-500 hover:text-slate-400"
+              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Equipment Models"
         >
           <Wrench className="w-3.5 h-3.5" />
-          <span>Equipment</span>
+          <span className="hidden md:inline">Equipment</span>
         </button>
 
         <button
           onClick={() => onToggleLayer("alerts")}
-          className={`flex items-center gap-1 px-2 py-1.5 rounded-md transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.alerts
-              ? "bg-slate-800 text-cyan-400 border border-cyan-500/30 font-semibold"
-              : "text-slate-500 hover:text-slate-400"
+              ? "bg-polar-850 text-amber-400 border border-amber-500/30 font-semibold"
+              : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Alert Beacons"
         >
           <Bell className="w-3.5 h-3.5" />
-          <span>Alerts</span>
+          <span className="hidden md:inline">Alerts</span>
         </button>
 
         <button
           onClick={() => onToggleLayer("environment")}
-          className={`flex items-center gap-1 px-2 py-1.5 rounded-md transition-colors ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.environment
-              ? "bg-slate-800 text-cyan-400 border border-cyan-500/30 font-semibold"
-              : "text-slate-500 hover:text-slate-400"
+              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Katabatic Snow & Polar Terrain"
         >
           <CloudSnow className="w-3.5 h-3.5" />
-          <span>Weather</span>
+          <span className="hidden md:inline">Weather</span>
         </button>
       </div>
     </div>

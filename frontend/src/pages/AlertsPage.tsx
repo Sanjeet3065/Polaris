@@ -299,22 +299,26 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header & Command Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-polar-750 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <ShieldAlert className="w-7 h-7 text-cyan-400" />
-            <h1 className="text-xl font-bold tracking-tight text-slate-100">
-              Alert & Incident Command Center
-            </h1>
+            <div className="p-2 rounded-xl bg-polar-900 border border-polar-750 shadow-titanium">
+              <ShieldAlert className="w-6 h-6 text-cyan-400" />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white font-mono uppercase">
+                Alert & Incident Command
+              </h1>
+              <p className="text-xs text-slate-400 mt-0.5 max-w-2xl">
+                Real-time deterministic anomaly triage, deduplication matrix, and operational incident dispatch.
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Real-time deterministic anomaly triage, deduplication matrix, and operational incident dispatch for Maitri & Bharati Antarctic stations.
-          </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
           {/* Real-time Connection Status Indicator */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-polar-900 border border-polar-750 text-xs shadow-titanium">
             <Radio
               className={`w-3.5 h-3.5 ${
                 realtimeStatus === "LIVE"
@@ -328,12 +332,12 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
           </div>
 
           {/* Station Selector Toggle */}
-          <div className="flex items-center bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs font-medium">
+          <div className="flex items-center bg-polar-900 p-1 rounded-xl border border-polar-750 text-xs font-mono font-medium shadow-titanium">
             <button
               onClick={() => setSelectedStation("ALL")}
-              className={`px-3 py-1 rounded-md transition-colors ${
+              className={`px-3 py-1 rounded-lg transition-all ${
                 selectedStation === "ALL"
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow"
+                  ? "bg-cyan-500 text-polar-950 font-bold shadow-md shadow-cyan-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -341,9 +345,9 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
             </button>
             <button
               onClick={() => setSelectedStation("MAITRI")}
-              className={`px-3 py-1 rounded-md transition-colors ${
+              className={`px-3 py-1 rounded-lg transition-all ${
                 selectedStation === "MAITRI"
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow"
+                  ? "bg-amber-500 text-polar-950 font-bold shadow-md shadow-amber-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -351,9 +355,9 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
             </button>
             <button
               onClick={() => setSelectedStation("BHARATI")}
-              className={`px-3 py-1 rounded-md transition-colors ${
+              className={`px-3 py-1 rounded-lg transition-all ${
                 selectedStation === "BHARATI"
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow"
+                  ? "bg-cyan-500 text-polar-950 font-bold shadow-md shadow-cyan-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -368,7 +372,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
               fetchIncidents();
             }}
             title="Refresh Command Feeds"
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl bg-polar-900 border border-polar-750 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors shadow-titanium"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -377,7 +381,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
           {canMutate && (
             <button
               onClick={() => setIsCreateIncidentOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/20 transition-all hover:scale-[1.02]"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-titanium transition-all hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Log Incident</span>
@@ -387,13 +391,13 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
       </div>
 
       {/* Main Tab Controls */}
-      <div className="flex items-center gap-2 border-b border-slate-800">
+      <div className="flex items-center gap-2 border-b border-polar-750 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab("alerts")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === "alerts"
-              ? "border-cyan-400 text-cyan-300 bg-cyan-950/20"
-              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
+              ? "border-cyan-400 text-cyan-300 bg-polar-900/60 font-mono"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-polar-900/30"
           }`}
         >
           <ShieldAlert className="w-4 h-4" />
@@ -413,16 +417,16 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
 
         <button
           onClick={() => setActiveTab("incidents")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === "incidents"
-              ? "border-purple-400 text-purple-300 bg-purple-950/20"
-              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
+              ? "border-blue-400 text-blue-300 bg-polar-900/60 font-mono"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-polar-900/30"
           }`}
         >
           <Layers className="w-4 h-4" />
           <span>Incident Command Center</span>
           {incidentsOverview && incidentsOverview.openIncidents > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-purple-500/20 text-purple-300 font-mono border border-purple-500/30">
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-blue-500/20 text-blue-300 font-mono border border-blue-500/30">
               {incidentsOverview.openIncidents}
             </span>
           )}

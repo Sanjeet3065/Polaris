@@ -35,21 +35,21 @@ export const ActiveAlertsPanel: React.FC = () => {
   };
 
   return (
-    <Card className="p-5 bg-polar-900/60 border-slate-800/80 space-y-4">
+    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-titanium space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+      <div className="flex items-center justify-between border-b border-polar-750 pb-3">
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
             <TriangleAlert className="h-4 w-4 text-amber-400" />
-            Active Operational Alarms
+            <span>Active Alarms</span>
           </h3>
-          <p className="text-xs text-slate-400">Real-time threshold breaches & system notices</p>
+          <p className="text-[11px] text-slate-400">Real-time threshold breaches & telemetry flags</p>
         </div>
         <Link
           to="/alerts"
-          className="flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
         >
-          <span>View all alerts</span>
+          <span>All alerts</span>
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -70,21 +70,21 @@ export const ActiveAlertsPanel: React.FC = () => {
             return (
               <div
                 key={alert.id}
-                className="flex items-start gap-3 rounded-lg border border-slate-800/80 bg-slate-950/60 p-3 hover:border-slate-700 transition-colors"
+                className="flex items-start gap-3 rounded-lg border border-polar-750 bg-polar-950/80 p-3 hover:border-polar-700 transition-colors"
               >
-                <div className={`p-1.5 rounded-md border shrink-0 ${badge.bg}`}>
+                <div className={`p-1.5 rounded-lg border shrink-0 ${badge.bg}`}>
                   <Icon className={`h-4 w-4 ${badge.iconColor}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-slate-200 truncate">
+                    <span className="text-xs font-semibold text-slate-100 truncate">
                       {alert.title}
                     </span>
-                    <span className="font-mono text-[10px] text-slate-400 uppercase shrink-0">
+                    <span className="font-mono text-[10px] text-cyan-400 uppercase shrink-0 font-bold">
                       {alert.stationCode}
                     </span>
                   </div>
-                  <p className="mt-0.5 text-xs text-slate-400 leading-relaxed">
+                  <p className="mt-0.5 text-xs text-slate-400 leading-relaxed line-clamp-2">
                     {alert.description}
                   </p>
                 </div>

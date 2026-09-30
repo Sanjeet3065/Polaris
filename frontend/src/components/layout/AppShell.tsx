@@ -12,7 +12,7 @@ export const AppShell: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-screen bg-polar-950 text-slate-100 flex flex-col selection:bg-sky-500/30 selection:text-sky-200">
+    <div className="min-h-screen bg-polar-950 text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Sidebar Navigation */}
       <Sidebar
         collapsed={collapsed}
@@ -24,7 +24,7 @@ export const AppShell: React.FC = () => {
       {/* Main Content Area (Offset by Sidebar on Desktop) */}
       <div
         className={cn(
-          "flex flex-1 flex-col transition-all duration-300 ease-in-out",
+          "flex flex-1 flex-col transition-all duration-300 ease-in-out min-w-0 w-full",
           collapsed ? "lg:pl-16" : "lg:pl-64"
         )}
       >
@@ -38,7 +38,7 @@ export const AppShell: React.FC = () => {
         <DemoBanner />
 
         {/* Dynamic Route Content */}
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 max-w-[1600px] w-full mx-auto">
+        <main className="flex-1 px-3 py-4 sm:px-6 lg:px-8 max-w-[1600px] w-full mx-auto min-w-0">
           <Outlet />
         </main>
 

@@ -62,45 +62,45 @@ export const EnvironmentalSnapshot: React.FC = () => {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Wind className="h-4 w-4 text-sky-400" />
-            Environmental Snapshot
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+            <Wind className="h-4 w-4 text-cyan-400" />
+            <span>Environmental Telemetry</span>
           </h3>
-          <p className="text-xs text-slate-400">Microclimate telemetry from automated AWS weather stations</p>
+          <p className="text-[11px] text-slate-400">AWS microclimate sensors & meteorological station array</p>
         </div>
-        <div className="flex items-center gap-1.5 rounded-full bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
+        <div className="flex items-center gap-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-emerald-300">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          <span>MICROCLIMATE STABLE</span>
+          <span>AWS ARRAY NOMINAL</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
         {metrics.map((m) => {
           const Icon = m.icon;
           return (
             <Card
               key={m.label}
-              className="p-3.5 bg-polar-900/70 border-slate-800/80 hover:border-slate-700 transition-colors"
+              className="p-3 bg-polar-900/75 border-polar-750 hover:border-cyan-500/30 shadow-titanium transition-colors"
             >
               <div className="flex items-center justify-between text-slate-400 mb-1.5">
-                <Icon className="h-4 w-4 text-sky-400" />
+                <Icon className="h-3.5 w-3.5 text-cyan-400" />
                 <span
                   className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono ${
                     m.status === "WARNING"
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                      ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
                       : m.status === "CRITICAL"
-                      ? "bg-red-500/20 text-red-300 border border-red-500/40"
-                      : "bg-slate-800 text-slate-400"
+                      ? "bg-rose-500/15 text-rose-300 border border-rose-500/30"
+                      : "bg-polar-800 text-slate-400 border border-polar-700"
                   }`}
                 >
                   {m.status}
                 </span>
               </div>
-              <div className="text-[11px] font-semibold text-slate-400 truncate">{m.label}</div>
-              <div className={`text-lg font-black font-mono tracking-tight mt-0.5 ${m.color}`}>
+              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wide truncate">{m.label}</div>
+              <div className={`text-base sm:text-lg font-black font-mono tracking-tight tabular-nums mt-0.5 ${m.color}`}>
                 {m.value}
               </div>
-              <div className="text-[10px] text-slate-400 truncate mt-1">{m.subtext}</div>
+              <div className="text-[10px] text-slate-400 truncate mt-0.5 font-mono">{m.subtext}</div>
             </Card>
           );
         })}

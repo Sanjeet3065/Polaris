@@ -56,32 +56,32 @@ export const QuickActions: React.FC = () => {
   ];
 
   return (
-    <Card className="p-5 bg-polar-900/60 border-slate-800/80 space-y-4">
-      <div className="border-b border-slate-800/80 pb-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">
-          Mission Control Quick Actions
+    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-titanium space-y-4">
+      <div className="border-b border-polar-750 pb-3">
+        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+          Mission Control Shortcuts
         </h3>
-        <p className="text-xs text-slate-400">Direct operational shortcuts to key station subsystems</p>
+        <p className="text-[11px] text-slate-400">Direct operational telecommands & subsystem diagnostic views</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
         {actions.map((act) => {
           const Icon = act.icon;
           return (
             <Link
               key={act.title}
               to={act.path}
-              className={`group flex flex-col justify-between rounded-xl border border-slate-800/80 bg-slate-950/60 p-3.5 transition-all duration-200 hover:bg-slate-900/80 ${act.border}`}
+              className={`group flex flex-col justify-between rounded-xl border border-polar-750 bg-polar-950/80 p-3 sm:p-3.5 transition-all duration-200 hover:bg-polar-850 touch-target ${act.border}`}
             >
               <div className="flex items-center justify-between text-slate-400">
-                <Icon className={`h-5 w-5 transition-colors ${act.color}`} />
-                <ArrowUpRight className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-300 transition-colors" />
+                <Icon className={`h-4 sm:h-5 w-4 sm:w-5 transition-colors ${act.color}`} />
+                <ArrowUpRight className="h-3.5 w-3.5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
               </div>
               <div className="mt-3">
                 <h4 className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">
                   {act.title}
                 </h4>
-                <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5 font-mono">
                   {act.description}
                 </p>
               </div>

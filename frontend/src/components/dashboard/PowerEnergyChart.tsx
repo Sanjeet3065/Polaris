@@ -18,74 +18,75 @@ export const PowerEnergyChart: React.FC = () => {
   const { energy, hourlyPower } = useStation();
 
   return (
-    <Card className="p-5 bg-polar-900/60 border-slate-800/80 space-y-4">
+    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-titanium space-y-4">
       {/* Header and instantaneous metrics */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-polar-750 pb-3 sm:pb-4">
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
             <Zap className="h-4 w-4 text-emerald-400" />
-            Power Generation vs. Load Demand
+            <span>Power Generation vs. Load</span>
           </h3>
-          <p className="text-xs text-slate-400">Continuous 24-hour microgrid telemetry (Solar PV + Arctic Diesel)</p>
+          <p className="text-[11px] text-slate-400">Microgrid telemetry (Bifacial Solar PV + Arctic Diesel generators)</p>
         </div>
 
         {/* Quick summary badges */}
-        <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">
-            <span className="text-slate-400">Total Gen:</span>
-            <span className="font-bold text-emerald-400">{formatPower(energy.totalGenerationKw)}</span>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono">
+          <div className="flex items-center gap-1.5 bg-polar-950/80 border border-polar-750 px-2.5 py-1 rounded-lg">
+            <span className="text-slate-400 text-[10px]">GEN:</span>
+            <span className="font-bold text-emerald-400 tabular-nums">{formatPower(energy.totalGenerationKw)}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">
-            <span className="text-slate-400">Total Load:</span>
-            <span className="font-bold text-sky-400">{formatPower(energy.totalConsumptionKw)}</span>
+          <div className="flex items-center gap-1.5 bg-polar-950/80 border border-polar-750 px-2.5 py-1 rounded-lg">
+            <span className="text-slate-400 text-[10px]">LOAD:</span>
+            <span className="font-bold text-cyan-400 tabular-nums">{formatPower(energy.totalConsumptionKw)}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">
+          <div className="flex items-center gap-1.5 bg-polar-950/80 border border-polar-750 px-2.5 py-1 rounded-lg">
             <Fuel className="h-3 w-3 text-amber-400" />
-            <span className="text-slate-400">Fuel:</span>
-            <span className="font-bold text-amber-300">{formatLiters(energy.fuelReservesLiters)}</span>
+            <span className="text-slate-400 text-[10px]">FUEL:</span>
+            <span className="font-bold text-amber-300 tabular-nums">{formatLiters(energy.fuelReservesLiters)}</span>
           </div>
         </div>
       </div>
 
       {/* Chart Canvas */}
-      <div className="h-72 w-full">
+      <div className="h-64 sm:h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={hourlyPower} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorGeneration" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.35} />
+                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
               </linearGradient>
               <linearGradient id="colorConsumption" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.0} />
+                <stop offset="5%" stopColor="#00e5c8" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#00e5c8" stopOpacity={0.0} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1B2945" vertical={false} />
 
             <XAxis
               dataKey="time"
-              stroke="#64748b"
-              fontSize={11}
+              stroke="#546E9E"
+              fontSize={10}
               tickLine={false}
-              axisLine={{ stroke: "#334155" }}
+              axisLine={{ stroke: "#1B2945" }}
             />
             <YAxis
-              stroke="#64748b"
-              fontSize={11}
+              stroke="#546E9E"
+              fontSize={10}
               tickLine={false}
-              axisLine={{ stroke: "#334155" }}
+              axisLine={{ stroke: "#1B2945" }}
               unit="kW"
             />
 
             <RechartsTooltip
               contentStyle={{
-                backgroundColor: "#080e1e",
-                borderColor: "#1e293b",
-                borderRadius: "0.5rem",
-                fontSize: "12px",
-                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)"
+                backgroundColor: "#0B111E",
+                borderColor: "#1B2945",
+                borderRadius: "0.75rem",
+                fontSize: "11px",
+                fontFamily: "JetBrains Mono, monospace",
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.7)"
               }}
               labelStyle={{ color: "#94a3b8", fontWeight: "bold", marginBottom: "4px" }}
             />
@@ -109,7 +110,7 @@ export const PowerEnergyChart: React.FC = () => {
               type="monotone"
               dataKey="consumption"
               name="Consumption (kW)"
-              stroke="#38bdf8"
+              stroke="#00e5c8"
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorConsumption)"

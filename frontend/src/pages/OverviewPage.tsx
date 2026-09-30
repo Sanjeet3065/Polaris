@@ -19,22 +19,22 @@ export const OverviewPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-polar-750 pb-4">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
-            <span>Station Overview</span>
-            <span className="rounded bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 text-xs font-mono text-sky-400 font-semibold uppercase">
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
+            <span className="polar-gradient-text">Mission Overview</span>
+            <span className="rounded-lg bg-polar-850 border border-cyan-500/30 px-2.5 py-0.5 text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider">
               {selectedStation}
             </span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Remote operational telemetry, microgrid status, and environmental diagnostics for {stationInfo.name}
+            Remote telemetry stream, microgrid telemetry, and environmental diagnostics for {stationInfo.name}
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-          <span>Lat: <strong className="text-slate-200">{stationInfo.location.lat}°S</strong></span>
-          <span>•</span>
-          <span>Lng: <strong className="text-slate-200">{stationInfo.location.lng}°E</strong></span>
+        <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-polar-900/60 px-3 py-1.5 rounded-lg border border-polar-750 self-start sm:self-auto">
+          <span>Lat: <strong className="text-slate-200 tabular-nums">{stationInfo.location.lat}°S</strong></span>
+          <span className="text-polar-700">•</span>
+          <span>Lng: <strong className="text-slate-200 tabular-nums">{stationInfo.location.lng}°E</strong></span>
         </div>
       </div>
 

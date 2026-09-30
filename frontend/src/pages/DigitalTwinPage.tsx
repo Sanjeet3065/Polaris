@@ -125,9 +125,9 @@ export const DigitalTwinPage: React.FC = () => {
   return (
     <div className="space-y-5 pb-10">
       {/* 1. Header Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-polar-750 pb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1.5">
             <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
               <Box className="w-3.5 h-3.5" />
               PHASE 6 • 3D DIGITAL TWIN
@@ -174,10 +174,10 @@ export const DigitalTwinPage: React.FC = () => {
             )}
           </div>
 
-          <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-3">
-            <span>Spatial Operations Twin</span>
-            <span className="text-slate-500 font-light">|</span>
-            <span className="text-cyan-300 text-lg font-mono font-medium">
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="font-mono uppercase tracking-wider">Spatial Operations Twin</span>
+            <span className="text-polar-700 font-light hidden sm:inline">|</span>
+            <span className="text-cyan-400 text-base sm:text-lg font-mono font-medium">
               {selectedStation === "ALL" ? "Multi-Station Network" : stationInfo.name}
             </span>
           </h1>
@@ -185,7 +185,7 @@ export const DigitalTwinPage: React.FC = () => {
 
         {/* Timestamp */}
         <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
-          <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <div className="flex items-center gap-1.5 bg-polar-900 px-3 py-1.5 rounded-lg border border-polar-750 shadow-titanium">
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
             <span>
               Telemetry:{" "}
@@ -201,7 +201,7 @@ export const DigitalTwinPage: React.FC = () => {
       {selectedStation === "ALL" ? (
         // ALL STATIONS: Multi-Twin Hub Selector (Section 14)
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 text-slate-200 shadow-xl">
+          <div className="p-5 sm:p-6 rounded-2xl bg-polar-900 border border-polar-750 text-slate-200 shadow-titanium">
             <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
               <Compass className="w-5 h-5 text-cyan-400" />
               Select Antarctic Research Station Digital Twin
@@ -211,41 +211,41 @@ export const DigitalTwinPage: React.FC = () => {
               Select a station below to enter its real-time 3D operational canvas.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Maitri Station Card */}
               <div
                 onClick={() => setSelectedStation("MAITRI")}
-                className="group relative p-6 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-orange-500/50 transition-all cursor-pointer shadow-lg hover:shadow-orange-500/10"
+                className="group relative p-5 sm:p-6 rounded-2xl bg-polar-950 border border-polar-750 hover:border-amber-500/50 transition-all cursor-pointer shadow-titanium hover:shadow-amber-500/10"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-orange-400 font-semibold">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-semibold">
                       Second Indian Station • Est. 1989
                     </span>
-                    <h4 className="text-xl font-bold text-white mt-1 group-hover:text-orange-300 transition-colors">
+                    <h4 className="text-xl font-bold text-white mt-1 group-hover:text-amber-300 transition-colors">
                       Maitri Research Base
                     </h4>
                     <p className="text-xs text-slate-400 mt-1">
                       Schirmacher Oasis, Queen Maud Land
                     </p>
                   </div>
-                  <span className="p-2.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 group-hover:scale-110 transition-transform">
+                  <span className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 group-hover:scale-110 transition-transform">
                     <Box className="w-6 h-6" />
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mb-6 text-xs font-mono">
-                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
-                    <span className="text-slate-500 block text-[10px]">HEALTH SCORE</span>
+                  <div className="p-2.5 rounded-lg bg-polar-900 border border-polar-750">
+                    <span className="text-slate-400 block text-[10px]">HEALTH SCORE</span>
                     <span className="text-base font-bold text-emerald-400">94%</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
-                    <span className="text-slate-500 block text-[10px]">ARCHITECTURE</span>
+                  <div className="p-2.5 rounded-lg bg-polar-900 border border-polar-750">
+                    <span className="text-slate-400 block text-[10px]">ARCHITECTURE</span>
                     <span className="text-xs font-semibold text-slate-200">Modular Oasis on Stilts</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs font-semibold text-orange-400 pt-2 border-t border-slate-800/80">
+                <div className="flex items-center justify-between text-xs font-semibold text-amber-400 pt-2 border-t border-polar-750">
                   <span>Enter Maitri 3D Twin</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -254,7 +254,7 @@ export const DigitalTwinPage: React.FC = () => {
               {/* Bharati Station Card */}
               <div
                 onClick={() => setSelectedStation("BHARATI")}
-                className="group relative p-6 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/50 transition-all cursor-pointer shadow-lg hover:shadow-cyan-500/10"
+                className="group relative p-5 sm:p-6 rounded-2xl bg-polar-950 border border-polar-750 hover:border-cyan-500/50 transition-all cursor-pointer shadow-titanium hover:shadow-cyan-500/10"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -274,17 +274,17 @@ export const DigitalTwinPage: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mb-6 text-xs font-mono">
-                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
-                    <span className="text-slate-500 block text-[10px]">HEALTH SCORE</span>
+                  <div className="p-2.5 rounded-lg bg-polar-900 border border-polar-750">
+                    <span className="text-slate-400 block text-[10px]">HEALTH SCORE</span>
                     <span className="text-base font-bold text-emerald-400">96%</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
-                    <span className="text-slate-500 block text-[10px]">ARCHITECTURE</span>
+                  <div className="p-2.5 rounded-lg bg-polar-900 border border-polar-750">
+                    <span className="text-slate-400 block text-[10px]">ARCHITECTURE</span>
                     <span className="text-xs font-semibold text-slate-200">Aerodynamic Containers</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs font-semibold text-cyan-400 pt-2 border-t border-slate-800/80">
+                <div className="flex items-center justify-between text-xs font-semibold text-cyan-400 pt-2 border-t border-polar-750">
                   <span>Enter Bharati 3D Twin</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -295,9 +295,9 @@ export const DigitalTwinPage: React.FC = () => {
       ) : (
         // SINGLE STATION 3D DIGITAL TWIN VIEW
         <div className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch min-h-[560px]">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
             {/* 3. Left/Center 3D Canvas Viewport (75% on Desktop) */}
-            <div className="lg:col-span-3 h-[520px] lg:h-[620px] relative">
+            <div className="lg:col-span-3 h-[420px] sm:h-[500px] lg:h-[620px] relative rounded-2xl overflow-hidden border border-polar-750 shadow-hud">
               <DigitalTwinCanvas
                 stationCode={activeStationCode}
                 equipmentStates={equipmentStates}
@@ -314,7 +314,7 @@ export const DigitalTwinPage: React.FC = () => {
             </div>
 
             {/* 4. Right Diagnostics & Information Sidebar (25% on Desktop) */}
-            <div className="lg:col-span-1 h-[520px] lg:h-[620px]">
+            <div className="lg:col-span-1 min-h-[360px] lg:h-[620px]">
               {selectedEquipment ? (
                 <EquipmentInfoPanel
                   stationCode={activeStationCode}

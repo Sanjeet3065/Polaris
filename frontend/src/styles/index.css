@@ -6,69 +6,90 @@
 
 @layer base {
   :root {
-    --color-bg-primary: #020617;
-    --color-bg-secondary: #080e1e;
-    --color-border: #1e293b;
-    --color-ice: #38bdf8;
-    --color-aurora: #10b981;
+    --color-bg-primary: #060A12;
+    --color-bg-secondary: #0B111E;
+    --color-border: #1B2945;
+    --color-ice: #00E5C8;
+    --color-aurora: #10B981;
   }
 
   body {
     background-color: var(--color-bg-primary);
-    color: #f8fafc;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: #f1f5f9;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom dark polar scrollbar */
+  /* Sleek aerospace mission control scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #080e1e;
+    background: #080D18;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 4px;
+    background: #1B2945;
+    border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #38bdf8;
+    background: #00E5C8;
   }
 }
 
 @layer components {
-  /* Glassmorphism Polar Cards */
+  /* High-Precision Aerospace Hardware Panels */
   .polar-card {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(56, 189, 248, 0.12);
+    background: linear-gradient(180deg, rgba(16, 24, 42, 0.75) 0%, rgba(10, 16, 28, 0.88) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.75rem;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 4px 24px -2px rgba(0, 0, 0, 0.65);
+    position: relative;
   }
 
   .polar-card-glow {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.15);
+    background: linear-gradient(180deg, rgba(19, 30, 52, 0.82) 0%, rgba(12, 19, 34, 0.92) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 229, 200, 0.28);
+    border-radius: 0.75rem;
+    box-shadow: inset 0 1px 0 0 rgba(0, 229, 200, 0.16), 0 8px 32px -4px rgba(0, 0, 0, 0.7), 0 0 18px -4px rgba(0, 229, 200, 0.18);
   }
 
+  /* Authentic Titanium Metallic Heading (Non-AI gradient) */
   .polar-gradient-text {
-    background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #818cf8 100%);
+    background: linear-gradient(180deg, #FFFFFF 20%, #94A3B8 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    letter-spacing: 0.05em;
+  }
+
+  /* Telemetry Chip / Hardware Badge */
+  .telemetry-chip {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
+  }
+
+  /* Safe Touch Target for Mobile Devices (44x44 minimum touch target) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
 /* Accessibility Focus States */
 :focus-visible {
-  outline: 2px solid #38bdf8 !important;
+  outline: 2px solid #00E5C8 !important;
   outline-offset: 2px !important;
 }
 
