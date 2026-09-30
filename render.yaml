@@ -1,26 +1,19 @@
 # ============================================================
 # POLARIS Cloud Deployment Blueprint (Render.com)
+# Connected to Live Supabase PostgreSQL Database
 # Polar Operations & Logistics Automated Remote Intelligence System
 # SIH 2026 - Problem Statement ID: SIH26060
 # ============================================================
 
-databases:
-  # 1. Managed PostgreSQL Database Tier
-  - name: polaris-db
-    databaseName: polaris_db
-    user: polaris_admin
-    plan: free
-    region: oregon
-
 services:
-  # 2. Node.js Express & Real-time WebSockets API Service
+  # 1. Node.js Express & Real-time WebSockets API Service
   - type: web
     name: polaris-backend
     runtime: node
     plan: free
-    region: oregon
+    region: singapore
     rootDir: backend
-    buildCommand: npm install && npx prisma db push --skip-generate && npx prisma generate && npm run db:seed && npm run build
+    buildCommand: npm install && npx prisma generate && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /api/v1/health
     envVars:
@@ -39,21 +32,14 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: polaris-db
-          property: connectionString
-      - key: AI_SERVICE_URL
-        fromService:
-          type: web
-          name: polaris-ai-service
-          property: host
+        value: postgresql://postgres.ftmerrdajglkergcpfxp:polarios%40llama9999@aws-0-ap-south-1.pooler.supabase.com:5432/postgres?schema=public
 
-  # 3. Python FastAPI AI Predictive Maintenance Microservice
+  # 2. Python FastAPI AI Predictive Maintenance Microservice
   - type: web
     name: polaris-ai-service
     runtime: python
     plan: free
-    region: oregon
+    region: singapore
     rootDir: ai-service
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
