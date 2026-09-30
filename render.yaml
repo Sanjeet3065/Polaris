@@ -31,6 +31,8 @@ services:
         generateValue: true
       - key: DATABASE_URL
         value: postgresql://postgres.ftmerrdajglkergcpfxp:polarios%40llama9999@aws-0-ap-south-1.pooler.supabase.com:5432/postgres?schema=public
+      - key: AI_SERVICE_URL
+        value: https://polaris-ai-service.onrender.com
 
   # 2. Python FastAPI AI Predictive Maintenance Microservice
   - type: web
