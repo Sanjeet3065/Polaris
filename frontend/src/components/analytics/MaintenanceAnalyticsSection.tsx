@@ -62,8 +62,8 @@ export const MaintenanceAnalyticsSection: React.FC<Props> = ({ data, isLoading }
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3.5">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 min-w-0">
           <div className="text-[11px] font-semibold text-slate-400 uppercase mb-1">Total Models</div>
           <div className="text-xl font-bold text-white">{summary.totalPredictions}</div>
           <div className="text-[10px] text-slate-500 mt-1">Degradation baselines</div>

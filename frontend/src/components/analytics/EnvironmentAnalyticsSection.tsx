@@ -103,8 +103,8 @@ export const EnvironmentAnalyticsSection: React.FC<Props> = ({ data, isLoading }
       </div>
 
       {/* Atmospheric Metric Badges */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3.5">
+        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 min-w-0">
           <div className="text-[11px] font-semibold text-slate-400 mb-1">Avg Temperature</div>
           <div className="text-lg font-bold text-white">
             {metrics.avgTemperature ?? "N/A"}{" "}

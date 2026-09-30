@@ -74,18 +74,18 @@ export const EnvironmentalSnapshot: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
         {metrics.map((m) => {
           const Icon = m.icon;
           return (
             <Card
               key={m.label}
-              className="p-3 bg-polar-900/75 border-polar-750 hover:border-polar-600 shadow-sm transition-colors"
+              className="p-3 bg-polar-900/75 border-polar-750 hover:border-polar-600 shadow-sm transition-colors min-w-0"
             >
-              <div className="flex items-center justify-between text-slate-400 mb-1.5">
-                <Icon className="h-3.5 w-3.5 text-orange-400" />
+              <div className="flex items-center justify-between text-slate-400 mb-1.5 gap-1.5 min-w-0">
+                <Icon className="h-3.5 w-3.5 text-orange-400 shrink-0" />
                 <span
-                  className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono ${
+                  className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono whitespace-nowrap shrink-0 ${
                     m.status === "WARNING"
                       ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
                       : m.status === "CRITICAL"

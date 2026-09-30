@@ -64,14 +64,14 @@ export const QuickActions: React.FC = () => {
         <p className="text-[11px] text-slate-400">Direct operational telecommands & subsystem diagnostic views</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
         {actions.map((act) => {
           const Icon = act.icon;
           return (
             <Link
               key={act.title}
               to={act.path}
-              className={`group flex flex-col justify-between rounded-xl border border-polar-750 bg-polar-950/80 p-3 sm:p-3.5 transition-all duration-200 hover:bg-polar-850 touch-target ${act.border}`}
+              className={`group flex flex-col justify-between rounded-xl border border-polar-750 bg-polar-950/80 p-3 sm:p-3.5 transition-all duration-200 hover:bg-polar-850 touch-target min-w-0 ${act.border}`}
             >
               <div className="flex items-center justify-between text-slate-400">
                 <Icon className={`h-4 sm:h-5 w-4 sm:w-5 transition-colors ${act.color}`} />

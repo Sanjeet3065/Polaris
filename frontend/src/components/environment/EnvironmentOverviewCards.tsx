@@ -37,60 +37,60 @@ export const EnvironmentOverviewCards: React.FC = () => {
   const visEval = evaluateVisibilityStatus(visibility, isOffline);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-3.5 sm:gap-4">
       {/* 1. Ambient Temperature */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Thermometer className="h-4 w-4 text-cyan-400" />
-            Temperature
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Thermometer className="h-4 w-4 text-orange-400 shrink-0" />
+            <span className="truncate">Temperature</span>
           </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${tempEval.badgeClass}`}>
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${tempEval.badgeClass}`}>
             {tempEval.label}
           </span>
         </div>
 
         <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-cyan-200">
+          <div className="text-2xl font-bold font-mono text-slate-100">
             {formatTemperature(tempC)}
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={tempEval.description}>
             {tempEval.description}
           </div>
         </div>
       </Card>
 
       {/* 2. Wind Velocity & Heading */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Wind className="h-4 w-4 text-sky-400" />
-            Wind Velocity
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Wind className="h-4 w-4 text-amber-400 shrink-0" />
+            <span className="truncate">Wind Velocity</span>
           </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${windEval.badgeClass}`}>
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${windEval.badgeClass}`}>
             {windEval.label}
           </span>
         </div>
 
         <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100 flex items-baseline gap-1.5">
+          <div className="text-2xl font-bold font-mono text-slate-100 flex items-baseline gap-1.5 min-w-0">
             <span>{formatWind(windKmh)}</span>
-            <span className="text-xs font-normal text-slate-400 font-sans">{compass} ({degrees}°)</span>
+            <span className="text-xs font-normal text-slate-400 font-sans truncate">{compass} ({degrees}°)</span>
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={windEval.description}>
             {windEval.description}
           </div>
         </div>
       </Card>
 
       {/* 3. Barometric Pressure */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Gauge className="h-4 w-4 text-indigo-400" />
-            Barometer
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Gauge className="h-4 w-4 text-indigo-400 shrink-0" />
+            <span className="truncate">Barometer</span>
           </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${pressEval.badgeClass}`}>
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${pressEval.badgeClass}`}>
             {pressEval.label}
           </span>
         </div>
@@ -99,20 +99,20 @@ export const EnvironmentOverviewCards: React.FC = () => {
           <div className="text-2xl font-bold font-mono text-slate-100">
             {formatPressure(pressureHpa)}
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={pressEval.description}>
             {pressEval.description}
           </div>
         </div>
       </Card>
 
       {/* 4. Relative Humidity */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Droplets className="h-4 w-4 text-blue-400" />
-            Humidity
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Droplets className="h-4 w-4 text-sky-400 shrink-0" />
+            <span className="truncate">Humidity</span>
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-blue-400">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-sky-500/30 bg-sky-500/10 text-sky-300 whitespace-nowrap shrink-0">
             RH Ambient
           </span>
         </div>
@@ -121,20 +121,20 @@ export const EnvironmentOverviewCards: React.FC = () => {
           <div className="text-2xl font-bold font-mono text-slate-100">
             {formatPercentage(humidity)}
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
-            Low moisture polar air
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title="Low moisture polar atmosphere">
+            Low moisture polar atmosphere
           </div>
         </div>
       </Card>
 
       {/* 5. Optical Visibility */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Eye className="h-4 w-4 text-emerald-400" />
-            Visibility
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Eye className="h-4 w-4 text-emerald-400 shrink-0" />
+            <span className="truncate">Visibility</span>
           </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${visEval.badgeClass}`}>
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${visEval.badgeClass}`}>
             {visEval.label}
           </span>
         </div>
@@ -143,20 +143,20 @@ export const EnvironmentOverviewCards: React.FC = () => {
           <div className="text-2xl font-bold font-mono text-slate-100">
             {visibility.toFixed(1)} km
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={visEval.description}>
             {visEval.description}
           </div>
         </div>
       </Card>
 
       {/* 6. Solar Irradiance */}
-      <Card className="p-4 bg-polar-900/60 border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Sun className="h-4 w-4 text-amber-400" />
-            Solar Flux
+      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
+            <Sun className="h-4 w-4 text-amber-400 shrink-0" />
+            <span className="truncate">Solar Flux</span>
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-400">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-300 whitespace-nowrap shrink-0">
             Pyranometer
           </span>
         </div>
@@ -165,7 +165,7 @@ export const EnvironmentOverviewCards: React.FC = () => {
           <div className="text-2xl font-bold font-mono text-amber-300">
             {Math.round(solarRad)} W/m²
           </div>
-          <div className="mt-2 text-xs text-slate-400 pt-2 border-t border-slate-800/70 truncate">
+          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title="Incident global horizontal radiation">
             Incident global horizontal radiation
           </div>
         </div>
