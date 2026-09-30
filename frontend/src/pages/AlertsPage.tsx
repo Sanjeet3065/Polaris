@@ -103,9 +103,11 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
   }, [selectedStation]);
 
   // Load Alerts
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (silent = false) => {
     try {
-      setIsAlertsLoading(true);
+      if (!silent) {
+        setIsAlertsLoading(true);
+      }
       const [listRes, overviewRes] = await Promise.all([
         alertService.getAlerts({
           page: alertPagination.page,
@@ -124,7 +126,9 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
     } catch (err) {
       console.error("Failed to load alerts:", err);
     } finally {
-      setIsAlertsLoading(false);
+      if (!silent) {
+        setIsAlertsLoading(false);
+      }
     }
   }, [
     alertPagination.page,
@@ -137,9 +141,11 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
   ]);
 
   // Load Incidents
-  const fetchIncidents = useCallback(async () => {
+  const fetchIncidents = useCallback(async (silent = false) => {
     try {
-      setIsIncidentsLoading(true);
+      if (!silent) {
+        setIsIncidentsLoading(true);
+      }
       const [listRes, overviewRes] = await Promise.all([
         alertService.getIncidents({
           page: incidentPagination.page,
@@ -158,7 +164,9 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
     } catch (err) {
       console.error("Failed to load incidents:", err);
     } finally {
-      setIsIncidentsLoading(false);
+      if (!silent) {
+        setIsIncidentsLoading(false);
+      }
     }
   }, [
     incidentPagination.page,
@@ -179,11 +187,11 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
     fetchIncidents();
   }, [fetchIncidents]);
 
-  // Real-Time WebSocket Listener
+  // Real-Time WebSocket Listener (Silent update to prevent UI flickering)
   useEffect(() => {
     const handleWsEvent = () => {
-      fetchAlerts();
-      fetchIncidents();
+      fetchAlerts(true);
+      fetchIncidents(true);
     };
 
     const unsubCreated = polarisWebSocketClient.on("alert:created", handleWsEvent);
