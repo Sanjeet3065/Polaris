@@ -3,18 +3,18 @@
 
 > **"A Digital Twin for Smarter Antarctic Station Management."**
 
-[![Smart India Hackathon 2026](https://img.shields.io/badge/SIH-2026-blue?style=for-the-badge&logo=target)](https://sih.gov.in/)
-[![Problem ID](https://img.shields.io/badge/Problem%20ID-SIH26060-orange?style=for-the-badge)](https://sih.gov.in/)
 [![Ministry](https://img.shields.io/badge/Ministry-MoES%20%2F%20NCPOR-green?style=for-the-badge)](https://ncpor.res.in/)
-[![Phase 0](https://img.shields.io/badge/Phase%200-Foundation%20%26%20Architecture-brightgreen?style=for-the-badge)](#phased-development-roadmap)
-[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)]()
+[![Phase](https://img.shields.io/badge/Phase%2016-Completed-brightgreen?style=for-the-badge)](#phased-development-roadmap)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](./LICENSE)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel)](https://polaris-twin.vercel.app)
+[![Backend on Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render)](https://polaris-backend.onrender.com)
 
 ---
 
-## 🧭 Hackathon Problem Statement
+## 🧭 Project Overview
 
-* **Competition**: SMART INDIA HACKATHON 2026
-* **Problem Statement ID**: **SIH26060**
+POLARIS is a full-stack digital twin platform for remotely managing India's Antarctic research stations. It provides real-time telemetry monitoring, AI-driven predictive maintenance, logistics management, and environmental intelligence for polar operations.
+
 * **Title**: Digital Platform for efficient remote management of Indian Antarctic Research Stations
 * **Organization**: Ministry of Earth Sciences (MoES)
 * **Department**: National Centre for Polar and Ocean Research (NCPOR)
@@ -199,8 +199,8 @@ Comprehensive specifications located in the `/docs` directory:
 | **13**| Security + Complete Testing | Rate limiting, penetration defense, Vitest, Playwright | **COMPLETED** ✅ |
 | **14**| Final UI/UX Polish | High-contrast polar mode, micro-animations, keyboard nav | **COMPLETED** ✅ |
 | **15**| Docker + Deployment | Multi-container cloud manifests, health monitors | **COMPLETED** ✅ |
-| **16**| SIH Demo Mode | One-click emergency scenarios (Blizzard, DG Trip, Fuel Crisis) | **COMPLETED** ✅ |
+| **16**| Emergency Drill Mode | One-click emergency scenarios (Blizzard, DG Trip, Fuel Crisis) | **COMPLETED** ✅ |
 
 ---
 
-*Developed for the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences (MoES) — Smart India Hackathon 2026.*
+*Developed for the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences (MoES).*
