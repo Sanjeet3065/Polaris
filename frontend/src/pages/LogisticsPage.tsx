@@ -340,7 +340,7 @@ export const LogisticsPage: React.FC = () => {
       )}
 
       {/* 4. Tab Navigation Bar */}
-      <div className="flex border-b border-polar-750 gap-4 pt-4">
+      <div className="flex border-b border-polar-750 gap-4 pt-4 overflow-x-auto no-scrollbar whitespace-nowrap">
         <button
           onClick={() => setActiveTab("inventory")}
           className={`pb-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${

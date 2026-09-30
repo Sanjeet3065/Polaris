@@ -215,7 +215,7 @@ export const EquipmentPage: React.FC = () => {
       </section>
 
       {/* 3. Search & Filter Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3 rounded-xl border border-slate-800 bg-slate-900/60">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3 rounded-xl border border-polar-750 bg-polar-900/75 shadow-sm">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input
@@ -403,10 +403,10 @@ export const EquipmentPage: React.FC = () => {
         </div>
       ) : (
         /* Table View */
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+        <div className="rounded-xl border border-polar-750 bg-polar-900/60 overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-800 bg-polar-950/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            <table className="w-full text-left text-xs min-w-[760px]">
+              <thead className="border-b border-polar-750 bg-polar-950/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
                 <tr>
                   <th className="px-4 py-3">Equipment Name</th>
                   <th className="px-4 py-3">Station</th>

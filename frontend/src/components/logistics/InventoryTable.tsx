@@ -43,7 +43,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
     <div className="bg-polar-900/60 border border-slate-800/80 rounded-xl overflow-hidden shadow-lg flex flex-col">
       {/* Table Content */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-left text-xs min-w-[760px]">
           <thead className="bg-polar-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800/90 select-none">
             <tr>
               <th className="py-3 px-4">Item & SKU</th>
@@ -94,7 +94,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                     {/* Item Name & SKU */}
                     <td className="py-3.5 px-4">
                       <div className="flex flex-col">
-                        <span className="font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors line-clamp-1">
+                        <span className="font-semibold text-slate-200 group-hover:text-orange-400 transition-colors line-clamp-1">
                           {item.name}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 mt-0.5">
@@ -116,7 +116,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                         className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
                           item.station?.code === "MAITRI"
                             ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
-                            : "bg-cyan-500/10 text-cyan-300 border-cyan-500/30"
+                            : "bg-orange-500/10 text-orange-400 border border-orange-500/30"
                         }`}
                       >
                         {item.station?.name || item.stationId}
@@ -224,7 +224,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
       </div>
 
       {/* Pagination Footer */}
-      <div className="bg-polar-950/70 border-t border-slate-800/80 px-4 py-3 flex items-center justify-between text-xs text-slate-400">
+      <div className="bg-polar-950/70 border-t border-slate-800/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
         <div>
           Showing <span className="font-mono text-slate-200">{items.length}</span> of{" "}
           <span className="font-mono text-slate-200">{totalItems}</span> catalog items

@@ -49,7 +49,7 @@ export const DigitalTwinCanvas: React.FC<Props> = ({
 
   return (
     <DigitalTwinErrorBoundary>
-      <div className="relative w-full h-full min-h-[520px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl">
+      <div className="relative w-full h-full min-h-[340px] sm:min-h-[450px] lg:min-h-[580px] rounded-2xl overflow-hidden bg-polar-950 border border-polar-750 shadow-2xl">
         {/* R3F WebGL 3D Canvas */}
         <Canvas
           camera={{ position: [24, 18, 28], fov: 45 }}

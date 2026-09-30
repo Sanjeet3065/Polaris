@@ -31,7 +31,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onSetPreset("default")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "default"
-              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              ? "bg-orange-500 text-white font-bold shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Reset to default isometric angle"
@@ -45,7 +45,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onSetPreset("top")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "top"
-              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              ? "bg-orange-500 text-white font-bold shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Top-down structural cutaway view"
@@ -59,7 +59,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onSetPreset("station")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md font-medium font-mono text-[11px] transition-colors ${
             preset === "station"
-              ? "bg-cyan-500 text-slate-950 font-bold shadow-sm"
+              ? "bg-orange-500 text-white font-bold shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-polar-800"
           }`}
           title="Wide operational station perimeter view"
@@ -78,7 +78,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onToggleLayer("buildings")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.buildings
-              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              ? "bg-polar-850 text-orange-400 border border-orange-500/30 font-semibold"
               : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Building Shells"
@@ -91,7 +91,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onToggleLayer("equipment")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.equipment
-              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              ? "bg-polar-850 text-orange-400 border border-orange-500/30 font-semibold"
               : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Equipment Models"
@@ -117,7 +117,7 @@ export const DigitalTwinToolbar: React.FC<Props> = ({
           onClick={() => onToggleLayer("environment")}
           className={`flex items-center gap-1 px-2 py-1 rounded-md transition-colors ${
             layers.environment
-              ? "bg-polar-850 text-cyan-400 border border-cyan-500/30 font-semibold"
+              ? "bg-polar-850 text-amber-400 border border-amber-500/30 font-semibold"
               : "text-slate-500 hover:text-slate-300"
           }`}
           title="Toggle Katabatic Snow & Polar Terrain"

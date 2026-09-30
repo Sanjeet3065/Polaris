@@ -94,10 +94,10 @@ export const ShipmentTable: React.FC<ShipmentTableProps> = ({
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+    <div className="bg-polar-900/60 border border-polar-750 rounded-xl overflow-hidden shadow-xl">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-950/60 text-slate-400 uppercase font-medium border-b border-slate-800">
+        <table className="w-full text-left text-xs min-w-[700px]">
+          <thead className="bg-polar-950/80 text-slate-400 uppercase font-medium border-b border-polar-750">
             <tr>
               <th className="px-4 py-3.5">Shipment Reference</th>
               <th className="px-4 py-3.5">Route</th>

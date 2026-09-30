@@ -90,10 +90,10 @@ export const EquipmentRiskTable: React.FC<Props> = ({
   }
 
   return (
-    <div className="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+    <div className="bg-polar-900/80 border border-polar-750 rounded-xl overflow-hidden shadow-xl">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-950/80 border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[760px]">
+          <thead className="bg-polar-950/80 border-b border-polar-750 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
             <tr>
               <th scope="col" className="py-3 px-4">Equipment Asset</th>
               <th scope="col" className="py-3 px-3">Station</th>
@@ -120,7 +120,7 @@ export const EquipmentRiskTable: React.FC<Props> = ({
                   {/* Asset Tag & Name */}
                   <td className="py-3 px-4">
                     <div className="flex flex-col">
-                      <span className="font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                      <span className="font-semibold text-white group-hover:text-orange-400 transition-colors">
                         {eq?.name || "Machinery Asset"}
                       </span>
                       <span className="font-mono text-[11px] text-slate-400">
@@ -176,7 +176,7 @@ export const EquipmentRiskTable: React.FC<Props> = ({
                   <td className="py-3 px-3">
                     {p.estimatedRulDays != null ? (
                       <div className="flex items-center gap-1.5 font-medium text-slate-200">
-                        <Clock className="w-3.5 h-3.5 text-cyan-400" />
+                        <Clock className="w-3.5 h-3.5 text-orange-400" />
                         <span>{p.estimatedRulDays} days</span>
                       </div>
                     ) : (

@@ -52,10 +52,10 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
       case "MEDIUM":
         return <AlertCircle className="w-3.5 h-3.5 text-amber-400" />;
       case "LOW":
-        return <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />;
+        return <AlertCircle className="w-3.5 h-3.5 text-orange-400" />;
       case "INFO":
       default:
-        return <Info className="w-3.5 h-3.5 text-blue-400" />;
+        return <Info className="w-3.5 h-3.5 text-slate-400" />;
     }
   };
 
@@ -63,9 +63,9 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
   if (isLoading) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
+      <div className="rounded-xl border border-polar-750 bg-polar-900/50 p-6 space-y-4">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="h-14 rounded-lg bg-slate-800/40 animate-pulse" />
+          <div key={i} className="h-14 rounded-lg bg-polar-800/40 animate-pulse" />
         ))}
       </div>
     );
@@ -73,9 +73,9 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
   if (alerts.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-12 text-center">
+      <div className="rounded-xl border border-polar-750 bg-polar-900/40 p-12 text-center shadow-titanium">
         <ShieldAlert className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-        <h3 className="text-base font-semibold text-slate-300">No Operational Alerts Found</h3>
+        <h3 className="text-base font-semibold text-slate-300 font-mono">No Operational Alerts Found</h3>
         <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
           All Antarctic life-support, energy, environmental, and equipment telemetry systems are currently within nominal operational limits.
         </p>
@@ -84,10 +84,10 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-md overflow-hidden shadow-xl">
+    <div className="rounded-xl border border-polar-750 bg-polar-900/90 overflow-hidden shadow-titanium">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-950/80 text-[11px] text-slate-400 uppercase tracking-wider border-b border-slate-800">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[700px]">
+          <thead className="bg-polar-950/90 text-[10px] text-slate-400 uppercase tracking-wider border-b border-polar-750 font-mono">
             <tr>
               <th className="py-3 px-4">Severity</th>
               <th className="py-3 px-3">Status</th>
@@ -99,7 +99,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
               <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-sans">
+          <tbody className="divide-y divide-polar-750/70 font-sans">
             {alerts.map((alert) => {
               const sev = SEVERITY_CONFIG[alert.severity] || SEVERITY_CONFIG.INFO;
               const statusCfg = ALERT_STATUS_CONFIG[alert.status] || ALERT_STATUS_CONFIG.OPEN;
@@ -110,13 +110,13 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
               return (
                 <tr
                   key={alert.id}
-                  className="hover:bg-slate-800/40 transition-colors cursor-pointer group"
+                  className="hover:bg-polar-800/40 transition-colors cursor-pointer group"
                   onClick={() => onSelectAlert(alert)}
                 >
                   {/* Severity */}
                   <td className="py-3 px-4 whitespace-nowrap">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${sev.badge}`}
+                      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider font-mono ${sev.badge}`}
                     >
                       {getSeverityIcon(alert.severity)}
                       {sev.label}
@@ -126,7 +126,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
                   {/* Status */}
                   <td className="py-3 px-3 whitespace-nowrap">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold ${statusCfg.badge}`}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold font-mono ${statusCfg.badge}`}
                     >
                       <span className={`w-1.5 h-1.5 rounded-full ${statusCfg.dot}`} />
                       {statusCfg.label}
@@ -135,14 +135,14 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
                   {/* Alert details */}
                   <td className="py-3 px-4 min-w-[220px]">
-                    <div className="font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors">
+                    <div className="font-semibold text-slate-200 group-hover:text-orange-400 transition-colors">
                       {alert.title}
                     </div>
                     <div className="text-[11px] text-slate-400 truncate max-w-sm mt-0.5">
                       {alert.message || alert.description}
                     </div>
                     {alert.triggerValue !== null && alert.triggerValue !== undefined && (
-                      <div className="text-[10px] font-mono text-cyan-400/90 mt-0.5">
+                      <div className="text-[10px] font-mono text-orange-400/90 mt-0.5">
                         Triggered at: {alert.triggerValue} {alert.unit || ""}{" "}
                         {alert.thresholdValue !== null && alert.thresholdValue !== undefined && (
                           <span className="text-slate-500">(Limit: {alert.thresholdValue} {alert.unit || ""})</span>

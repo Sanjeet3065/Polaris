@@ -43,7 +43,7 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = ({
         return <AlertCircle className="w-3.5 h-3.5 text-amber-400" />;
       case "LOW":
       default:
-        return <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />;
+        return <AlertCircle className="w-3.5 h-3.5 text-orange-400" />;
     }
   };
 
@@ -56,9 +56,9 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = ({
       case "MEDIUM":
         return "bg-amber-500/20 text-amber-400 border border-amber-500/40";
       case "LOW":
-        return "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40";
+        return "bg-orange-500/15 text-orange-400 border border-orange-500/30";
       default:
-        return "bg-slate-700/30 text-slate-400 border border-slate-700/50";
+        return "bg-polar-800 text-slate-400 border border-polar-700";
     }
   };
 
@@ -66,9 +66,9 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = ({
 
   if (isLoading) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
+      <div className="rounded-xl border border-polar-750 bg-polar-900/50 p-6 space-y-4">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="h-14 rounded-lg bg-slate-800/40 animate-pulse" />
+          <div key={i} className="h-14 rounded-lg bg-polar-800/40 animate-pulse" />
         ))}
       </div>
     );
@@ -76,9 +76,9 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = ({
 
   if (incidents.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-12 text-center">
+      <div className="rounded-xl border border-polar-750 bg-polar-900/40 p-12 text-center shadow-titanium">
         <ShieldAlert className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-        <h3 className="text-base font-semibold text-slate-300">No Operational Incidents Logged</h3>
+        <h3 className="text-base font-semibold text-slate-300 font-mono">No Operational Incidents Logged</h3>
         <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
           No active or historical incidents recorded for the selected station and filters.
         </p>
@@ -87,10 +87,10 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = ({
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-md overflow-hidden shadow-xl">
+    <div className="rounded-xl border border-polar-750 bg-polar-900/90 overflow-hidden shadow-titanium">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-950/80 text-[11px] text-slate-400 uppercase tracking-wider border-b border-slate-800">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[700px]">
+          <thead className="bg-polar-950/90 text-[10px] text-slate-400 uppercase tracking-wider border-b border-polar-750 font-mono">
             <tr>
               <th className="py-3 px-4">Incident #</th>
               <th className="py-3 px-3">Severity</th>

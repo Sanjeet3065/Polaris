@@ -35,14 +35,14 @@ export const AnalyticsFilters: React.FC<Props> = ({
   ];
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-lg backdrop-blur mb-6">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+    <div className="bg-polar-900/90 border border-polar-750 rounded-xl p-3 sm:p-4 shadow-hud backdrop-blur mb-6">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 sm:gap-4">
         {/* Station Filter */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono text-[11px]">
             Station Scope:
           </span>
-          <div className="inline-flex rounded-lg bg-slate-950 p-1 border border-slate-800">
+          <div className="inline-flex rounded-lg bg-polar-950 p-1 border border-polar-750">
             {[
               { id: "ALL", label: "All Stations" },
               { id: "MAITRI", label: "Maitri" },
@@ -52,9 +52,9 @@ export const AnalyticsFilters: React.FC<Props> = ({
                 key={st.id}
                 type="button"
                 onClick={() => onStationChange(st.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                className={`px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
                   stationId === st.id
-                    ? "bg-sky-600 text-white shadow-sm"
+                    ? "bg-orange-500 text-white shadow-sm font-mono"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -66,18 +66,18 @@ export const AnalyticsFilters: React.FC<Props> = ({
 
         {/* Time Range Pills */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono text-[11px]">
             Time Window:
           </span>
-          <div className="inline-flex rounded-lg bg-slate-950 p-1 border border-slate-800">
+          <div className="inline-flex flex-wrap rounded-lg bg-polar-950 p-1 border border-polar-750">
             {timeWindows.map((tw) => (
               <button
                 key={tw.value}
                 type="button"
                 onClick={() => onTimeRangeChange(tw.value)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                className={`px-2 sm:px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                   timeRange === tw.value
-                    ? "bg-slate-800 text-sky-400 border border-slate-700 shadow-sm"
+                    ? "bg-polar-800 text-orange-400 border border-orange-500/30 shadow-sm font-semibold"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -91,10 +91,10 @@ export const AnalyticsFilters: React.FC<Props> = ({
             type="button"
             onClick={onRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-medium text-slate-200 transition-all ml-1 disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-polar-800 hover:bg-polar-750 border border-polar-700 rounded-lg text-xs font-medium text-slate-200 transition-all disabled:opacity-50"
             title="Refresh operational telemetry"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin text-sky-400" : "text-slate-400"}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin text-orange-400" : "text-slate-400"}`} />
             <span>{isLoading ? "Fetching..." : "Refresh"}</span>
           </button>
         </div>

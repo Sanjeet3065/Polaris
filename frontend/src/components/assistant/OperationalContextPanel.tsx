@@ -30,13 +30,13 @@ export const OperationalContextPanel: React.FC<Props> = ({ stationCode }) => {
   const temperature = environment?.temperatureCelsius ?? -18.4;
 
   return (
-    <div className="w-80 border-l border-slate-800 bg-slate-950/60 p-4 space-y-4 overflow-y-auto hidden lg:block text-xs text-slate-300">
+    <div className="w-80 border-l border-polar-750 bg-polar-950/80 p-4 space-y-4 overflow-y-auto hidden lg:block text-xs text-slate-300">
       {/* Station Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-md">
+      <div className="bg-polar-900 border border-polar-750 rounded-xl p-3.5 shadow-hud">
         <div className="flex items-center justify-between mb-1.5">
           <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-sky-400" />
-            <h3 className="font-bold text-white text-xs uppercase tracking-wider">
+            <Compass className="w-4 h-4 text-orange-400" />
+            <h3 className="font-bold text-white text-xs uppercase tracking-wider font-mono">
               {stationInfo?.name || `${stationCode} Station`}
             </h3>
           </div>
@@ -47,10 +47,10 @@ export const OperationalContextPanel: React.FC<Props> = ({ stationCode }) => {
       </div>
 
       {/* Live Operational Telemetry */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5 shadow-md">
-        <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800/80">
-          <div className="flex items-center gap-1.5 font-bold uppercase text-[10px] text-white">
-            <Activity className="w-3.5 h-3.5 text-sky-400" />
+      <div className="bg-polar-900 border border-polar-750 rounded-xl p-3.5 space-y-2.5 shadow-hud">
+        <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-polar-750">
+          <div className="flex items-center gap-1.5 font-bold uppercase text-[10px] text-white font-mono">
+            <Activity className="w-3.5 h-3.5 text-orange-400" />
             <span>Live Telemetry</span>
           </div>
           <span className="text-[10px] text-emerald-400 font-mono">Stream Active</span>

@@ -49,21 +49,21 @@ export const ChatMessageItem: React.FC<Props> = ({ message }) => {
       <div
         className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
           isUser
-            ? "bg-sky-600/20 border-sky-500/40 text-sky-400"
-            : "bg-slate-800 border-slate-700 text-sky-400 shadow-md"
+            ? "bg-orange-500/20 border-orange-500/40 text-orange-400"
+            : "bg-polar-900 border-polar-750 text-orange-400 shadow-md"
         }`}
       >
         {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
       </div>
 
       {/* Message Content Container */}
-      <div className={`max-w-2xl space-y-2.5 ${isUser ? "items-end" : "items-start"}`}>
+      <div className={`max-w-[88%] sm:max-w-xl lg:max-w-2xl space-y-2.5 ${isUser ? "items-end" : "items-start"}`}>
         {/* Main Bubble */}
         <div
-          className={`rounded-2xl p-4 text-xs leading-relaxed border shadow-md ${
+          className={`rounded-2xl p-3.5 sm:p-4 text-xs leading-relaxed border shadow-md ${
             isUser
-              ? "bg-sky-600/15 text-sky-100 border-sky-500/30 rounded-tr-none"
-              : "bg-slate-900/90 text-slate-200 border-slate-800 rounded-tl-none"
+              ? "bg-orange-600/20 text-orange-100 border-orange-500/30 rounded-tr-none"
+              : "bg-polar-900/95 text-slate-200 border-polar-750 rounded-tl-none"
           }`}
         >
           {/* Header Info for Assistant */}

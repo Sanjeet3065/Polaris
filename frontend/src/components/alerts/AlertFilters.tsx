@@ -21,16 +21,16 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
   const sourceTypes = ["ENERGY", "ENVIRONMENT", "EQUIPMENT", "INVENTORY", "LOGISTICS", "TELEMETRY"];
 
   return (
-    <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 backdrop-blur-md space-y-3">
+    <div className="p-4 rounded-xl bg-polar-900 border border-polar-750 shadow-titanium space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
-          <Filter className="w-4 h-4 text-cyan-400" />
-          <span>Alert Filters & Triage</span>
+          <Filter className="w-4 h-4 text-orange-400" />
+          <span className="font-mono">Alert Filters & Triage</span>
         </div>
 
         <button
           onClick={onReset}
-          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-800 rounded-md border border-slate-700 transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-400 hover:text-slate-200 bg-polar-800 hover:bg-polar-750 rounded-lg border border-polar-700 transition-colors shadow-sm"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Filters</span>
@@ -46,7 +46,7 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
             placeholder="Search alerts by title, code, equipment..."
             value={filters.search || ""}
             onChange={(e) => onChange({ ...filters, search: e.target.value })}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-950/80 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50"
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-polar-950 border border-polar-750 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
           />
         </div>
 
@@ -56,7 +56,7 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
             <select
               value={filters.stationId || "ALL"}
               onChange={(e) => onChange({ ...filters, stationId: e.target.value === "ALL" ? undefined : e.target.value })}
-              className="w-full px-2.5 py-1.5 text-xs bg-slate-950/80 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-cyan-500/50"
+              className="w-full px-2.5 py-1.5 text-xs bg-polar-950 border border-polar-750 rounded-lg text-slate-300 focus:outline-none focus:border-orange-500"
             >
               <option value="ALL">All Stations</option>
               <option value="MAITRI">Maitri Station</option>
@@ -75,7 +75,7 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
                 severity: e.target.value === "ALL" ? undefined : (e.target.value as AlertSeverity)
               })
             }
-            className="w-full px-2.5 py-1.5 text-xs bg-slate-950/80 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-cyan-500/50"
+            className="w-full px-2.5 py-1.5 text-xs bg-polar-950 border border-polar-750 rounded-lg text-slate-300 focus:outline-none focus:border-orange-500"
           >
             <option value="ALL">All Severities</option>
             {severities.map((sev) => (
@@ -96,7 +96,7 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
                 status: e.target.value === "ALL" ? undefined : (e.target.value as AlertStatus)
               })
             }
-            className="w-full px-2.5 py-1.5 text-xs bg-slate-950/80 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-cyan-500/50"
+            className="w-full px-2.5 py-1.5 text-xs bg-polar-950 border border-polar-750 rounded-lg text-slate-300 focus:outline-none focus:border-orange-500"
           >
             <option value="ALL">All Statuses</option>
             {statuses.map((st) => (
@@ -117,7 +117,7 @@ export const AlertFilters: React.FC<AlertFiltersProps> = ({
                 sourceType: e.target.value === "ALL" ? undefined : e.target.value
               })
             }
-            className="w-full px-2.5 py-1.5 text-xs bg-slate-950/80 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-cyan-500/50"
+            className="w-full px-2.5 py-1.5 text-xs bg-polar-950 border border-polar-750 rounded-lg text-slate-300 focus:outline-none focus:border-orange-500"
           >
             <option value="ALL">All Sources</option>
             {sourceTypes.map((st) => (

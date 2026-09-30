@@ -85,9 +85,9 @@ export const SettingsPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Page Header */}
-      <div className="border-b border-slate-800/80 pb-4">
-        <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-          <Sliders className="h-6 w-6 text-sky-400" />
+      <div className="border-b border-polar-750 pb-4">
+        <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5 font-mono">
+          <Sliders className="h-6 w-6 text-orange-400" />
           <span>System Settings & Operational Diagnostics</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
@@ -96,13 +96,13 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 gap-2 overflow-x-auto">
+      <div className="flex border-b border-polar-750 gap-2 overflow-x-auto no-scrollbar whitespace-nowrap">
         <button
           onClick={() => setActiveTab("profile")}
           className={cn(
             "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
             activeTab === "profile"
-              ? "border-sky-400 text-sky-300"
+              ? "border-orange-500 text-orange-400 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           )}
         >
@@ -115,7 +115,7 @@ export const SettingsPage: React.FC = () => {
           className={cn(
             "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
             activeTab === "security"
-              ? "border-sky-400 text-sky-300"
+              ? "border-orange-500 text-orange-400 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           )}
         >
@@ -133,7 +133,7 @@ export const SettingsPage: React.FC = () => {
           className={cn(
             "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
             activeTab === "status"
-              ? "border-sky-400 text-sky-300"
+              ? "border-orange-500 text-orange-400 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           )}
         >
@@ -146,7 +146,7 @@ export const SettingsPage: React.FC = () => {
           className={cn(
             "px-4 py-2 text-xs font-bold transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5",
             activeTab === "info"
-              ? "border-sky-400 text-sky-300"
+              ? "border-orange-500 text-orange-400 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           )}
         >
@@ -158,10 +158,10 @@ export const SettingsPage: React.FC = () => {
       {/* TAB 1: PROFILE */}
       {activeTab === "profile" && (
         <div className="space-y-4">
-          <Card className="p-6 bg-polar-900/60 border-slate-800 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+          <Card className="p-5 sm:p-6 bg-polar-900/75 border-polar-750 space-y-5 shadow-titanium">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-polar-750">
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-slate-950 font-black text-xl shadow-ice-glow">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500/20 text-orange-400 border border-orange-500/40 font-black text-xl shadow-titanium">
                   {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
                 </div>
                 <div>

@@ -32,7 +32,7 @@ export const PowerBalanceFlow: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4 mb-6">
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Zap className="h-4 w-4 text-cyan-400" />
+            <Zap className="h-4 w-4 text-orange-400" />
             Station Microgrid Power Flow Architecture
           </h3>
           <p className="text-xs text-slate-400">
@@ -53,9 +53,9 @@ export const PowerBalanceFlow: React.FC = () => {
       </div>
 
       {/* Grid Flow Canvas */}
-      <div className="flex flex-col items-center gap-6">
+      <div className="flex flex-col items-center gap-5 sm:gap-6">
         {/* TOP: GENERATION SOURCES */}
-        <div className="w-full max-w-2xl grid grid-cols-2 gap-4">
+        <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {/* Solar PV Node */}
           <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -93,7 +93,7 @@ export const PowerBalanceFlow: React.FC = () => {
 
         {/* DOWN ARROW CONNECTOR */}
         <div className="flex items-center justify-center">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700 text-[11px] font-mono text-emerald-400 animate-pulse">
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-polar-850 border border-polar-700 text-[11px] font-mono text-emerald-400 animate-pulse">
             <ArrowDown className="h-3.5 w-3.5" />
             <span>Total Inflow: {formatPower(totalGen)}</span>
             <ArrowDown className="h-3.5 w-3.5" />
@@ -101,23 +101,23 @@ export const PowerBalanceFlow: React.FC = () => {
         </div>
 
         {/* MIDDLE: CENTRAL MICROGRID BUS */}
-        <div className="w-full max-w-xl p-4 rounded-xl border border-cyan-500/40 bg-gradient-to-r from-cyan-950/40 via-polar-900 to-cyan-950/40 text-center relative overflow-hidden shadow-lg shadow-cyan-950/20">
-          <div className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest font-semibold flex items-center justify-center gap-2">
-            <Zap className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />
+        <div className="w-full max-w-xl p-4 rounded-xl border border-orange-500/40 bg-gradient-to-r from-orange-950/30 via-polar-900 to-orange-950/30 text-center relative overflow-hidden shadow-lg shadow-orange-950/20">
+          <div className="text-[11px] font-mono text-orange-400 uppercase tracking-widest font-semibold flex items-center justify-center gap-2">
+            <Zap className="h-3.5 w-3.5 text-orange-400 animate-pulse" />
             Central Synchronous Microgrid Bus (415V / 50Hz)
           </div>
 
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-6 text-xs font-mono">
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-mono">
             <div>
               <span className="text-slate-400">Generation: </span>
               <span className="font-bold text-emerald-400">{formatPower(totalGen)}</span>
             </div>
-            <div className="text-slate-600">|</div>
+            <div className="hidden sm:inline text-slate-600">|</div>
             <div>
-              <span className="text-slate-400">Station Demand: </span>
-              <span className="font-bold text-sky-400">{formatPower(totalLoad)}</span>
+              <span className="text-slate-400">Demand: </span>
+              <span className="font-bold text-amber-300">{formatPower(totalLoad)}</span>
             </div>
-            <div className="text-slate-600">|</div>
+            <div className="hidden sm:inline text-slate-600">|</div>
             <div>
               <span className="text-slate-400">Net Flow: </span>
               <span className={`font-bold ${netPower >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
@@ -128,7 +128,7 @@ export const PowerBalanceFlow: React.FC = () => {
         </div>
 
         {/* BRANCHING CONNECTOR */}
-        <div className="w-full max-w-2xl flex items-center justify-between px-16 text-slate-500">
+        <div className="w-full max-w-2xl flex flex-col sm:flex-row items-center justify-between gap-1 px-3 sm:px-12 text-slate-400">
           <div className="flex items-center gap-1 font-mono text-[10px]">
             {isCharging ? (
               <span className="text-emerald-400 flex items-center gap-1">
@@ -143,14 +143,14 @@ export const PowerBalanceFlow: React.FC = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-1 font-mono text-[10px] text-sky-400">
+          <div className="flex items-center gap-1 font-mono text-[10px] text-orange-400">
             <span>Primary Load Routing ({formatPower(totalLoad)})</span>
             <ArrowDown className="h-3.5 w-3.5" />
           </div>
         </div>
 
         {/* BOTTOM: STORAGE & CONSUMPTION LOADS */}
-        <div className="w-full max-w-2xl grid grid-cols-2 gap-4">
+        <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {/* Battery Storage Node */}
           <div className={`p-4 rounded-xl border flex flex-col justify-between ${
             isCharging ? "border-emerald-500/40 bg-emerald-500/10" : isDischarging ? "border-amber-500/40 bg-amber-500/10" : "border-slate-800 bg-slate-900/60"

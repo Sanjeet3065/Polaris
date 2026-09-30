@@ -193,7 +193,7 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs min-w-[680px]">
             <thead>
               <tr className="border-b border-slate-800 text-slate-400 font-semibold">
                 <th className="pb-3 px-3">Report Title & ID</th>
@@ -224,7 +224,7 @@ export const ReportsPage: React.FC = () => {
                       <div className="font-semibold text-white">{r.title}</div>
                       <div className="text-[10px] text-slate-500 font-mono">{r.id}</div>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-sky-400">{r.station.code}</td>
+                    <td className="py-3 px-3 font-semibold text-orange-400 font-mono">{r.station.code}</td>
                     <td className="py-3 px-3 text-slate-400 font-medium">{r.reportType}</td>
                     <td className="py-3 px-3">
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -244,10 +244,10 @@ export const ReportsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setPreviewReport(r)}
-                          className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs transition-all"
+                          className="flex items-center gap-1 px-2.5 py-1 bg-polar-800 hover:bg-polar-750 text-slate-200 rounded text-xs transition-all border border-polar-700"
                           title="Preview full report"
                         >
-                          <Eye className="w-3.5 h-3.5 text-sky-400" />
+                          <Eye className="w-3.5 h-3.5 text-orange-400" />
                           <span>Preview</span>
                         </button>
 
