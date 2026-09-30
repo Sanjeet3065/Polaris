@@ -127,7 +127,7 @@ export const EquipmentPage: React.FC = () => {
             <div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
                 <span>Machinery & Equipment Fleet</span>
-                <span className="rounded bg-sky-500/10 border border-sky-500/30 px-2.5 py-0.5 text-xs font-mono text-sky-400 font-semibold uppercase">
+                <span className="rounded bg-orange-500/10 border border-orange-500/30 px-2.5 py-0.5 text-xs font-mono text-orange-400 font-semibold uppercase">
                   {selectedStation}
                 </span>
               </h1>
@@ -140,13 +140,13 @@ export const EquipmentPage: React.FC = () => {
 
         {/* View Mode Toggle */}
         <div className="flex items-center gap-2 self-start sm:self-center">
-          <div className="flex rounded-lg border border-slate-800 bg-slate-900 p-0.5">
+          <div className="flex rounded-lg border border-polar-750 bg-polar-900 p-0.5">
             <button
               onClick={() => setViewMode("grid")}
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
                 viewMode === "grid"
-                  ? "bg-sky-500/20 text-sky-300 border border-sky-500/40"
+                  ? "bg-orange-500/15 text-orange-400 border border-orange-500/30 font-mono"
                   : "text-slate-400 hover:text-white"
               )}
               aria-label="Grid View"
@@ -159,7 +159,7 @@ export const EquipmentPage: React.FC = () => {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors",
                 viewMode === "table"
-                  ? "bg-sky-500/20 text-sky-300 border border-sky-500/40"
+                  ? "bg-orange-500/15 text-orange-400 border border-orange-500/30 font-mono"
                   : "text-slate-400 hover:text-white"
               )}
               aria-label="Table View"
@@ -223,7 +223,7 @@ export const EquipmentPage: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search equipment by name, model, category..."
-            className="w-full rounded-lg border border-slate-700/80 bg-slate-950 py-1.5 pl-9 pr-3 text-xs text-slate-100 placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400"
+            className="w-full rounded-lg border border-polar-750 bg-polar-950 py-1.5 pl-9 pr-3 text-xs text-slate-100 placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
           />
         </div>
 
@@ -232,7 +232,7 @@ export const EquipmentPage: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="rounded-lg border border-slate-700/80 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-sky-400 focus:outline-none"
+            className="rounded-lg border border-polar-750 bg-polar-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-orange-500 focus:outline-none"
             aria-label="Filter by Category"
           >
             {categories.map((c) => (
@@ -246,7 +246,7 @@ export const EquipmentPage: React.FC = () => {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="rounded-lg border border-slate-700/80 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-sky-400 focus:outline-none"
+            className="rounded-lg border border-polar-750 bg-polar-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-orange-500 focus:outline-none"
             aria-label="Filter by Status"
           >
             <option value="ALL">All Statuses</option>
@@ -264,7 +264,7 @@ export const EquipmentPage: React.FC = () => {
                 setSelectedCategory("ALL");
                 setSelectedStatus("ALL");
               }}
-              className="text-xs font-semibold text-sky-400 hover:text-sky-300 px-2 py-1"
+              className="text-xs font-semibold text-orange-400 hover:text-orange-300 px-2 py-1 font-mono"
             >
               Clear Filters
             </button>
@@ -289,7 +289,7 @@ export const EquipmentPage: React.FC = () => {
           {filteredEquipment.map((item) => (
             <Card
               key={item.id}
-              className="border-slate-800/90 bg-slate-900/70 p-5 hover:border-sky-500/40 transition-all duration-200 flex flex-col justify-between"
+              className="border-polar-750 bg-polar-900/90 p-5 hover:border-orange-500/40 transition-all duration-200 flex flex-col justify-between shadow-titanium"
             >
               <div>
                 {/* Card Top: Category & Status */}
@@ -382,7 +382,7 @@ export const EquipmentPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => navigate("/digital-twin")}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[10px] font-semibold transition-colors"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 border border-orange-500/30 text-[10px] font-semibold transition-colors"
                     title="Inspect in 3D Digital Twin"
                   >
                     <Box className="h-3 w-3" />
@@ -473,7 +473,7 @@ export const EquipmentPage: React.FC = () => {
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => navigate("/digital-twin")}
-                          className="px-2 py-1 rounded bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-[10px] font-semibold border border-sky-500/30"
+                          className="px-2 py-1 rounded bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-[10px] font-semibold border border-orange-500/30"
                         >
                           3D
                         </button>

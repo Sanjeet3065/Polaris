@@ -9,12 +9,12 @@ export const StationLocationCard: React.FC = () => {
       <div className="flex items-center justify-between border-b border-polar-750 pb-3">
         <div>
           <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Globe className="h-4 w-4 text-cyan-400" />
+            <Globe className="h-4 w-4 text-orange-400" />
             <span>Antarctic Geodetic Reference</span>
           </h3>
           <p className="text-[11px] text-slate-400">Official NCPOR geospatial coordinates & terrain profile</p>
         </div>
-        <span className="rounded bg-polar-800 border border-polar-700 px-2 py-0.5 text-[10px] font-mono text-cyan-300">
+        <span className="rounded bg-polar-800 border border-polar-700 px-2 py-0.5 text-[10px] font-mono text-slate-300">
           WGS-84
         </span>
       </div>
@@ -25,7 +25,7 @@ export const StationLocationCard: React.FC = () => {
         <div className="rounded-xl border border-polar-750 bg-polar-950/80 p-3.5 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+              <span className="h-2 w-2 rounded-full bg-amber-400" />
               <h4 className="text-xs font-bold text-slate-100 uppercase tracking-wide font-mono">
                 Maitri Research Base
               </h4>
@@ -36,11 +36,11 @@ export const StationLocationCard: React.FC = () => {
           <div className="space-y-1 font-mono text-xs text-slate-300 bg-polar-900/90 p-2.5 rounded-lg border border-polar-750">
             <div className="flex justify-between">
               <span className="text-slate-400">Latitude:</span>
-              <span className="font-bold text-cyan-300 tabular-nums">70.7667° S</span>
+              <span className="font-bold text-amber-300 tabular-nums">70.7667° S</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Longitude:</span>
-              <span className="font-bold text-cyan-300 tabular-nums">11.7333° E</span>
+              <span className="font-bold text-amber-300 tabular-nums">11.7333° E</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Altitude:</span>
@@ -57,7 +57,7 @@ export const StationLocationCard: React.FC = () => {
         <div className="rounded-xl border border-polar-750 bg-polar-950/80 p-3.5 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="h-2 w-2 rounded-full bg-orange-400" />
               <h4 className="text-xs font-bold text-slate-100 uppercase tracking-wide font-mono">
                 Bharati Research Base
               </h4>
@@ -68,11 +68,11 @@ export const StationLocationCard: React.FC = () => {
           <div className="space-y-1 font-mono text-xs text-slate-300 bg-polar-900/90 p-2.5 rounded-lg border border-polar-750">
             <div className="flex justify-between">
               <span className="text-slate-400">Latitude:</span>
-              <span className="font-bold text-emerald-300 tabular-nums">69.4072° S</span>
+              <span className="font-bold text-orange-400 tabular-nums">69.4072° S</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Longitude:</span>
-              <span className="font-bold text-emerald-300 tabular-nums">76.1917° E</span>
+              <span className="font-bold text-orange-400 tabular-nums">76.1917° E</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Altitude:</span>

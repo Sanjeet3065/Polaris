@@ -63,15 +63,13 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-polar-950 text-slate-100 flex flex-col justify-center items-center p-4 sm:p-6 overflow-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Subtle Aurora & Grid Ambient Background Elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,229,200,0.1),rgba(255,255,255,0))] pointer-events-none" />
-      <div className="absolute top-1/4 -left-48 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative min-h-screen w-full bg-polar-950 text-slate-100 flex flex-col justify-center items-center p-4 sm:p-6 overflow-hidden selection:bg-orange-500/30 selection:text-orange-200">
+      {/* Subtle Warm Carbon Depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(249,115,22,0.06),rgba(0,0,0,0))] pointer-events-none" />
 
       {/* Background Mission Control Coordinate Markers */}
       <div className="absolute top-4 left-6 hidden lg:flex items-center gap-3 text-[10px] font-mono text-slate-400">
-        <Radio className="h-3 w-3 text-cyan-400 animate-pulse" />
+        <Radio className="h-3 w-3 text-orange-400" />
         <span>MAITRI: 70°45'57"S 11°44'09"E</span>
         <span className="text-polar-700">|</span>
         <span>BHARATI: 69°24'29"S 76°11'14"E</span>
@@ -86,33 +84,33 @@ export const LoginPage: React.FC = () => {
       <div className="relative z-10 w-full max-w-md">
         {/* Header Branding */}
         <div className="text-center mb-6">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-b from-polar-800 to-polar-900 border border-cyan-500/30 shadow-titanium">
-            <Compass className="h-7 w-7 text-cyan-400" />
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-polar-900 border border-orange-500/30 shadow-sm">
+            <Compass className="h-7 w-7 text-orange-400" />
           </div>
 
-          <h1 className="mt-4 text-3xl font-black tracking-widest polar-gradient-text uppercase font-mono">
+          <h1 className="mt-4 text-3xl font-extrabold tracking-wider text-white uppercase font-mono">
             POLARIS
           </h1>
-          <p className="mt-1 text-xs font-semibold tracking-wider text-cyan-400 uppercase font-mono">
+          <p className="mt-1 text-xs font-semibold tracking-wider text-orange-400 uppercase font-mono">
             Polar Operations & Logistics Automated Remote Intelligence System
           </p>
           <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-polar-750 bg-polar-900/80 px-3 py-1 text-[11px] text-slate-400">
             <span>MoES / NCPOR</span>
             <span className="text-polar-700">•</span>
-            <span className="font-mono text-cyan-300">SIH 2026 (SIH26060)</span>
+            <span className="font-mono text-slate-300">SIH 2026 (SIH26060)</span>
           </div>
         </div>
 
         {/* Login Form Container */}
-        <div className="rounded-2xl border border-polar-750 bg-polar-900/85 p-6 sm:p-8 shadow-hud backdrop-blur-2xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400" />
+        <div className="rounded-2xl border border-polar-750 bg-polar-900/90 p-6 sm:p-8 shadow-hud backdrop-blur-xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600" />
 
           <div className="mb-5 flex items-center justify-between">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
               Terminal Authentication
             </span>
-            <span className="inline-flex items-center gap-1 rounded bg-polar-800 border border-polar-700 px-2 py-0.5 text-[10px] font-mono text-cyan-300">
-              <ShieldCheck className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 rounded bg-polar-850 border border-polar-700 px-2 py-0.5 text-[10px] font-mono text-slate-300">
+              <ShieldCheck className="h-3 w-3 text-emerald-400" />
               Argon2id + JWT
             </span>
           </div>
@@ -141,7 +139,7 @@ export const LoginPage: React.FC = () => {
                   placeholder="commander@polaris.local"
                   required
                   disabled={isSubmitting}
-                  className="w-full rounded-xl border border-polar-750 bg-polar-950/80 py-2.5 pl-10 pr-4 text-xs text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 transition-all font-mono"
+                  className="w-full rounded-xl border border-polar-750 bg-polar-950/80 py-2.5 pl-10 pr-4 text-xs text-slate-100 placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/25 transition-all font-mono"
                 />
               </div>
             </div>
@@ -164,7 +162,7 @@ export const LoginPage: React.FC = () => {
                   placeholder="••••••••••••"
                   required
                   disabled={isSubmitting}
-                  className="w-full rounded-xl border border-polar-750 bg-polar-950/80 py-2.5 pl-10 pr-10 text-xs text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 transition-all font-mono"
+                  className="w-full rounded-xl border border-polar-750 bg-polar-950/80 py-2.5 pl-10 pr-10 text-xs text-slate-100 placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/25 transition-all font-mono"
                 />
                 <button
                   type="button"
@@ -181,11 +179,11 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 w-full flex items-center justify-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 active:bg-cyan-600 py-2.5 px-4 text-xs font-mono font-bold text-slate-950 shadow-titanium transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+              className="mt-2 w-full flex items-center justify-center gap-2 rounded-xl bg-orange-600 hover:bg-orange-500 active:bg-orange-700 py-2.5 px-4 text-xs font-mono font-bold text-white shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-target"
             >
               {isSubmitting ? (
                 <>
-                  <div className="h-4 w-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>Authorizing Session...</span>
                 </>
               ) : (
@@ -200,7 +198,7 @@ export const LoginPage: React.FC = () => {
           {/* Quick Demo Credentials for Evaluation & Hackathon Jury */}
           <div className="mt-6 pt-5 border-t border-polar-750">
             <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-mono font-bold text-slate-400">
-              <Sparkles className="h-3 w-3 text-cyan-400" />
+              <Sparkles className="h-3 w-3 text-orange-400" />
               <span>SIH 2026 Operator Quick-Fill:</span>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -218,9 +216,9 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleQuickFill("operator@polaris.local", "Polaris@Operator2026!")}
-                className="flex flex-col items-center p-2 rounded-xl bg-polar-950 border border-polar-750 hover:border-cyan-500/50 hover:bg-polar-850 transition-all text-center group"
+                className="flex flex-col items-center p-2 rounded-xl bg-polar-950 border border-polar-750 hover:border-orange-500/50 hover:bg-polar-850 transition-all text-center group"
               >
-                <span className="text-[10px] font-bold text-cyan-300 group-hover:text-cyan-200 font-mono">
+                <span className="text-[10px] font-bold text-orange-400 group-hover:text-orange-300 font-mono">
                   OPERATOR
                 </span>
                 <span className="text-[9px] text-slate-400 font-mono mt-0.5">Operations</span>
@@ -229,9 +227,9 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleQuickFill("viewer@polaris.local", "Polaris@Viewer2026!")}
-                className="flex flex-col items-center p-2 rounded-xl bg-polar-950 border border-polar-750 hover:border-blue-500/50 hover:bg-polar-850 transition-all text-center group"
+                className="flex flex-col items-center p-2 rounded-xl bg-polar-950 border border-polar-750 hover:border-emerald-500/50 hover:bg-polar-850 transition-all text-center group"
               >
-                <span className="text-[10px] font-bold text-blue-300 group-hover:text-blue-200 font-mono">
+                <span className="text-[10px] font-bold text-emerald-400 group-hover:text-emerald-300 font-mono">
                   VIEWER
                 </span>
                 <span className="text-[9px] text-slate-400 font-mono mt-0.5">Read-Only</span>

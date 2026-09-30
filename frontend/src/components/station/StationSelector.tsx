@@ -28,12 +28,12 @@ export const StationSelector: React.FC<StationSelectorProps> = ({
               glow={isSelected}
               className={`relative overflow-hidden transition-all duration-300 ${
                 isSelected
-                  ? "border-sky-500/60 bg-slate-900/90"
-                  : "border-slate-800/80 bg-slate-950/50 hover:border-slate-700"
+                  ? "border-orange-500/60 bg-polar-900/90 shadow-titanium"
+                  : "border-polar-750 bg-polar-950/70 hover:border-polar-700"
               }`}
             >
               {isSelected && (
-                <div className="absolute top-0 right-0 h-16 w-16 bg-gradient-to-bl from-sky-400/20 to-transparent pointer-events-none" />
+                <div className="absolute top-0 right-0 h-16 w-16 bg-gradient-to-bl from-orange-500/20 to-transparent pointer-events-none" />
               )}
 
               <div className="flex items-start justify-between">
@@ -52,9 +52,9 @@ export const StationSelector: React.FC<StationSelectorProps> = ({
                 </Badge>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-slate-800/80 pt-3 text-xs text-slate-300">
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-polar-750 pt-3 text-xs text-slate-300">
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                  <MapPin className="h-3.5 w-3.5 text-orange-400 shrink-0" />
                   <span className="truncate">{station.location.region}</span>
                 </div>
                 <div className="flex items-center gap-1.5">

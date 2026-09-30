@@ -12,7 +12,7 @@ export const AppShell: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-screen bg-polar-950 text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-polar-950 text-slate-100 flex flex-col selection:bg-orange-500/30 selection:text-orange-200">
       {/* Sidebar Navigation */}
       <Sidebar
         collapsed={collapsed}

@@ -70,7 +70,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
         </button>
 
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 sm:gap-2 text-xs font-medium truncate">
-          <span className="font-bold text-cyan-400 font-mono tracking-wider">POLARIS</span>
+          <span className="font-bold text-orange-400 font-mono tracking-wider">POLARIS</span>
           <span className="text-slate-600">/</span>
           <span className="text-slate-200 font-semibold truncate max-w-[90px] sm:max-w-none">{getBreadcrumb()}</span>
         </nav>
@@ -80,11 +80,11 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
       <div className="relative">
         <button
           onClick={() => setStationDropdownOpen((prev) => !prev)}
-          className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-cyan-500/30 bg-polar-900/90 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-cyan-200 shadow-titanium hover:border-cyan-400 hover:bg-polar-850 transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+          className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-polar-700 bg-polar-900/90 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-slate-200 shadow-sm hover:border-orange-500/50 hover:bg-polar-850 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500/30"
           aria-expanded={stationDropdownOpen}
           aria-haspopup="true"
         >
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
           <span className="hidden sm:inline tracking-wide font-mono text-[11px]">
             {selectedStation === "ALL"
               ? "ALL STATIONS (96% Avg)"
@@ -117,19 +117,19 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
               className={cn(
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left",
                 selectedStation === "MAITRI"
-                  ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                  ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
                   : "text-slate-300 hover:bg-polar-800 hover:text-white"
               )}
               role="menuitem"
             >
               <div>
                 <div className="font-bold flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
                   <span>MAITRI</span>
                 </div>
                 <span className="text-[10px] text-emerald-400 font-mono">● OPERATIONAL</span>
               </div>
-              <span className="text-xs font-mono font-bold text-emerald-400">Health 98%</span>
+              <span className="text-xs font-mono font-bold text-amber-400">Health 98%</span>
             </button>
 
             <button
@@ -137,19 +137,19 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
               className={cn(
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left mt-1",
                 selectedStation === "BHARATI"
-                  ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                  ? "bg-orange-500/15 text-orange-400 border border-orange-500/30"
                   : "text-slate-300 hover:bg-polar-800 hover:text-white"
               )}
               role="menuitem"
             >
               <div>
                 <div className="font-bold flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-400" />
                   <span>BHARATI</span>
                 </div>
                 <span className="text-[10px] text-emerald-400 font-mono">● OPERATIONAL</span>
               </div>
-              <span className="text-xs font-mono font-bold text-cyan-400">Health 94%</span>
+              <span className="text-xs font-mono font-bold text-orange-400">Health 94%</span>
             </button>
 
             <div className="my-1 border-t border-polar-750" />
@@ -159,14 +159,14 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
               className={cn(
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors text-left",
                 selectedStation === "ALL"
-                  ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                  ? "bg-orange-500/15 text-orange-400 border border-orange-500/30"
                   : "text-slate-300 hover:bg-polar-800 hover:text-white"
               )}
               role="menuitem"
             >
               <div>
                 <div className="font-bold flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-400" />
                   <span>ALL BASES</span>
                 </div>
                 <span className="text-[10px] text-slate-400 font-mono">Combined Fleet Overview</span>
@@ -183,7 +183,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
         <div
           className={cn(
             "flex items-center gap-1.5 rounded-full px-2 sm:px-2.5 py-1 text-[11px] font-mono font-bold transition-colors",
-            realtimeStatus === "LIVE" && !isStale && "border border-cyan-500/30 bg-cyan-950/50 text-cyan-300 shadow-[0_0_8px_rgba(0,229,200,0.2)]",
+            realtimeStatus === "LIVE" && !isStale && "border border-emerald-500/30 bg-emerald-950/40 text-emerald-400",
             realtimeStatus === "LIVE" && isStale && "border border-amber-500/30 bg-amber-950/50 text-amber-300",
             realtimeStatus === "RECONNECTING" && "border border-amber-500/30 bg-amber-950/50 text-amber-300",
             realtimeStatus === "OFFLINE" && "border border-rose-500/30 bg-rose-950/50 text-rose-400"
@@ -193,7 +193,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
           <span
             className={cn(
               "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full",
-              realtimeStatus === "LIVE" && !isStale && "bg-cyan-400 animate-pulse",
+              realtimeStatus === "LIVE" && !isStale && "bg-emerald-400",
               realtimeStatus === "LIVE" && isStale && "bg-amber-400",
               realtimeStatus === "RECONNECTING" && "bg-amber-400 animate-ping",
               realtimeStatus === "OFFLINE" && "bg-rose-500"
@@ -212,13 +212,13 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
 
         {/* System operational pill */}
         <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-2.5 py-1 text-[11px] font-mono font-bold text-emerald-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           <span className="tracking-wider">NOMINAL OPS</span>
         </div>
 
         {/* Live ticking UTC clock */}
-        <div className="hidden md:flex items-center gap-1.5 font-mono text-[11px] font-semibold text-slate-300 bg-polar-900/80 px-2.5 py-1 rounded-lg border border-polar-750">
-          <Clock className="h-3.5 w-3.5 text-cyan-400" />
+        <div className="hidden md:flex items-center gap-1.5 font-mono text-[11px] font-semibold text-slate-300 bg-polar-900 px-2.5 py-1 rounded-lg border border-polar-750">
+          <Clock className="h-3.5 w-3.5 text-slate-400" />
           <span>{currentTime}</span>
         </div>
 
@@ -226,7 +226,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
         <div className="relative">
           <button
             onClick={() => setNotificationsOpen((prev) => !prev)}
-            className="relative rounded-lg p-2 text-slate-400 hover:bg-polar-850 hover:text-slate-100 transition-colors focus:outline-none touch-target flex items-center justify-center"
+            className="relative rounded-lg p-2 text-slate-400 hover:bg-polar-800 hover:text-slate-100 transition-colors focus:outline-none touch-target flex items-center justify-center"
             aria-label="View alerts and notifications"
           >
             <Bell className="h-4 w-4" />
@@ -257,7 +257,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
                     <div key={alert.id} className="py-2 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-slate-200 truncate">{alert.title}</span>
-                        <span className="font-mono text-[10px] text-cyan-400 shrink-0 ml-2">
+                        <span className="font-mono text-[10px] text-orange-400 shrink-0 ml-2">
                           {alert.stationCode}
                         </span>
                       </div>
@@ -274,11 +274,11 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
         <div className="relative">
           <button
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="flex items-center gap-2 rounded-xl border border-polar-750 bg-polar-900/80 p-1.5 hover:border-cyan-500/40 hover:bg-polar-850 transition-all focus:outline-none touch-target"
+            className="flex items-center gap-2 rounded-xl border border-polar-750 bg-polar-900 p-1.5 hover:border-orange-500/40 hover:bg-polar-850 transition-all focus:outline-none touch-target"
             aria-label="User account menu"
             aria-expanded={userMenuOpen}
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-polar-800 border border-cyan-500/30 text-xs font-mono font-bold text-cyan-300 shadow-sm">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-polar-800 border border-polar-700 text-xs font-mono font-bold text-orange-400 shadow-sm">
               {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
             </div>
             <div className="hidden md:flex flex-col text-left">
@@ -291,7 +291,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onOpenMobileSidebar }) => 
                   user?.role === "ADMIN"
                     ? "text-amber-400"
                     : user?.role === "OPERATOR"
-                    ? "text-cyan-400"
+                    ? "text-orange-400"
                     : "text-emerald-400"
                 )}
               >

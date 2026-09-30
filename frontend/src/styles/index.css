@@ -6,71 +6,62 @@
 
 @layer base {
   :root {
-    --color-bg-primary: #060A12;
-    --color-bg-secondary: #0B111E;
-    --color-border: #1B2945;
-    --color-ice: #00E5C8;
+    --color-bg-primary: #0C0D11;
+    --color-bg-secondary: #13151B;
+    --color-border: #292E3B;
+    --color-brand: #F97316;
     --color-aurora: #10B981;
   }
 
   body {
-    background-color: var(--color-bg-primary);
-    background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 28px 28px;
-    color: #f1f5f9;
+    background-color: #0C0D11;
+    color: #F3F4F6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Sleek aerospace mission control scrollbar */
+  /* Sleek authentic dark scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #080D18;
+    background: #0C0D11;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1B2945;
+    background: #292E3B;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00E5C8;
+    background: #F97316;
   }
 }
 
 @layer components {
-  /* High-Precision Aerospace Hardware Panels */
+  /* Real-world Clean Matte Carbon Card */
   .polar-card {
-    background: linear-gradient(180deg, rgba(16, 24, 42, 0.75) 0%, rgba(10, 16, 28, 0.88) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #14161E;
+    border: 1px solid #272C38;
     border-radius: 0.75rem;
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 4px 24px -2px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5);
     position: relative;
   }
 
   .polar-card-glow {
-    background: linear-gradient(180deg, rgba(19, 30, 52, 0.82) 0%, rgba(12, 19, 34, 0.92) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 229, 200, 0.28);
+    background: #171A24;
+    border: 1px solid rgba(249, 115, 22, 0.35);
     border-radius: 0.75rem;
-    box-shadow: inset 0 1px 0 0 rgba(0, 229, 200, 0.16), 0 8px 32px -4px rgba(0, 0, 0, 0.7), 0 0 18px -4px rgba(0, 229, 200, 0.18);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 0 14px -2px rgba(249, 115, 22, 0.15);
   }
 
-  /* Authentic Titanium Metallic Heading (Non-AI gradient) */
+  /* Clean Solid High-Contrast Heading (Authentic typography) */
   .polar-gradient-text {
-    background: linear-gradient(180deg, #FFFFFF 20%, #94A3B8 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    font-weight: 800;
   }
 
   /* Telemetry Chip / Hardware Badge */
@@ -89,7 +80,7 @@
 
 /* Accessibility Focus States */
 :focus-visible {
-  outline: 2px solid #00E5C8 !important;
+  outline: 2px solid #F97316 !important;
   outline-offset: 2px !important;
 }
 

@@ -231,7 +231,7 @@ export const LogisticsPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400">
               <Boxes className="h-6 w-6" />
             </div>
             <div>
@@ -254,7 +254,7 @@ export const LogisticsPage: React.FC = () => {
             className="p-2 sm:px-3 sm:py-2 text-xs font-medium text-slate-300 bg-polar-900 border border-slate-700/80 rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-1.5 shadow-sm"
             title="Refresh All Logistics Data"
           >
-            <RefreshCw className="w-4 h-4 text-cyan-400" />
+            <RefreshCw className="w-4 h-4 text-orange-400" />
             <span className="hidden sm:inline">Refresh</span>
           </button>
 
@@ -267,15 +267,15 @@ export const LogisticsPage: React.FC = () => {
                     setIsTransferModalOpen(true);
                   }
                 }}
-                className="px-3 py-2 text-xs font-semibold text-slate-200 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-500/30 rounded-xl transition-colors flex items-center gap-1.5 shadow-sm shadow-indigo-950/30"
+                className="px-3 py-2 text-xs font-semibold text-slate-200 bg-polar-800 hover:bg-polar-750 border border-polar-700 rounded-xl transition-colors flex items-center gap-1.5 shadow-titanium"
               >
-                <ArrowLeftRight className="w-4 h-4 text-indigo-400" />
+                <ArrowLeftRight className="w-4 h-4 text-amber-400" />
                 <span>Inter-Station Transfer</span>
               </button>
 
               <button
                 onClick={() => setIsCreateItemModalOpen(true)}
-                className="px-3 py-2 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 border border-cyan-500 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-cyan-600/20"
+                className="px-3 py-2 text-xs font-bold text-white bg-orange-600 hover:bg-orange-500 border border-orange-500/40 rounded-xl transition-all flex items-center gap-1.5 shadow-titanium"
               >
                 <Plus className="w-4 h-4" />
                 <span>Register Supply</span>
@@ -340,18 +340,18 @@ export const LogisticsPage: React.FC = () => {
       )}
 
       {/* 4. Tab Navigation Bar */}
-      <div className="flex border-b border-slate-800 gap-4 pt-4">
+      <div className="flex border-b border-polar-750 gap-4 pt-4">
         <button
           onClick={() => setActiveTab("inventory")}
           className={`pb-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
             activeTab === "inventory"
-              ? "border-cyan-500 text-cyan-400 font-bold"
+              ? "border-orange-500 text-orange-400 font-bold font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           }`}
         >
           <Boxes className="w-4 h-4" />
           <span>Station Inventory & Reserves</span>
-          <span className="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-300 font-mono">
+          <span className="px-2 py-0.5 text-xs rounded-full bg-polar-800 text-slate-300 font-mono">
             {inventoryPagination.total}
           </span>
         </button>
@@ -360,13 +360,13 @@ export const LogisticsPage: React.FC = () => {
           onClick={() => setActiveTab("shipments")}
           className={`pb-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
             activeTab === "shipments"
-              ? "border-cyan-500 text-cyan-400 font-bold"
+              ? "border-amber-500 text-amber-400 font-bold font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200"
           }`}
         >
           <Truck className="w-4 h-4" />
           <span>Polar Shipments & Resupply Manifests</span>
-          <span className="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-300 font-mono">
+          <span className="px-2 py-0.5 text-xs rounded-full bg-polar-800 text-slate-300 font-mono">
             {shipments.length}
           </span>
         </button>

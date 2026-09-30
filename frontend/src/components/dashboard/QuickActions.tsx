@@ -18,16 +18,16 @@ export const QuickActions: React.FC = () => {
       description: "Microgrid load and solar/diesel balance",
       path: "/energy",
       icon: Zap,
-      color: "text-sky-400 group-hover:text-sky-300",
-      border: "hover:border-sky-500/50"
+      color: "text-amber-400 group-hover:text-amber-300",
+      border: "hover:border-amber-500/50"
     },
     {
       title: "View Environment",
       description: "Microclimate weather and wind dynamics",
       path: "/environment",
       icon: Wind,
-      color: "text-purple-400 group-hover:text-purple-300",
-      border: "hover:border-purple-500/50"
+      color: "text-emerald-400 group-hover:text-emerald-300",
+      border: "hover:border-emerald-500/50"
     },
     {
       title: "Station Alarms",
@@ -42,21 +42,21 @@ export const QuickActions: React.FC = () => {
       description: "Health indices and diagnostic logs",
       path: "/equipment",
       icon: Settings2,
-      color: "text-blue-400 group-hover:text-blue-300",
-      border: "hover:border-blue-500/50"
+      color: "text-orange-400 group-hover:text-orange-300",
+      border: "hover:border-orange-500/50"
     },
     {
       title: "Logistics & Cargo",
       description: "Fuel reserves, consumables, and shipping",
       path: "/logistics",
       icon: Boxes,
-      color: "text-indigo-400 group-hover:text-indigo-300",
-      border: "hover:border-indigo-500/50"
+      color: "text-slate-300 group-hover:text-white",
+      border: "hover:border-slate-500/50"
     }
   ];
 
   return (
-    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-titanium space-y-4">
+    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-sm space-y-4">
       <div className="border-b border-polar-750 pb-3">
         <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
           Mission Control Shortcuts
@@ -75,7 +75,7 @@ export const QuickActions: React.FC = () => {
             >
               <div className="flex items-center justify-between text-slate-400">
                 <Icon className={`h-4 sm:h-5 w-4 sm:w-5 transition-colors ${act.color}`} />
-                <ArrowUpRight className="h-3.5 w-3.5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
+                <ArrowUpRight className="h-3.5 w-3.5 text-slate-600 group-hover:text-orange-400 transition-colors" />
               </div>
               <div className="mt-3">
                 <h4 className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">

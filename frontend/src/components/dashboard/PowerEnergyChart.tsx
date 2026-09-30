@@ -37,7 +37,7 @@ export const PowerEnergyChart: React.FC = () => {
           </div>
           <div className="flex items-center gap-1.5 bg-polar-950/80 border border-polar-750 px-2.5 py-1 rounded-lg">
             <span className="text-slate-400 text-[10px]">LOAD:</span>
-            <span className="font-bold text-cyan-400 tabular-nums">{formatPower(energy.totalConsumptionKw)}</span>
+            <span className="font-bold text-orange-400 tabular-nums">{formatPower(energy.totalConsumptionKw)}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-polar-950/80 border border-polar-750 px-2.5 py-1 rounded-lg">
             <Fuel className="h-3 w-3 text-amber-400" />
@@ -57,32 +57,32 @@ export const PowerEnergyChart: React.FC = () => {
                 <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
               </linearGradient>
               <linearGradient id="colorConsumption" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#00e5c8" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#00e5c8" stopOpacity={0.0} />
+                <stop offset="5%" stopColor="#f97316" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#f97316" stopOpacity={0.0} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" stroke="#1B2945" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#292E3B" vertical={false} />
 
             <XAxis
               dataKey="time"
-              stroke="#546E9E"
+              stroke="#758097"
               fontSize={10}
               tickLine={false}
-              axisLine={{ stroke: "#1B2945" }}
+              axisLine={{ stroke: "#292E3B" }}
             />
             <YAxis
-              stroke="#546E9E"
+              stroke="#758097"
               fontSize={10}
               tickLine={false}
-              axisLine={{ stroke: "#1B2945" }}
+              axisLine={{ stroke: "#292E3B" }}
               unit="kW"
             />
 
             <RechartsTooltip
               contentStyle={{
-                backgroundColor: "#0B111E",
-                borderColor: "#1B2945",
+                backgroundColor: "#13151B",
+                borderColor: "#292E3B",
                 borderRadius: "0.75rem",
                 fontSize: "11px",
                 fontFamily: "JetBrains Mono, monospace",
@@ -110,7 +110,7 @@ export const PowerEnergyChart: React.FC = () => {
               type="monotone"
               dataKey="consumption"
               name="Consumption (kW)"
-              stroke="#00e5c8"
+              stroke="#f97316"
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorConsumption)"

@@ -39,21 +39,21 @@ export const KpiCardsSection: React.FC = () => {
       </Card>
 
       {/* CARD 2: POWER BALANCE */}
-      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-cyan-500/40 shadow-titanium transition-all duration-200 p-4 sm:p-5">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-cyan-500/60" />
+      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-orange-500/40 shadow-sm transition-all duration-200 p-4 sm:p-5">
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-orange-500" />
         <div className="flex items-start justify-between">
           <div>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Power Balance
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-3xl font-black text-cyan-300 font-mono tracking-tight tabular-nums">
+              <span className="text-3xl font-black text-orange-400 font-mono tracking-tight tabular-nums">
                 {kpiSummary.netPowerKw >= 0 ? `+${kpiSummary.netPowerKw}` : kpiSummary.netPowerKw}
               </span>
-              <span className="text-xs font-bold text-cyan-400 font-mono">kW Net</span>
+              <span className="text-xs font-bold text-orange-400 font-mono">kW Net</span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-polar-800 text-cyan-400 border border-cyan-500/25">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-polar-800 text-orange-400 border border-orange-500/25">
             <Zap className="h-5 w-5" />
           </div>
         </div>
@@ -70,15 +70,15 @@ export const KpiCardsSection: React.FC = () => {
       </Card>
 
       {/* CARD 3: BATTERY RESERVE */}
-      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-blue-500/40 shadow-titanium transition-all duration-200 p-4 sm:p-5">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-blue-500/60" />
+      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-slate-500/40 shadow-sm transition-all duration-200 p-4 sm:p-5">
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-emerald-500/80" />
         <div className="flex items-start justify-between">
           <div>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Battery Bank
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-3xl font-black text-blue-200 font-mono tracking-tight tabular-nums">
+              <span className="text-3xl font-black text-white font-mono tracking-tight tabular-nums">
                 {kpiSummary.batteryPercent}%
               </span>
               <span
@@ -94,7 +94,7 @@ export const KpiCardsSection: React.FC = () => {
               </span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-polar-800 text-blue-400 border border-blue-500/25">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-polar-800 text-emerald-400 border border-polar-700">
             {kpiSummary.batteryStatus === "CHARGING" ? (
               <BatteryCharging className="h-5 w-5" />
             ) : kpiSummary.batteryPercent < 50 ? (
@@ -106,13 +106,13 @@ export const KpiCardsSection: React.FC = () => {
         </div>
         <div className="mt-3 flex items-center justify-between border-t border-polar-750 pt-2.5 text-xs text-slate-400 font-mono">
           <span className="text-[10px]">Fuel: <strong className="text-slate-200 tabular-nums">{kpiSummary.fuelPercent}%</strong></span>
-          <span className="text-[10px] text-blue-300">493V Bus</span>
+          <span className="text-[10px] text-slate-400">493V Bus</span>
         </div>
       </Card>
 
       {/* CARD 4: ACTIVE ALERTS */}
-      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-amber-500/40 shadow-titanium transition-all duration-200 p-4 sm:p-5">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-amber-500/60" />
+      <Card className="relative overflow-hidden border-polar-750 bg-polar-900/75 hover:border-amber-500/40 shadow-sm transition-all duration-200 p-4 sm:p-5">
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-amber-500" />
         <div className="flex items-start justify-between">
           <div>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
@@ -142,7 +142,7 @@ export const KpiCardsSection: React.FC = () => {
           <span className="text-polar-700">|</span>
           <span className="text-amber-300 font-semibold">Warn: {kpiSummary.warningAlerts}</span>
           <span className="text-polar-700">|</span>
-          <span className="text-cyan-300 font-semibold">Info: {kpiSummary.infoAlerts}</span>
+          <span className="text-slate-300 font-semibold">Info: {kpiSummary.infoAlerts}</span>
         </div>
       </Card>
     </div>

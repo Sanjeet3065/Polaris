@@ -21,11 +21,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const variantStyles = {
-      primary: "bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold shadow-ice-glow hover:shadow-sky-400/50",
-      secondary: "bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700",
-      outline: "border border-sky-500/40 text-sky-300 hover:bg-sky-500/10 hover:border-sky-400",
-      ghost: "text-slate-300 hover:bg-slate-800/60 hover:text-white",
-      danger: "bg-red-600 hover:bg-red-500 text-white shadow-alert-glow"
+      primary: "bg-orange-600 hover:bg-orange-500 text-white font-semibold shadow-titanium hover:scale-[1.01] active:scale-[0.99]",
+      secondary: "bg-polar-800 hover:bg-polar-750 text-slate-100 border border-polar-700 shadow-titanium",
+      outline: "border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500",
+      ghost: "text-slate-300 hover:bg-polar-800/60 hover:text-white",
+      danger: "bg-rose-600 hover:bg-rose-500 text-white shadow-titanium"
     };
 
     const sizeStyles = {
@@ -38,7 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-sky-400/50",
+          "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-orange-500/50",
           variantStyles[variant],
           sizeStyles[size],
           className

@@ -125,7 +125,7 @@ export const MaintenancePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-polar-950 text-slate-100 p-4 sm:p-6 lg:p-8">
       {/* Toast Notification */}
       {toastMessage && (
         <div
@@ -146,17 +146,17 @@ export const MaintenancePage: React.FC = () => {
       )}
 
       {/* Page Header */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-polar-750 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="p-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30">
+            <div className="p-1.5 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/30">
               <Wrench className="w-5 h-5" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              Predictive Maintenance Center
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2 font-mono">
+              PREDICTIVE MAINTENANCE CENTER
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 font-mono">
                 <Sparkles className="w-3 h-3" />
-                AI-Assisted
+                ML Advisory
               </span>
             </h1>
           </div>
@@ -168,7 +168,7 @@ export const MaintenancePage: React.FC = () => {
         {/* Station Badge Indicator */}
         <div className="text-right">
           <span className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold block">Active Operational Filter</span>
-          <span className="font-mono text-sm font-bold text-cyan-400">
+          <span className="font-mono text-sm font-bold text-orange-400">
             {filters.stationId === "ALL" ? "Pan-Antarctic Fleet" : `${filters.stationId} Station`}
           </span>
         </div>

@@ -94,10 +94,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClick={onCloseMobile}
         className={({ isActive }) =>
           cn(
-            "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-150 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 touch-target sm:min-h-0",
+            "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-150 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 touch-target sm:min-h-0",
             isActive
-              ? "bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 shadow-[inset_0_1px_0_0_rgba(0,229,200,0.12)]"
-              : "text-slate-400 hover:bg-polar-850 hover:text-slate-100 border border-transparent"
+              ? "bg-orange-500/10 text-orange-400 border border-orange-500/25 shadow-sm"
+              : "text-slate-400 hover:bg-polar-800 hover:text-slate-100 border border-transparent"
           )
         }
       >
@@ -106,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Icon
               className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                isActive ? "text-cyan-400" : "text-slate-400 group-hover:text-slate-200"
+                isActive ? "text-orange-400" : "text-slate-400 group-hover:text-slate-200"
               )}
               aria-hidden="true"
             />
@@ -119,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {isActive && (
               <>
                 <span className="sr-only">(current page)</span>
-                <span className="absolute -left-2 h-4 w-1 rounded-r-full bg-cyan-400" />
+                <span className="absolute -left-2 h-4 w-1 rounded-r-full bg-orange-500" />
               </>
             )}
           </>
@@ -163,12 +163,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-polar-750">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-polar-800 to-polar-900 border border-cyan-500/30 shadow-titanium">
-              <Compass className="h-5 w-5 text-cyan-400" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 border border-orange-500/30 shadow-sm">
+              <Compass className="h-5 w-5 text-orange-400" />
             </div>
             {!collapsed && (
               <div className="flex flex-col">
-                <span className="text-base font-black tracking-wider polar-gradient-text">
+                <span className="text-base font-bold tracking-wider text-white">
                   POLARIS
                 </span>
                 <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
@@ -227,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="border-t border-polar-750 p-3 bg-polar-900/60">
           {/* User profile capsule */}
           <div className="flex items-center gap-3 rounded-lg p-2 bg-polar-950/80 border border-polar-750">
-            <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-polar-800 text-cyan-300 border border-cyan-500/30 font-bold text-xs font-mono">
+            <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-polar-800 text-orange-400 border border-orange-500/30 font-bold text-xs font-mono">
               {user?.name ? user.name.charAt(0).toUpperCase() : <UserCheck className="h-4 w-4" />}
               <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-polar-950" />
             </div>
@@ -242,7 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     user?.role === "ADMIN"
                       ? "text-amber-400"
                       : user?.role === "OPERATOR"
-                      ? "text-cyan-400"
+                      ? "text-orange-400"
                       : "text-emerald-400"
                   )}
                 >

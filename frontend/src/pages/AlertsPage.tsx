@@ -303,7 +303,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
         <div>
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-polar-900 border border-polar-750 shadow-titanium">
-              <ShieldAlert className="w-6 h-6 text-cyan-400" />
+              <ShieldAlert className="w-6 h-6 text-orange-400" />
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white font-mono uppercase">
@@ -337,7 +337,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
               onClick={() => setSelectedStation("ALL")}
               className={`px-3 py-1 rounded-lg transition-all ${
                 selectedStation === "ALL"
-                  ? "bg-cyan-500 text-polar-950 font-bold shadow-md shadow-cyan-500/20"
+                  ? "bg-orange-500 text-white font-bold shadow-md shadow-orange-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -357,7 +357,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
               onClick={() => setSelectedStation("BHARATI")}
               className={`px-3 py-1 rounded-lg transition-all ${
                 selectedStation === "BHARATI"
-                  ? "bg-cyan-500 text-polar-950 font-bold shadow-md shadow-cyan-500/20"
+                  ? "bg-orange-500 text-white font-bold shadow-md shadow-orange-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -372,7 +372,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
               fetchIncidents();
             }}
             title="Refresh Command Feeds"
-            className="p-2 rounded-xl bg-polar-900 border border-polar-750 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors shadow-titanium"
+            className="p-2 rounded-xl bg-polar-900 border border-polar-750 text-slate-400 hover:text-orange-400 hover:border-orange-500/40 transition-colors shadow-titanium"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -381,7 +381,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
           {canMutate && (
             <button
               onClick={() => setIsCreateIncidentOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-titanium transition-all hover:scale-[1.02]"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold shadow-titanium transition-all hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Log Incident</span>
@@ -396,7 +396,7 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
           onClick={() => setActiveTab("alerts")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === "alerts"
-              ? "border-cyan-400 text-cyan-300 bg-polar-900/60 font-mono"
+              ? "border-orange-500 text-orange-400 bg-polar-900/60 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-polar-900/30"
           }`}
         >
@@ -419,14 +419,14 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" })
           onClick={() => setActiveTab("incidents")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === "incidents"
-              ? "border-blue-400 text-blue-300 bg-polar-900/60 font-mono"
+              ? "border-amber-500 text-amber-400 bg-polar-900/60 font-mono"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-polar-900/30"
           }`}
         >
           <Layers className="w-4 h-4" />
           <span>Incident Command Center</span>
           {incidentsOverview && incidentsOverview.openIncidents > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-blue-500/20 text-blue-300 font-mono border border-blue-500/30">
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500/20 text-amber-300 font-mono border border-amber-500/30">
               {incidentsOverview.openIncidents}
             </span>
           )}

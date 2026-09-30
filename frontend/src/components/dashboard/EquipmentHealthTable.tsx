@@ -18,14 +18,14 @@ export const EquipmentHealthTable: React.FC = () => {
       <div className="flex items-center justify-between border-b border-polar-750 pb-3">
         <div>
           <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Settings2 className="h-4 w-4 text-cyan-400" />
+            <Settings2 className="h-4 w-4 text-orange-400" />
             <span>Equipment Health Index</span>
           </h3>
           <p className="text-[11px] text-slate-400">Continuous machinery vibration, thermal, and electrical diagnostics</p>
         </div>
         <Link
           to="/equipment"
-          className="flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-mono font-semibold text-orange-400 hover:text-orange-300 transition-colors"
         >
           <span>All machinery</span>
           <ArrowRight className="h-3.5 w-3.5" />

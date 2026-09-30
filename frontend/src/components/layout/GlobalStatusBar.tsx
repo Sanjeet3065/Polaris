@@ -34,7 +34,7 @@ export const GlobalStatusBar: React.FC = () => {
         {/* Left Side: Station & Status */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 font-semibold text-slate-300">
-            <Radio className="h-3.5 w-3.5 text-cyan-400" />
+            <Radio className="h-3.5 w-3.5 text-orange-400" />
             <span className="text-slate-400 text-[10px] font-mono">BASE:</span>
             <span className="text-white font-bold tracking-wider text-xs">{stationInfo.name}</span>
           </div>
@@ -49,8 +49,8 @@ export const GlobalStatusBar: React.FC = () => {
           <span className="hidden md:inline text-polar-700" aria-hidden="true">•</span>
 
           {/* Telemetry Simulation Badge */}
-          <div className="flex items-center gap-1 rounded-full bg-polar-850 border border-polar-700 px-2.5 py-0.5 text-[10px] font-mono font-bold text-cyan-300">
-            <Sparkles className="h-3 w-3 shrink-0 text-cyan-400" />
+          <div className="flex items-center gap-1 rounded-full bg-polar-850 border border-polar-700 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-slate-300">
+            <Sparkles className="h-3 w-3 shrink-0 text-orange-400" />
             <span>STREAM SYNCHRONIZED</span>
           </div>
         </div>
@@ -60,8 +60,8 @@ export const GlobalStatusBar: React.FC = () => {
           {/* Real-time WebSocket connection state */}
           <div className="flex items-center gap-1.5">
             {realtimeStatus === "LIVE" && !isStale ? (
-              <span className="flex items-center gap-1 text-cyan-300 font-bold">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="flex items-center gap-1 text-emerald-400 font-bold">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 <span>LIVE ({secondsAgo}s ago)</span>
               </span>
             ) : isStale ? (

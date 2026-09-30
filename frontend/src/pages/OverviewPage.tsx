@@ -22,8 +22,8 @@ export const OverviewPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-polar-750 pb-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
-            <span className="polar-gradient-text">Mission Overview</span>
-            <span className="rounded-lg bg-polar-850 border border-cyan-500/30 px-2.5 py-0.5 text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider">
+            <span>Mission Overview</span>
+            <span className="rounded-lg bg-orange-500/10 border border-orange-500/30 px-2.5 py-0.5 text-[11px] font-mono text-orange-400 font-bold uppercase tracking-wider">
               {selectedStation}
             </span>
           </h1>

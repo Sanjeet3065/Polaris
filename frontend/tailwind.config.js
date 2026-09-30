@@ -8,39 +8,84 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Override Tailwind default sky & cyan so no neon blue/cyan AI generated styling leaks through
+        sky: {
+          50: "#FFF7ED",
+          100: "#FFEDD5",
+          200: "#FED7AA",
+          300: "#FDBA74",
+          400: "#FB923C",
+          500: "#F97316", // Polar Safety Orange
+          600: "#EA580C",
+          700: "#C2410C",
+          800: "#9A3412",
+          900: "#7C2D12",
+          950: "#431407"
+        },
+        cyan: {
+          50: "#FFF7ED",
+          100: "#FFEDD5",
+          200: "#FED7AA",
+          300: "#FDBA74",
+          400: "#FB923C",
+          500: "#F97316", // Polar Safety Orange
+          600: "#EA580C",
+          700: "#C2410C",
+          800: "#9A3412",
+          900: "#7C2D12",
+          950: "#431407"
+        },
+        blue: {
+          50: "#F8FAFC",
+          100: "#F1F5F9",
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#64748B", // Clean industrial slate
+          600: "#475569",
+          700: "#334155",
+          800: "#1E293B",
+          900: "#0F172A",
+          950: "#020617"
+        },
         polar: {
-          950: "#060A12", // Deep titanium obsidian
-          900: "#0B111E", // Command center slate
-          850: "#10182A", // Console surface
-          800: "#152036", // Elevated panel
-          750: "#1B2945", // Hairline border
-          700: "#223354",
-          600: "#364C77",
-          500: "#546E9E"
+          950: "#0C0D11", // Deep neutral carbon black (Chassis body)
+          900: "#13151B", // Command center graphite (Panels & Headers)
+          850: "#181B23", // Card background
+          800: "#1E222D", // Elevated card / modal
+          750: "#292E3B", // Hairline carbon border
+          700: "#373E4F", // Hover border
+          600: "#50586D",
+          500: "#758097"
+        },
+        expedition: {
+          DEFAULT: "#F97316", // Polar Safety International Orange
+          hover: "#EA580C",
+          light: "#FB923C",
+          dim: "rgba(249, 115, 22, 0.12)"
         },
         tactical: {
-          cyan: "#00E5C8", // Arctic tactical cyan
-          teal: "#06B6D4", // Secondary telemetry
-          blue: "#2563EB", // Command telemetry cobalt
-          amber: "#F59E0B", // Advisory caution
-          red: "#F43F5E", // Hazard critical
-          green: "#10B981" // Nominal status
+          orange: "#F97316", // High-vis polar expedition accent
+          amber: "#F59E0B",  // Caution / Advisory
+          red: "#EF4444",    // Critical Hazard
+          green: "#10B981",  // Nominal Status
+          slate: "#94A3B8"   // Secondary telemetry
         },
         ice: {
-          DEFAULT: "#00E5C8",
-          glow: "#38EDD2",
-          dim: "#0891B2",
-          dark: "#0E7490"
+          DEFAULT: "#F97316",
+          glow: "#FB923C",
+          dim: "#EA580C",
+          dark: "#9A3412"
         },
         aurora: {
-          DEFAULT: "#10b981",
-          bright: "#34d399",
+          DEFAULT: "#10B981",
+          bright: "#34D399",
           dim: "#059669"
         },
         blizzard: {
-          DEFAULT: "#e2e8f0",
-          pure: "#ffffff",
-          muted: "#94a3b8"
+          DEFAULT: "#F1F5F9",
+          pure: "#FFFFFF",
+          muted: "#94A3B8"
         }
       },
       fontFamily: {
@@ -48,12 +93,12 @@ export default {
         mono: ["JetBrains Mono", "SF Mono", "Fira Code", "monospace"]
       },
       boxShadow: {
-        "polar-card": "inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 4px 24px -2px rgba(0, 0, 0, 0.65)",
-        "titanium": "inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 6px 28px -4px rgba(0, 0, 0, 0.75)",
-        "hud": "0 0 0 1px rgba(255, 255, 255, 0.07), 0 10px 30px rgba(0, 0, 0, 0.7)",
-        "ice-glow": "0 0 16px -2px rgba(0, 229, 200, 0.2)",
+        "polar-card": "0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5)",
+        "titanium": "0 1px 3px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.05)",
+        "hud": "0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06)",
+        "orange-glow": "0 0 16px -2px rgba(249, 115, 22, 0.25)",
         "aurora-glow": "0 0 16px -2px rgba(16, 185, 129, 0.25)",
-        "alert-glow": "0 0 18px -2px rgba(244, 63, 94, 0.3)"
+        "alert-glow": "0 0 18px -2px rgba(239, 68, 68, 0.3)"
       },
       backdropBlur: {
         xs: "2px"

@@ -71,15 +71,15 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     LIVE: {
       label: "LIVE",
       icon: Radio,
-      dotClass: "bg-cyan-400 animate-pulse",
-      containerClass: "bg-cyan-950/70 text-cyan-300 border-cyan-800/60 shadow-[0_0_12px_rgba(6,182,212,0.3)]",
+      dotClass: "bg-emerald-400 animate-pulse",
+      containerClass: "bg-emerald-950/70 text-emerald-300 border-emerald-800/60 shadow-titanium",
       symbol: "●"
     },
     SIMULATION: {
       label: "SIMULATION",
       icon: Sparkles,
-      dotClass: "bg-sky-400",
-      containerClass: "bg-sky-950/70 text-sky-300 border-sky-800/60",
+      dotClass: "bg-amber-400",
+      containerClass: "bg-amber-950/70 text-amber-300 border-amber-800/60 shadow-titanium",
       symbol: "✦"
     },
     WARNING: {

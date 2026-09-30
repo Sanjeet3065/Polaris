@@ -28,14 +28,14 @@ export const ActiveAlertsPanel: React.FC = () => {
       default:
         return {
           icon: Info,
-          bg: "bg-sky-500/15 border-sky-500/30 text-sky-300",
-          iconColor: "text-sky-400"
+          bg: "bg-polar-800 border-polar-700 text-slate-300",
+          iconColor: "text-slate-400"
         };
     }
   };
 
   return (
-    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-titanium space-y-4">
+    <Card className="p-4 sm:p-5 bg-polar-900/75 border-polar-750 shadow-sm space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-polar-750 pb-3">
         <div>
@@ -47,7 +47,7 @@ export const ActiveAlertsPanel: React.FC = () => {
         </div>
         <Link
           to="/alerts"
-          className="flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-mono font-semibold text-orange-400 hover:text-orange-300 transition-colors"
         >
           <span>All alerts</span>
           <ArrowRight className="h-3.5 w-3.5" />
@@ -80,7 +80,7 @@ export const ActiveAlertsPanel: React.FC = () => {
                     <span className="text-xs font-semibold text-slate-100 truncate">
                       {alert.title}
                     </span>
-                    <span className="font-mono text-[10px] text-cyan-400 uppercase shrink-0 font-bold">
+                    <span className="font-mono text-[10px] text-orange-400 uppercase shrink-0 font-bold">
                       {alert.stationCode}
                     </span>
                   </div>

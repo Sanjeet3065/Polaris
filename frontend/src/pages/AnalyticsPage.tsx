@@ -178,11 +178,11 @@ export const AnalyticsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Page Title & Subtitle */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-polar-750 gap-3">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <BarChart3 className="w-5 h-5 text-sky-400" />
-            <span>Analytics & Operational Intelligence</span>
+          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5 font-mono">
+            <BarChart3 className="w-5 h-5 text-orange-400" />
+            <span>ANALYTICS & OPERATIONAL INTELLIGENCE</span>
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
             Historical operational performance, microgrid telemetry, and station insights
@@ -207,7 +207,7 @@ export const AnalyticsPage: React.FC = () => {
       />
 
       {/* Navigation Sub-Tabs */}
-      <div className="border-b border-slate-800 flex overflow-x-auto gap-2 pb-0.5">
+      <div className="border-b border-polar-750 flex overflow-x-auto gap-2 pb-0.5">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -218,7 +218,7 @@ export const AnalyticsPage: React.FC = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-3.5 py-2.5 text-xs font-semibold border-b-2 whitespace-nowrap transition-all ${
                 isActive
-                  ? "border-sky-500 text-sky-400 bg-sky-500/10"
+                  ? "border-orange-500 text-orange-400 bg-orange-500/10 font-mono"
                   : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700"
               }`}
             >

@@ -291,7 +291,7 @@ export const AssistantPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-polar-950 text-slate-100 overflow-hidden">
       {/* Assistant Mission Control Header */}
       <AssistantHeader
         stationCode={stationCode}
@@ -303,7 +303,7 @@ export const AssistantPage: React.FC = () => {
       {/* Main Container: Chat + Operational Context Panel */}
       <div className="flex flex-1 overflow-hidden">
         {/* Chat Feed Column */}
-        <div className="flex flex-col flex-1 min-w-0 bg-slate-950">
+        <div className="flex flex-col flex-1 min-w-0 bg-polar-950">
           {/* Scrollable Messages Viewport */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
             {/* Error Notification Banner */}
@@ -326,27 +326,27 @@ export const AssistantPage: React.FC = () => {
             {/* Empty State / Welcome Screen */}
             {messages.length === 0 && (
               <div className="max-w-2xl mx-auto my-auto py-8 text-center space-y-5 animate-in fade-in">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400/20 to-indigo-600/20 border border-sky-500/40 text-sky-400 flex items-center justify-center mx-auto shadow-xl shadow-sky-500/10">
+                <div className="w-16 h-16 rounded-2xl bg-polar-900 border border-orange-500/30 text-orange-400 flex items-center justify-center mx-auto shadow-titanium">
                   <Bot className="w-8 h-8" />
                 </div>
 
                 <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-300 text-xs font-semibold">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-semibold font-mono">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>POLARIS Mission Operational Assistant</span>
+                    <span>POLARIS MISSION ASSISTANT</span>
                   </div>
-                  <h2 className="text-xl font-bold text-white tracking-tight">
-                    Natural Language Polar Station Intelligence
+                  <h2 className="text-xl font-bold text-white tracking-tight font-mono">
+                    Natural Language Polar Station Telemetry
                   </h2>
                   <p className="text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
-                    Directly query energy telemetry, life-support microgrids, machinery health, Phase 10 predictive maintenance risks, and active alarms for <span className="font-semibold text-slate-200 uppercase">{stationCode}</span>.
+                    Directly query energy telemetry, life-support microgrids, machinery health, predictive maintenance risks, and active alarms for <span className="font-semibold text-slate-200 uppercase">{stationCode}</span>.
                   </p>
                 </div>
 
                 {/* Scope & Grounding Notice */}
-                <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 max-w-lg mx-auto text-left space-y-1 shadow-inner">
+                <div className="p-3.5 rounded-xl bg-polar-900 border border-polar-750 text-[11px] text-slate-400 max-w-lg mx-auto text-left space-y-1 shadow-titanium">
                   <div className="flex items-center gap-1.5 font-bold text-slate-300">
-                    <Compass className="w-3.5 h-3.5 text-sky-400" />
+                    <Compass className="w-3.5 h-3.5 text-orange-400" />
                     <span>Operational Scope & Boundary</span>
                   </div>
                   <p>

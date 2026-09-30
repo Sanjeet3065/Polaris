@@ -14,7 +14,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: "Deep Polar Cold",
       icon: Thermometer,
       status: environment.temperatureCelsius < -40 ? "WARNING" : "NORMAL",
-      color: "text-sky-300"
+      color: "text-white"
     },
     {
       label: "Wind Speed",
@@ -22,7 +22,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: `Katabatic Gusts · ${environment.windDirectionCompass}`,
       icon: Wind,
       status: environment.windSpeedKmh > 60 ? "CRITICAL" : environment.windSpeedKmh > 40 ? "WARNING" : "NORMAL",
-      color: "text-indigo-300"
+      color: "text-orange-400"
     },
     {
       label: "Barometric Pressure",
@@ -30,7 +30,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: "Stable Gradient",
       icon: Gauge,
       status: environment.atmosphericPressureHpa < 970 ? "WARNING" : "NORMAL",
-      color: "text-emerald-300"
+      color: "text-emerald-400"
     },
     {
       label: "Relative Humidity",
@@ -38,7 +38,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: "Ice Fog Saturation",
       icon: Droplets,
       status: "NORMAL",
-      color: "text-sky-200"
+      color: "text-slate-200"
     },
     {
       label: "Wind Direction",
@@ -46,7 +46,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: "Inland to Coast Line",
       icon: Navigation,
       status: "NORMAL",
-      color: "text-purple-300"
+      color: "text-slate-300"
     },
     {
       label: "Horizontal Visibility",
@@ -54,7 +54,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       subtext: "Unobstructed Line-of-Sight",
       icon: Eye,
       status: environment.visibilityKm < 5 ? "WARNING" : "NORMAL",
-      color: "text-amber-200"
+      color: "text-amber-300"
     }
   ];
 
@@ -63,7 +63,7 @@ export const EnvironmentalSnapshot: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <Wind className="h-4 w-4 text-cyan-400" />
+            <Wind className="h-4 w-4 text-orange-400" />
             <span>Environmental Telemetry</span>
           </h3>
           <p className="text-[11px] text-slate-400">AWS microclimate sensors & meteorological station array</p>
@@ -80,10 +80,10 @@ export const EnvironmentalSnapshot: React.FC = () => {
           return (
             <Card
               key={m.label}
-              className="p-3 bg-polar-900/75 border-polar-750 hover:border-cyan-500/30 shadow-titanium transition-colors"
+              className="p-3 bg-polar-900/75 border-polar-750 hover:border-polar-600 shadow-sm transition-colors"
             >
               <div className="flex items-center justify-between text-slate-400 mb-1.5">
-                <Icon className="h-3.5 w-3.5 text-cyan-400" />
+                <Icon className="h-3.5 w-3.5 text-orange-400" />
                 <span
                   className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono ${
                     m.status === "WARNING"

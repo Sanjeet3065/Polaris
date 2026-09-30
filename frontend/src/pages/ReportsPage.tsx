@@ -69,11 +69,11 @@ export const ReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-polar-750 gap-3">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <FileText className="w-5 h-5 text-sky-400" />
-            <span>Reports & Operational Intelligence</span>
+          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5 font-mono">
+            <FileText className="w-5 h-5 text-orange-400" />
+            <span>REPORTS & OPERATIONAL INTELLIGENCE</span>
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
             Official NCPOR / MoES polar operations governance, compliance logs, and exportable intelligence
@@ -82,10 +82,10 @@ export const ReportsPage: React.FC = () => {
       </div>
 
       {/* Report Generator Studio Form */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg">
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-800">
-          <Sparkles className="w-4 h-4 text-sky-400" />
-          <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+      <div className="bg-polar-900 border border-polar-750 rounded-xl p-5 shadow-titanium">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-polar-750">
+          <Sparkles className="w-4 h-4 text-orange-400" />
+          <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
             Operational Report Generation Studio
           </h2>
         </div>
@@ -94,13 +94,13 @@ export const ReportsPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Report Type Selector */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Report Template Category:
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                REPORT TEMPLATE:
               </label>
               <select
                 value={selectedReportType}
                 onChange={(e) => setSelectedReportType(e.target.value as ReportType)}
-                className="w-full bg-slate-950 border border-slate-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500"
+                className="w-full bg-polar-950 border border-polar-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
               >
                 {reportTypes?.map((t) => (
                   <option key={t.type} value={t.type}>
@@ -117,13 +117,13 @@ export const ReportsPage: React.FC = () => {
 
             {/* Station Target */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Target Research Station:
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                TARGET RESEARCH STATION:
               </label>
               <select
                 value={stationId}
                 onChange={(e) => setStationId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500"
+                className="w-full bg-polar-950 border border-polar-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
               >
                 <option value="ALL">All Stations (Maitri & Bharati)</option>
                 <option value="MAITRI">Maitri Station</option>
@@ -136,13 +136,13 @@ export const ReportsPage: React.FC = () => {
 
             {/* Time Window */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Observation Time Period:
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                OBSERVATION PERIOD:
               </label>
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value as TimeRangeOption)}
-                className="w-full bg-slate-950 border border-slate-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500"
+                className="w-full bg-polar-950 border border-polar-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
               >
                 <option value="1h">Last 1 Hour</option>
                 <option value="6h">Last 6 Hours</option>
@@ -157,21 +157,21 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* Optional Title & Action Button */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-slate-800/80">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-polar-750">
             <div className="flex-1 max-w-md">
               <input
                 type="text"
                 value={reportTitle}
                 onChange={(e) => setReportTitle(e.target.value)}
                 placeholder="Custom report title (leave empty for auto-generated)..."
-                className="w-full bg-slate-950 border border-slate-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500"
+                className="w-full bg-polar-950 border border-polar-750 text-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
               />
             </div>
 
             <button
               type="submit"
               disabled={generateMutation.isPending}
-              className="flex items-center justify-center gap-2 px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold transition-all shadow-md disabled:opacity-50"
+              className="flex items-center justify-center gap-2 px-5 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-xs font-bold transition-all shadow-titanium disabled:opacity-50 font-mono"
             >
               <PlusCircle className="w-4 h-4" />
               <span>{generateMutation.isPending ? "Generating Intelligence..." : "Generate Operational Report"}</span>
