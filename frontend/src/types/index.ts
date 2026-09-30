@@ -135,13 +135,7 @@ export interface StationComparisonMetric {
   benchmark: "higher-better" | "lower-better" | "neutral";
 }
 
-export type UserRole =
-  | "SUPER_ADMIN"
-  | "STATION_ADMIN"
-  | "OPERATOR"
-  | "SCIENTIST"
-  | "LOGISTICS_MANAGER"
-  | "VIEWER";
+export type UserRole = "ADMIN" | "OPERATOR" | "VIEWER";
 
 export interface User {
   id: string;
@@ -154,6 +148,12 @@ export interface User {
 export interface ApiResponseEnvelope<T> {
   success: boolean;
   data: T;
+  meta?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+    timestamp?: string;
+  };
   pagination?: {
     page: number;
     limit: number;

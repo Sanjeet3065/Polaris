@@ -92,11 +92,11 @@ export const alertService = {
     if (stationId && stationId !== "ALL") {
       params.stationId = stationId;
     }
-    const response = await apiClient.get<ApiResponseEnvelope<AlertOverviewKpi>>(
-      "/api/v1/alerts/overview",
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<AlertOverviewKpi>>(
+      "/alerts/overview",
       { params }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async getAlerts(
@@ -113,66 +113,66 @@ export const alertService = {
     if (params.ruleCode) query.ruleCode = params.ruleCode;
     if (params.search) query.search = params.search;
 
-    const response = await apiClient.get<ApiResponseEnvelope<Alert[]>>("/api/v1/alerts", {
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Alert[]>>("/alerts", {
       params: query
     });
     return {
-      items: response.data.data,
+      items: response.data || [],
       pagination: {
-        page: response.data.pagination?.page || 1,
-        limit: response.data.pagination?.limit || 20,
-        total: response.data.pagination?.total || 0
+        page: response.meta?.page || response.pagination?.page || 1,
+        limit: response.meta?.limit || response.pagination?.limit || 20,
+        total: response.meta?.total || response.pagination?.total || 0
       }
     };
   },
 
   async getAlertById(id: string): Promise<Alert> {
-    const response = await apiClient.get<ApiResponseEnvelope<Alert>>(`/api/v1/alerts/${id}`);
-    return response.data.data;
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Alert>>(`/alerts/${id}`);
+    return response.data;
   },
 
   async createAlert(data: CreateAlertData): Promise<Alert> {
-    const response = await apiClient.post<ApiResponseEnvelope<Alert>>("/api/v1/alerts", data);
-    return response.data.data;
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Alert>>("/alerts", data);
+    return response.data;
   },
 
   async acknowledgeAlert(id: string, note?: string): Promise<Alert> {
-    const response = await apiClient.post<ApiResponseEnvelope<Alert>>(
-      `/api/v1/alerts/${id}/acknowledge`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Alert>>(
+      `/alerts/${id}/acknowledge`,
       { note }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async escalateAlert(id: string, data?: EscalateAlertData): Promise<{ alert: Alert; incident: Incident }> {
-    const response = await apiClient.post<ApiResponseEnvelope<{ alert: Alert; incident: Incident }>>(
-      `/api/v1/alerts/${id}/escalate`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<{ alert: Alert; incident: Incident }>>(
+      `/alerts/${id}/escalate`,
       data || {}
     );
-    return response.data.data;
+    return response.data;
   },
 
   async resolveAlert(id: string, note?: string): Promise<Alert> {
-    const response = await apiClient.post<ApiResponseEnvelope<Alert>>(
-      `/api/v1/alerts/${id}/resolve`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Alert>>(
+      `/alerts/${id}/resolve`,
       { note }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async suppressAlert(id: string, reason: string): Promise<Alert> {
-    const response = await apiClient.post<ApiResponseEnvelope<Alert>>(
-      `/api/v1/alerts/${id}/suppress`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Alert>>(
+      `/alerts/${id}/suppress`,
       { reason }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async getAlertTimeline(id: string): Promise<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>> {
-    const response = await apiClient.get<ApiResponseEnvelope<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>>>(
-      `/api/v1/alerts/${id}/timeline`
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>>>(
+      `/alerts/${id}/timeline`
     );
-    return response.data.data;
+    return response.data;
   },
 
   // ==========================================
@@ -184,11 +184,11 @@ export const alertService = {
     if (stationId && stationId !== "ALL") {
       params.stationId = stationId;
     }
-    const response = await apiClient.get<ApiResponseEnvelope<IncidentOverviewKpi>>(
-      "/api/v1/incidents/overview",
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<IncidentOverviewKpi>>(
+      "/incidents/overview",
       { params }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async getIncidents(
@@ -205,35 +205,35 @@ export const alertService = {
     if (params.assignedTo) query.assignedTo = params.assignedTo;
     if (params.search) query.search = params.search;
 
-    const response = await apiClient.get<ApiResponseEnvelope<Incident[]>>("/api/v1/incidents", {
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Incident[]>>("/incidents", {
       params: query
     });
     return {
-      items: response.data.data,
+      items: response.data || [],
       pagination: {
-        page: response.data.pagination?.page || 1,
-        limit: response.data.pagination?.limit || 20,
-        total: response.data.pagination?.total || 0
+        page: response.meta?.page || response.pagination?.page || 1,
+        limit: response.meta?.limit || response.pagination?.limit || 20,
+        total: response.meta?.total || response.pagination?.total || 0
       }
     };
   },
 
   async getIncidentById(id: string): Promise<Incident> {
-    const response = await apiClient.get<ApiResponseEnvelope<Incident>>(`/api/v1/incidents/${id}`);
-    return response.data.data;
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Incident>>(`/incidents/${id}`);
+    return response.data;
   },
 
   async createIncident(data: CreateIncidentData): Promise<Incident> {
-    const response = await apiClient.post<ApiResponseEnvelope<Incident>>("/api/v1/incidents", data);
-    return response.data.data;
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Incident>>("/incidents", data);
+    return response.data;
   },
 
   async updateIncident(id: string, data: UpdateIncidentData): Promise<Incident> {
-    const response = await apiClient.patch<ApiResponseEnvelope<Incident>>(
-      `/api/v1/incidents/${id}`,
+    const response = await apiClient.patch<unknown, ApiResponseEnvelope<Incident>>(
+      `/incidents/${id}`,
       data
     );
-    return response.data.data;
+    return response.data;
   },
 
   async updateIncidentStatus(
@@ -242,48 +242,48 @@ export const alertService = {
     note?: string,
     resolutionSummary?: string
   ): Promise<Incident> {
-    const response = await apiClient.post<ApiResponseEnvelope<Incident>>(
-      `/api/v1/incidents/${id}/status`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Incident>>(
+      `/incidents/${id}/status`,
       { status, note, resolutionSummary }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async assignIncident(id: string, assignedTo: string): Promise<Incident> {
-    const response = await apiClient.post<ApiResponseEnvelope<Incident>>(
-      `/api/v1/incidents/${id}/assign`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<Incident>>(
+      `/incidents/${id}/assign`,
       { assignedTo }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async addIncidentNote(id: string, content: string): Promise<IncidentNote> {
-    const response = await apiClient.post<ApiResponseEnvelope<IncidentNote>>(
-      `/api/v1/incidents/${id}/notes`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<IncidentNote>>(
+      `/incidents/${id}/notes`,
       { content }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async linkAlert(id: string, alertId: string): Promise<{ success: boolean }> {
-    const response = await apiClient.post<ApiResponseEnvelope<{ success: boolean }>>(
-      `/api/v1/incidents/${id}/alerts`,
+    const response = await apiClient.post<unknown, ApiResponseEnvelope<{ success: boolean }>>(
+      `/incidents/${id}/alerts`,
       { alertId }
     );
-    return response.data.data;
+    return response.data;
   },
 
   async unlinkAlert(id: string, alertId: string): Promise<{ success: boolean }> {
-    const response = await apiClient.delete<ApiResponseEnvelope<{ success: boolean }>>(
-      `/api/v1/incidents/${id}/alerts/${alertId}`
+    const response = await apiClient.delete<unknown, ApiResponseEnvelope<{ success: boolean }>>(
+      `/incidents/${id}/alerts/${alertId}`
     );
-    return response.data.data;
+    return response.data;
   },
 
   async getIncidentTimeline(id: string): Promise<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>> {
-    const response = await apiClient.get<ApiResponseEnvelope<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>>>(
-      `/api/v1/incidents/${id}/timeline`
+    const response = await apiClient.get<unknown, ApiResponseEnvelope<Array<{ id: string; type: string; title: string; description: string; occurredAt: string }>>>(
+      `/incidents/${id}/timeline`
     );
-    return response.data.data;
+    return response.data;
   }
 };

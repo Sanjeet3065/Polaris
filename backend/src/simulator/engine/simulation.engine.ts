@@ -161,6 +161,7 @@ export class SimulationEngine {
 
       equipmentHealthPayloads.push({
         equipmentId: spec.id,
+        equipmentCode: spec.code,
         recordedAt: timestamp,
         healthPercent: nextEq.healthPercent,
         temperature: nextEq.temperature,

@@ -163,6 +163,7 @@ export interface GeneratedTelemetryCycle {
   };
   equipmentHealth: Array<{
     equipmentId: string;
+    equipmentCode?: string;
     recordedAt: Date;
     healthPercent: number;
     temperature: number;

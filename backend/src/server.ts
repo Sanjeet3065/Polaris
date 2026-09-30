@@ -2,7 +2,6 @@ import http from "http";
 import { createApp } from "./app";
 import { env } from "./config/env";
 import { logger } from "./utils/logger";
-import { webSocketManager } from "./websocket/socketHandler";
 import { simulatorService } from "./simulator/simulator.service";
 import { realtimeService } from "./realtime/realtime.service";
 
@@ -10,8 +9,7 @@ const startServer = (): void => {
   const app = createApp();
   const server = http.createServer(app);
 
-  // Initialize WebSocket real-time monitoring server
-  webSocketManager.initialize(server);
+  // Initialize production WebSocket real-time monitoring service (Phase 5)
   realtimeService.initialize(server);
 
   server.listen(env.PORT, env.HOST, async () => {

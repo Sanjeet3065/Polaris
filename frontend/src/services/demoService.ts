@@ -35,7 +35,7 @@ export const DEMO_ACTS: DemoAct[] = [
     act: 5,
     label: "Automated Load Shed & Recovery",
     description: "AI incident protocols engage. Non-essential circuits isolated. Station reaches stable equilibrium.",
-    startSeconds: 50
+    startSeconds: 48
   }
 ];
 

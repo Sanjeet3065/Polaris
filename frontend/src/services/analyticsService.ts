@@ -44,66 +44,66 @@ export class AnalyticsService {
   }
 
   public async getOverview(filters?: AnalyticsFilterQuery): Promise<OverviewAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<OverviewAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<OverviewAnalyticsData>>(
       `/analytics/overview${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getEnergy(filters?: AnalyticsFilterQuery): Promise<EnergyAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<EnergyAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<EnergyAnalyticsData>>(
       `/analytics/energy${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getEnvironment(filters?: AnalyticsFilterQuery): Promise<EnvironmentAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<EnvironmentAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<EnvironmentAnalyticsData>>(
       `/analytics/environment${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getEquipment(filters?: AnalyticsFilterQuery): Promise<EquipmentAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<EquipmentAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<EquipmentAnalyticsData>>(
       `/analytics/equipment${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getMaintenance(filters?: AnalyticsFilterQuery): Promise<MaintenanceAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<MaintenanceAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<MaintenanceAnalyticsData>>(
       `/analytics/maintenance${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getAlerts(filters?: AnalyticsFilterQuery): Promise<AlertAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<AlertAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<AlertAnalyticsData>>(
       `/analytics/alerts${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getIncidents(filters?: AnalyticsFilterQuery): Promise<IncidentAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<IncidentAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<IncidentAnalyticsData>>(
       `/analytics/incidents${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getLogistics(filters?: AnalyticsFilterQuery): Promise<LogisticsAnalyticsData> {
-    const res = await apiClient.get<ApiResponseEnvelope<LogisticsAnalyticsData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<LogisticsAnalyticsData>>(
       `/analytics/logistics${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   public async getStationComparison(filters?: AnalyticsFilterQuery): Promise<StationComparisonData> {
-    const res = await apiClient.get<ApiResponseEnvelope<StationComparisonData>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<StationComparisonData>>(
       `/analytics/stations${buildQuery(filters)}`
     );
-    return res.data.data;
+    return res.data;
   }
 }
 

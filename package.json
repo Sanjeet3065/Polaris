@@ -8,7 +8,8 @@
     "backend"
   ],
   "scripts": {
-    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,cyan\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev": "concurrently -n \"DATABASE,BACKEND,FRONTEND\" -c \"magenta,blue,cyan\" \"npm run dev:db\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:db": "npm --prefix backend run db:start",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:ai": "cd ai-service && uvicorn app.main:app --reload --port 8000",

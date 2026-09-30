@@ -1,7 +1,10 @@
 import path from "path";
 import fs from "fs";
 import net from "net";
+import dotenv from "dotenv";
 import EmbeddedPostgres from "embedded-postgres";
+
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const PORT = 5432;
 const USER = "polaris_admin";
@@ -32,6 +35,12 @@ async function start() {
   console.log("=================================================");
   console.log("POLARIS PostgreSQL Database Manager");
   console.log("=================================================");
+
+  const dbUrl = process.env.DATABASE_URL || "";
+  if (dbUrl && !dbUrl.includes("localhost") && !dbUrl.includes("127.0.0.1")) {
+    console.log("☁️  Remote cloud database configured (Supabase/Neon). Skipping local embedded Postgres.");
+    return;
+  }
 
   const isRunning = await checkPortInUse(PORT);
   if (isRunning) {

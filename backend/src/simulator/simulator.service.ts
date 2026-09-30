@@ -333,6 +333,7 @@ export class SimulatorService {
       if (eh.status !== "OPERATIONAL") {
         realtimeService.publishEquipment({
           equipmentId: eh.equipmentId,
+          equipmentCode: eh.equipmentCode,
           stationCode: cycle.stationCode,
           status: eh.status,
           healthPercent: eh.healthPercent,

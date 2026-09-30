@@ -43,12 +43,22 @@ import {
 } from "lucide-react";
 import { polarisWebSocketClient } from "../services/websocket/websocketClient";
 
-export const AlertsPage: React.FC = () => {
+interface AlertsPageProps {
+  initialTab?: "alerts" | "incidents";
+}
+
+export const AlertsPage: React.FC<AlertsPageProps> = ({ initialTab = "alerts" }) => {
   const { selectedStation, setSelectedStation, realtimeStatus } = useStation();
   const { user } = useAuth();
 
   // Tab State: "alerts" vs "incidents"
-  const [activeTab, setActiveTab] = useState<"alerts" | "incidents">("alerts");
+  const [activeTab, setActiveTab] = useState<"alerts" | "incidents">(initialTab);
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Alerts State
   const [alerts, setAlerts] = useState<Alert[]>([]);

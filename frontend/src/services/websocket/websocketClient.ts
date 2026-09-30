@@ -329,6 +329,13 @@ export class PolarisWebSocketClient {
       return `${formattedUrl}${formattedUrl.includes("/ws") ? "" : "/ws"}?token=${encodeURIComponent(token)}`;
     }
 
+    // Derive from VITE_API_URL if configured for remote production environments
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (apiUrl && apiUrl.startsWith("http")) {
+      const wsFromApi = apiUrl.replace(/^http/, "ws").replace(/\/api\/v1\/?$/, "");
+      return `${wsFromApi}/ws?token=${encodeURIComponent(token)}`;
+    }
+
     const isSecure = window.location.protocol === "https:";
     const protocol = isSecure ? "wss:" : "ws:";
     const host = window.location.hostname;

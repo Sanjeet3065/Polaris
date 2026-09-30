@@ -42,17 +42,18 @@ export class MaintenanceService {
     if (params.page) query.append("page", params.page.toString());
     if (params.limit) query.append("limit", params.limit.toString());
 
-    const res = await apiClient.get<ApiResponseEnvelope<MaintenancePrediction[]>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<MaintenancePrediction[]>>(
       `/maintenance/predictions?${query.toString()}`
     );
 
-    const total = res.data.pagination?.total ?? res.data.data.length;
+    const items = res.data || [];
+    const total = res.meta?.total ?? res.pagination?.total ?? items.length;
     const limit = params.limit || 50;
 
     return {
-      items: res.data.data,
+      items,
       meta: {
-        page: res.data.pagination?.page ?? 1,
+        page: res.meta?.page ?? res.pagination?.page ?? 1,
         limit,
         total,
         totalPages: Math.ceil(total / limit) || 1
@@ -65,40 +66,40 @@ export class MaintenanceService {
    */
   public async getHealthOverview(stationId?: string): Promise<HealthOverviewStats> {
     const query = stationId && stationId !== "ALL" ? `?stationId=${encodeURIComponent(stationId)}` : "";
-    const res = await apiClient.get<ApiResponseEnvelope<HealthOverviewStats>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<HealthOverviewStats>>(
       `/maintenance/health-overview${query}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   /**
    * Retrieves detailed single prediction with historical trends, active alerts, and incidents
    */
   public async getPredictionByEquipmentId(equipmentId: string): Promise<DetailedPredictionView> {
-    const res = await apiClient.get<ApiResponseEnvelope<DetailedPredictionView>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<DetailedPredictionView>>(
       `/maintenance/predictions/${encodeURIComponent(equipmentId)}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   /**
    * Retrieves historical prediction snapshots for an equipment asset
    */
   public async getPredictionHistory(equipmentId: string, limit = 30): Promise<MaintenancePrediction[]> {
-    const res = await apiClient.get<ApiResponseEnvelope<MaintenancePrediction[]>>(
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<MaintenancePrediction[]>>(
       `/maintenance/predictions/${encodeURIComponent(equipmentId)}/history?limit=${limit}`
     );
-    return res.data.data;
+    return res.data;
   }
 
   /**
    * Triggers on-demand recalculation of predictive health
    */
   public async refreshPrediction(equipmentId: string): Promise<MaintenancePrediction> {
-    const res = await apiClient.post<ApiResponseEnvelope<MaintenancePrediction>>(
+    const res = await apiClient.post<unknown, ApiResponseEnvelope<MaintenancePrediction>>(
       `/maintenance/predictions/${encodeURIComponent(equipmentId)}/refresh`
     );
-    return res.data.data;
+    return res.data;
   }
 
   /**
@@ -108,11 +109,11 @@ export class MaintenanceService {
     equipmentId: string,
     data: CreateWorkOrderData
   ): Promise<any> {
-    const res = await apiClient.post<ApiResponseEnvelope<any>>(
+    const res = await apiClient.post<unknown, ApiResponseEnvelope<any>>(
       `/maintenance/predictions/${encodeURIComponent(equipmentId)}/work-order`,
       data
     );
-    return res.data.data;
+    return res.data;
   }
 }
 

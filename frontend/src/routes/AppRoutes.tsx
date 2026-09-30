@@ -53,6 +53,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/logistics" element={<LogisticsPage />} />
 
         <Route path="/alerts" element={<AlertsPage />} />
+        <Route path="/incidents" element={<AlertsPage initialTab="incidents" />} />
 
         <Route path="/maintenance" element={<MaintenancePage />} />
 

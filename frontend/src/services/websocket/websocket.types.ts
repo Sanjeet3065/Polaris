@@ -128,6 +128,7 @@ export interface WsScenarioPayload {
  */
 export interface WsEquipmentPayload {
   equipmentId: string;
+  equipmentCode?: string;
   stationCode: "MAITRI" | "BHARATI";
   status: "OPERATIONAL" | "DEGRADED" | "WARNING" | "CRITICAL" | "OFFLINE" | "MAINTENANCE";
   healthPercent: number;

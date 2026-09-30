@@ -181,6 +181,7 @@ export interface ScenarioActivePayload {
  */
 export interface EquipmentUpdatePayload {
   equipmentId: string;
+  equipmentCode?: string;
   stationCode: StationCode;
   status: EquipmentStatus;
   healthPercent: number;

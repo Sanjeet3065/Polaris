@@ -26,6 +26,7 @@ import {
   WsStationStatusPayload
 } from "../services/websocket/websocket.types";
 import { useAuth } from "./AuthContext";
+import { telemetryService } from "../services/telemetryService";
 
 const MAX_REALTIME_POINTS = 60; // Section 31: Rolling window limit to prevent memory leaks
 const STALE_THRESHOLD_MS = 20000; // Section 48: Stale data threshold (20 seconds)
@@ -117,6 +118,100 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (isAuthenticated) {
       polarisWebSocketClient.subscribe([selectedStation]);
     }
+  }, [isAuthenticated, selectedStation]);
+
+  // 2.1 Initial REST Telemetry Hydration & Reconnect Resync (Authoritative DB State)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    let isMounted = true;
+    const hydrateTelemetry = async () => {
+      const stationsToFetch = selectedStation === "ALL" ? ["MAITRI", "BHARATI"] : [selectedStation];
+      for (const st of stationsToFetch) {
+        try {
+          const [energyRes, envRes] = await Promise.allSettled([
+            telemetryService.getLatestEnergy(st),
+            telemetryService.getLatestEnvironment(st)
+          ]);
+
+          if (!isMounted) return;
+
+          if (envRes.status === "fulfilled" && envRes.value) {
+            const data = envRes.value;
+            setLiveEnvironment((prev) => ({
+              ...prev,
+              [st]: {
+                ...prev[st],
+                stationCode: st as "MAITRI" | "BHARATI",
+                temperatureCelsius: data.temperature,
+                humidityPercentage: data.humidity,
+                relativeHumidityPercent: data.humidity,
+                atmosphericPressureHpa: data.pressure,
+                barometricPressureHpa: data.pressure,
+                windSpeedKmh: data.windSpeed,
+                windSpeedKmH: data.windSpeed,
+                windDirectionDegrees: data.windDirection,
+                windDirectionCompass: data.windDirectionCompass,
+                visibilityKm: data.visibility,
+                opticalVisibilityKm: data.visibility,
+                solarRadiationWattsPerM2: data.solarRadiation,
+                solarIrradianceWm2: data.solarRadiation,
+                snowfallMmPerHour: data.snowfallRate,
+                status: data.status,
+                timestamp: data.recordedAt
+              }
+            }));
+            setLastTelemetryAt(new Date(data.recordedAt));
+            setIsStale(false);
+          }
+
+          if (energyRes.status === "fulfilled" && energyRes.value) {
+            const data = energyRes.value;
+            let batteryStatus: "CHARGING" | "STABLE" | "DISCHARGING" = "STABLE";
+            if (data.netPowerKw > 2.0) batteryStatus = "CHARGING";
+            else if (data.netPowerKw < -2.0) batteryStatus = "DISCHARGING";
+
+            setLiveEnergy((prev) => ({
+              ...prev,
+              [st]: {
+                ...prev[st],
+                stationCode: st as "MAITRI" | "BHARATI",
+                totalGenerationKw: data.generationKw,
+                solarGenerationKw: data.solarKw,
+                solarPhotovoltaicKw: data.solarKw,
+                dieselGenerationKw: data.dieselKw,
+                dieselGeneratorKw: data.dieselKw,
+                totalConsumptionKw: data.consumptionKw,
+                netPowerBalanceKw: data.netPowerKw,
+                batteryPercentage: data.batteryPercent,
+                batteryVoltageV: data.batteryVoltage,
+                batteryBusVoltage: data.batteryVoltage,
+                batteryStatus,
+                fuelReservesPercent: data.fuelPercent,
+                fuelReservesLiters: data.fuelLiters,
+                fuelReserveLiters: data.fuelLiters,
+                fuelAutonomyDaysRemaining: data.fuelDaysRemaining,
+                timestamp: data.recordedAt
+              }
+            }));
+          }
+        } catch {
+          // Graceful fallback to cached state if network momentarily unavailable
+        }
+      }
+    };
+
+    hydrateTelemetry();
+
+    // Hook into WebSocket resync event to refresh telemetry after sequence gap/reconnect
+    const unsubResync = polarisWebSocketClient.onResync(() => {
+      hydrateTelemetry();
+    });
+
+    return () => {
+      isMounted = false;
+      unsubResync();
+    };
   }, [isAuthenticated, selectedStation]);
 
   // 3. Stale Data Watchdog Timer (Section 48)
@@ -270,9 +365,21 @@ export const StationProvider: React.FC<{ children: React.ReactNode }> = ({ child
       WS_EVENT_TYPES.EQUIPMENT_UPDATE,
       (event) => {
         const eq = event.data;
+        const code = (eq.equipmentCode || eq.equipmentId || "").toUpperCase();
         setLiveEquipment((prev) =>
           prev.map((item) => {
-            if (item.id === eq.equipmentId) {
+            const isMatch =
+              item.id === eq.equipmentId ||
+              (eq.equipmentCode && item.id.toUpperCase() === eq.equipmentCode.toUpperCase()) ||
+              (eq.equipmentCode && item.name.toUpperCase().includes(eq.equipmentCode.toUpperCase())) ||
+              // Normalized canonical mapping for generator/HVAC/comm
+              (code.includes("GEN-01") && item.id.includes("gen-01")) ||
+              (code.includes("GEN-02") && item.id.includes("gen-02")) ||
+              (code.includes("HVAC") && item.id.includes("hvac")) ||
+              (code.includes("COMM") && item.id.includes("comm")) ||
+              (code.includes("CONV") && item.id.includes("conv"));
+
+            if (isMatch) {
               return {
                 ...item,
                 healthScore: eq.healthPercent,

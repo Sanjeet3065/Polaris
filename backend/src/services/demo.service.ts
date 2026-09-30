@@ -72,7 +72,7 @@ export const DEMO_ACTS: DemoAct[] = [
     act: 5,
     label: "Emergency Response & Recovery",
     description: "Incident command activated. Scenarios deactivated. Station stabilising.",
-    startSeconds: 50
+    startSeconds: 48
   }
 ];
 
@@ -84,7 +84,7 @@ const DEMO_ICONS: Record<number, string> = {
   5: "🔄"
 };
 
-const TOTAL_DURATION_SECONDS = 62;
+const TOTAL_DURATION_SECONDS = 60;
 
 // ---------------------------------------------------------------------------
 // Service
@@ -132,7 +132,7 @@ export class DemoService {
     this.startedAt = new Date();
     this.timers = [];
 
-    logger.info("[DemoService] SIH Demo Mode STARTED — executing 62-second narrative");
+    logger.info("[DemoService] SIH Demo Mode STARTED — executing 60-second narrative");
 
     // ---- Act 2 (T+5s): Katabatic Storm ----------------------------------------
     this._schedule(5000, () => {
@@ -152,13 +152,13 @@ export class DemoService {
       logger.info("[DemoService] Act 4: GENERATOR_OVERHEAT scenario activated on MAITRI");
     });
 
-    // ---- Act 5 (T+50s): Emergency Stop & Recovery ------------------------------
-    this._schedule(50000, () => {
+    // ---- Act 5 (T+48s): Emergency Stop & Recovery ------------------------------
+    this._schedule(48000, () => {
       simulatorService.stopScenario("MAITRI");
       logger.info("[DemoService] Act 5: All MAITRI scenarios stopped — recovery initiated");
     });
 
-    // ---- Demo Complete (T+62s) -------------------------------------------------
+    // ---- Demo Complete (T+60s) -------------------------------------------------
     this.completionTimer = setTimeout(() => {
       this.status = "COMPLETED";
       this.timers = [];

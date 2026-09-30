@@ -29,31 +29,31 @@ export class ReportService {
   }
 
   public async getReportTypes(): Promise<ReportTemplateInfo[]> {
-    const res = await apiClient.get<ApiResponseEnvelope<ReportTemplateInfo[]>>("/reports/types");
-    return res.data.data;
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<ReportTemplateInfo[]>>("/reports/types");
+    return res.data;
   }
 
   public async listReports(): Promise<GeneratedReport[]> {
-    const res = await apiClient.get<ApiResponseEnvelope<GeneratedReport[]>>("/reports");
-    return res.data.data;
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<GeneratedReport[]>>("/reports");
+    return res.data;
   }
 
   public async generateReport(payload: GenerateReportRequest): Promise<GeneratedReport> {
-    const res = await apiClient.post<ApiResponseEnvelope<GeneratedReport>>("/reports/generate", payload);
-    return res.data.data;
+    const res = await apiClient.post<unknown, ApiResponseEnvelope<GeneratedReport>>("/reports/generate", payload);
+    return res.data;
   }
 
   public async getReportById(reportId: string): Promise<GeneratedReport> {
-    const res = await apiClient.get<ApiResponseEnvelope<GeneratedReport>>(`/reports/${encodeURIComponent(reportId)}`);
-    return res.data.data;
+    const res = await apiClient.get<unknown, ApiResponseEnvelope<GeneratedReport>>(`/reports/${encodeURIComponent(reportId)}`);
+    return res.data;
   }
 
   public async downloadReportCsv(reportId: string, filename?: string): Promise<void> {
-    const res = await apiClient.get<string>(`/reports/${encodeURIComponent(reportId)}/export?format=csv`, {
+    const res = await apiClient.get<unknown, Blob | string>(`/reports/${encodeURIComponent(reportId)}/export?format=csv`, {
       responseType: "blob" as any
     });
 
-    const blob = new Blob([res.data], { type: "text/csv;charset=utf-8;" });
+    const blob = res instanceof Blob ? res : new Blob([res as any], { type: "text/csv;charset=utf-8;" });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -65,13 +65,14 @@ export class ReportService {
   }
 
   public async openReportPrintView(reportId: string): Promise<void> {
-    const res = await apiClient.get<string>(`/reports/${encodeURIComponent(reportId)}/export?format=html`, {
+    const res = await apiClient.get<unknown, string>(`/reports/${encodeURIComponent(reportId)}/export?format=html`, {
       responseType: "text" as any
     });
 
+    const htmlContent = typeof res === "string" ? res : (res as any)?.data || "";
     const printWindow = window.open("", "_blank");
     if (printWindow) {
-      printWindow.document.write(res.data);
+      printWindow.document.write(htmlContent);
       printWindow.document.close();
       printWindow.focus();
     }
