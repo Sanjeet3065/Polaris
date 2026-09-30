@@ -49,11 +49,14 @@ export interface UserResponse {
 
 export interface LoginResponse {
   accessToken: string;
+  refreshToken?: string;
   user: UserResponse;
 }
 
 export interface RefreshResponse {
   accessToken: string;
+  refreshToken?: string;
+  user?: UserResponse;
 }
 
 export interface AuthEventResponse {

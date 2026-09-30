@@ -12,6 +12,7 @@ import { ApiResponseEnvelope } from "../types";
 
 export interface LoginResult {
   accessToken: string;
+  refreshToken?: string;
   user: AuthUser;
 }
 
@@ -25,6 +26,9 @@ export interface AuthEventListResult {
   total: number;
 }
 
+const REFRESH_TOKEN_KEY = "polaris_refresh_token";
+const USER_KEY = "polaris_user";
+
 export const authService = {
   /**
    * Authenticates user with email and password
@@ -35,29 +39,56 @@ export const authService = {
       credentials
     );
     setAccessToken(res.data.accessToken);
+    if (typeof window !== "undefined") {
+      if (res.data.refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, res.data.refreshToken);
+      }
+      if (res.data.user) {
+        localStorage.setItem(USER_KEY, JSON.stringify(res.data.user));
+      }
+    }
     return res.data;
   },
 
   /**
-   * Silently refreshes access token using the HttpOnly cookie
+   * Silently refreshes access token using request body or HttpOnly cookie
    */
   async refresh(): Promise<LoginResult> {
+    const storedRefreshToken = typeof window !== "undefined"
+      ? localStorage.getItem(REFRESH_TOKEN_KEY)
+      : null;
+
     const res = await apiClient.post<unknown, ApiResponseEnvelope<LoginResult>>(
       "/auth/refresh",
-      {}
+      { refreshToken: storedRefreshToken }
     );
     setAccessToken(res.data.accessToken);
+    if (typeof window !== "undefined") {
+      if (res.data.refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, res.data.refreshToken);
+      }
+      if (res.data.user) {
+        localStorage.setItem(USER_KEY, JSON.stringify(res.data.user));
+      }
+    }
     return res.data;
   },
 
   /**
-   * Revokes refresh session and clears cookie
+   * Revokes refresh session and clears storage
    */
   async logout(): Promise<void> {
     try {
-      await apiClient.post("/auth/logout", {});
+      const storedRefreshToken = typeof window !== "undefined"
+        ? localStorage.getItem(REFRESH_TOKEN_KEY)
+        : null;
+      await apiClient.post("/auth/logout", { refreshToken: storedRefreshToken });
     } finally {
       setAccessToken(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+      }
     }
   },
 
@@ -66,6 +97,9 @@ export const authService = {
    */
   async getMe(): Promise<AuthUser> {
     const res = await apiClient.get<unknown, ApiResponseEnvelope<AuthUser>>("/auth/me");
+    if (typeof window !== "undefined" && res.data) {
+      localStorage.setItem(USER_KEY, JSON.stringify(res.data));
+    }
     return res.data;
   },
 
@@ -75,6 +109,10 @@ export const authService = {
   async changePassword(data: ChangePasswordData): Promise<void> {
     await apiClient.post("/auth/change-password", data);
     setAccessToken(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+    }
   },
 
   // ============================================================

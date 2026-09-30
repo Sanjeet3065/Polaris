@@ -2,14 +2,29 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
 
-// In-memory access token storage (never stored in localStorage for maximum security)
-let inMemoryAccessToken: string | null = null;
+const TOKEN_KEY = "polaris_access_token";
+const REFRESH_TOKEN_KEY = "polaris_refresh_token";
+
+// Persistent access token storage with in-memory fast cache
+let inMemoryAccessToken: string | null = typeof window !== "undefined"
+  ? localStorage.getItem(TOKEN_KEY)
+  : null;
 
 export const setAccessToken = (token: string | null): void => {
   inMemoryAccessToken = token;
+  if (typeof window !== "undefined") {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+  }
 };
 
 export const getAccessToken = (): string | null => {
+  if (!inMemoryAccessToken && typeof window !== "undefined") {
+    inMemoryAccessToken = localStorage.getItem(TOKEN_KEY);
+  }
   return inMemoryAccessToken;
 };
 
@@ -22,11 +37,12 @@ export const apiClient = axios.create({
   }
 });
 
-// Request interceptor: injects in-memory Bearer access token
+// Request interceptor: injects Bearer access token
 apiClient.interceptors.request.use(
   (config) => {
-    if (inMemoryAccessToken && !config.headers.Authorization) {
-      config.headers.Authorization = `Bearer ${inMemoryAccessToken}`;
+    const token = getAccessToken();
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -81,19 +97,27 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Attempt silent refresh via HttpOnly cookie
+        const storedRefreshToken = typeof window !== "undefined"
+          ? localStorage.getItem(REFRESH_TOKEN_KEY)
+          : null;
+
+        // Attempt refresh via request body or HttpOnly cookie
         const refreshResponse = await axios.post(
           `${baseURL}/auth/refresh`,
-          {},
+          { refreshToken: storedRefreshToken },
           { withCredentials: true }
         );
 
         const newAccessToken = refreshResponse.data?.data?.accessToken;
+        const newRefreshToken = refreshResponse.data?.data?.refreshToken;
         if (!newAccessToken) {
           throw new Error("No access token returned from refresh");
         }
 
         setAccessToken(newAccessToken);
+        if (newRefreshToken && typeof window !== "undefined") {
+          localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
+        }
         processQueue(null, newAccessToken);
 
         if (originalRequest.headers) {
@@ -104,6 +128,10 @@ apiClient.interceptors.response.use(
       } catch (refreshErr) {
         processQueue(refreshErr, null);
         setAccessToken(null);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
+          localStorage.removeItem("polaris_user");
+        }
 
         // Notify app auth state by dispatching auth:expired custom event
         if (typeof window !== "undefined") {

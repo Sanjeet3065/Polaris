@@ -15,23 +15,64 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+const USER_KEY = "polaris_user";
 
-  // Initialize session on startup
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Synchronously initialize cached user from localStorage so there is zero flash of login on reload
+  const [user, setUser] = useState<AuthUser | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const cached = localStorage.getItem(USER_KEY);
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // If we already have a user in localStorage, we are NOT in blocking loading state
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return !localStorage.getItem(USER_KEY);
+  });
+
+  // Validate or silently refresh session on startup
   useEffect(() => {
     let mounted = true;
 
     const initAuth = async () => {
-      try {
-        const result = await authService.refresh();
+      const hasStoredUser = typeof window !== "undefined" && !!localStorage.getItem(USER_KEY);
+      const hasStoredToken = typeof window !== "undefined" && !!localStorage.getItem("polaris_access_token");
+
+      if (!hasStoredUser && !hasStoredToken) {
         if (mounted) {
-          setUser(result.user);
+          setIsLoading(false);
+        }
+        return;
+      }
+
+      try {
+        // First try to fetch fresh profile using stored token
+        const freshUser = await authService.getMe();
+        if (mounted) {
+          setUser(freshUser);
         }
       } catch {
-        if (mounted) {
-          setUser(null);
+        // If access token expired, try silent refresh
+        try {
+          const result = await authService.refresh();
+          if (mounted) {
+            setUser(result.user);
+          }
+        } catch {
+          // If refresh also failed, clear session
+          if (mounted) {
+            setUser(null);
+            if (typeof window !== "undefined") {
+              localStorage.removeItem(USER_KEY);
+              localStorage.removeItem("polaris_access_token");
+              localStorage.removeItem("polaris_refresh_token");
+            }
+          }
         }
       } finally {
         if (mounted) {
@@ -45,6 +86,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth expiration events dispatched by apiClient
     const handleAuthExpired = () => {
       setUser(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem("polaris_access_token");
+        localStorage.removeItem("polaris_refresh_token");
+      }
     };
 
     window.addEventListener("polaris:auth:expired", handleAuthExpired);

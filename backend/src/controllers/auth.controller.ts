@@ -40,6 +40,7 @@ export class AuthController {
 
       const responseData: LoginResponse = {
         accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
         user: sanitizeUser(result.user)
       };
 
@@ -77,6 +78,7 @@ export class AuthController {
         res,
         {
           accessToken: result.accessToken,
+          refreshToken: result.newRefreshToken,
           user: sanitizeUser(result.user)
         },
         200
