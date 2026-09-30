@@ -1,4 +1,3 @@
-import axios from "axios";
 import { logger } from "../utils/logger";
 import { RiskBand, DataQuality } from "@prisma/client";
 
@@ -107,19 +106,23 @@ export class AiClientService {
    */
   public async getPrediction(request: PredictionRequestDto): Promise<PredictionResultDto> {
     try {
-      const response = await axios.post<PredictionResultDto>(
-        `${this.baseUrl}/predict`,
-        request,
-        {
-          timeout: this.timeoutMs,
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
+      const response = await fetch(`${this.baseUrl}/predict`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request),
+        signal: AbortSignal.timeout(this.timeoutMs)
+      });
+
+      if (!response.ok) {
+        throw new Error(`AI service HTTP error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = (await response.json()) as PredictionResultDto;
 
       return {
-        ...response.data,
+        ...data,
         isFallback: false
       };
     } catch (error) {
