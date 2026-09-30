@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
           </span>
           <span className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 transition-colors">
             <Cpu className="h-3.5 w-3.5 text-orange-400" />
-            Smart India Hackathon 2026 (SIH26060)
+            National Centre for Polar and Ocean Research (NCPOR)
           </span>
         </div>
       </div>

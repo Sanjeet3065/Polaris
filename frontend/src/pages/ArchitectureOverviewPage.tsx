@@ -34,9 +34,9 @@ export const ArchitectureOverviewPage: React.FC<ArchitectureOverviewPageProps> =
         <div className="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <Badge variant="ice">Smart India Hackathon 2026</Badge>
-            <Badge variant="neutral">Problem ID: SIH26060</Badge>
-            <Badge variant="success">Phase 0 Foundation Complete</Badge>
+            <Badge variant="ice">MoES / NCPOR Operations</Badge>
+            <Badge variant="neutral">Antarctic Research Platform</Badge>
+            <Badge variant="success">Mission Architecture Active</Badge>
           </div>
           <h1 className="text-3xl font-extrabold sm:text-4xl text-white tracking-tight">
             POLARIS <span className="polar-gradient-text">Architecture Hub</span>
@@ -171,12 +171,12 @@ export const ArchitectureOverviewPage: React.FC<ArchitectureOverviewPageProps> =
         </div>
       </section>
 
-      {/* SIH Phased Roadmap Tracker */}
+      {/* POLARIS Phased Roadmap Tracker */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
             <Layers className="h-5 w-5 text-indigo-400" />
-            SIH 2026 Phased Execution Roadmap (Phases 0 — 16)
+            POLARIS Phased Execution Roadmap (Phases 0 — 16)
           </h2>
           <span className="text-xs text-slate-400">Strictly phased development protocol</span>
         </div>

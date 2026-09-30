@@ -1,5 +1,5 @@
 /**
- * POLARIS — SIH Demo Mode Context
+ * POLARIS — Automated Incident Drill Context
  * Phase 16: State management & active polling for scripted evaluation demo
  */
 
@@ -102,7 +102,7 @@ export const DemoProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setDemoState(state);
       setIsModalOpen(false); // Close launch dialog so user sees the live operational view
     } catch (err: any) {
-      const msg = err?.message || err?.error?.message || "Failed to start SIH demo mode";
+      const msg = err?.message || err?.error?.message || "Failed to start emergency drill";
       setError(msg);
       throw err;
     } finally {
@@ -117,7 +117,7 @@ export const DemoProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const state = await demoService.stop();
       setDemoState(state);
     } catch (err: any) {
-      const msg = err?.message || err?.error?.message || "Failed to stop SIH demo mode";
+      const msg = err?.message || err?.error?.message || "Failed to stop emergency drill";
       setError(msg);
       throw err;
     } finally {

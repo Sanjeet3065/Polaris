@@ -104,8 +104,8 @@ export const DEVELOPMENT_PHASES: PhaseItem[] = [
   },
   {
     phase: 16,
-    name: "SIH Demo Mode",
-    description: "One-click judge simulation scenarios (Blizzard Event, Generator Failure, Fuel Emergency).",
+    name: "Autonomous Incident Drill",
+    description: "Scripted extreme telemetry scenarios (Blizzard Event, Generator Failure, Fuel Emergency).",
     status: "PENDING"
   }
 ];

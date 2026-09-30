@@ -27,8 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-xl font-black tracking-wider polar-gradient-text">
                 POLARIS
               </span>
-              <Badge variant="ice" size="sm">SIH26060</Badge>
-              <Badge variant="neutral" size="sm" className="hidden sm:inline-flex">MoES / NCPOR</Badge>
+              <Badge variant="ice" size="sm">MoES / NCPOR</Badge>
             </div>
             <p className="text-xs text-slate-400 hidden sm:block">
               Polar Operations & Logistics Automated Remote Intelligence System

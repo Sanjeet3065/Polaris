@@ -1,6 +1,6 @@
 /**
  * POLARIS — Central Domain Type Definitions
- * SIH 2026 Problem Statement: SIH26060
+ * Ministry of Earth Sciences (MoES) / NCPOR
  */
 
 export type StationCode = "MAITRI" | "BHARATI";
@@ -168,7 +168,7 @@ export interface ApiResponseEnvelope<T> {
 }
 
 // ============================================================
-// SIH DEMO MODE TYPES (Phase 16)
+// AUTOMATED DRILL SIMULATION TYPES (Phase 16)
 // ============================================================
 
 export type DemoStatus = "IDLE" | "ACTIVE" | "COMPLETED";

@@ -359,7 +359,7 @@ export const SettingsPage: React.FC = () => {
           </div>
 
           <p className="text-xs text-slate-300 leading-relaxed border-t border-slate-800/80 pt-4">
-            POLARIS is an advanced digital platform developed for the <strong>Smart India Hackathon 2026</strong> under Problem Statement ID <strong>SIH26060</strong>, proposed by the <strong>Ministry of Earth Sciences (MoES)</strong> and the <strong>National Centre for Polar and Ocean Research (NCPOR)</strong>.
+            POLARIS is an advanced digital platform engineered for comprehensive digital twin monitoring, autonomous station resilience, and mission telemetry across Indian Antarctic research stations under the <strong>Ministry of Earth Sciences (MoES)</strong> and the <strong>National Centre for Polar and Ocean Research (NCPOR)</strong>.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-1">
@@ -368,8 +368,8 @@ export const SettingsPage: React.FC = () => {
               <span className="text-slate-200 font-bold font-sans">MoES / NCPOR</span>
             </div>
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">PROBLEM CODE</span>
-              <span className="text-sky-300 font-bold font-sans">SIH26060</span>
+              <span className="text-slate-400 block text-[10px]">MISSION ID</span>
+              <span className="text-sky-300 font-bold font-sans">POLARIS-OPS</span>
             </div>
             <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
               <span className="text-slate-400 block text-[10px]">ANTARCTIC BASES</span>

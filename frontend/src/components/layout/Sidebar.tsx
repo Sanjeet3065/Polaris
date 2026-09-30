@@ -12,7 +12,6 @@ import {
   Wrench,
   ChartNoAxesCombined,
   FileText,
-  Layers,
   Sliders,
   ChevronLeft,
   ChevronRight,
@@ -70,7 +69,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const systemNavigation: NavItem[] = [
-    { name: "Architecture Hub", path: "/architecture", icon: Layers },
     { name: "Settings", path: "/settings", icon: Sliders }
   ];
 
@@ -172,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   POLARIS
                 </span>
                 <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
-                  Antarctic Ops • SIH26
+                  Antarctic Ops • Mission Control
                 </span>
               </div>
             )}

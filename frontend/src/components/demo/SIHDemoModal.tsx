@@ -1,5 +1,5 @@
 /**
- * POLARIS — SIH Demo Mode Launch Modal
+ * POLARIS — Emergency Drill Launch Modal
  * Phase 16: Evaluator launch dialog with 5-act narrative walkthrough
  */
 
@@ -23,7 +23,7 @@ import { DEMO_ACTS } from "../../services/demoService";
 
 const ACT_ICONS = [Activity, Wind, Zap, Flame, ShieldCheck];
 
-export const SIHDemoModal: React.FC = () => {
+export const EmergencyDrillModal: React.FC = () => {
   const {
     isModalOpen,
     closeLaunchModal,
@@ -41,7 +41,7 @@ export const SIHDemoModal: React.FC = () => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="sih-demo-modal-title"
+      aria-labelledby="emergency-drill-modal-title"
     >
       <div className="relative w-full max-w-2xl rounded-2xl border border-amber-500/40 bg-polar-900/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl max-h-[90vh] overflow-y-auto">
         {/* Glow ambient background accent */}
@@ -65,13 +65,13 @@ export const SIHDemoModal: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="rounded bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
-                SIH 2026 Problem Statement SIH26060
+                Autonomous Station Incident Drill
               </span>
               <span className="text-xs text-slate-400 flex items-center gap-1 font-mono">
                 <Clock className="h-3 w-3 text-amber-400" /> ~60 Seconds
               </span>
             </div>
-            <h2 id="sih-demo-modal-title" className="text-xl sm:text-2xl font-bold text-white mt-1">
+            <h2 id="emergency-drill-modal-title" className="text-xl sm:text-2xl font-bold text-white mt-1">
               Antarctic Incident Simulation Demo
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
@@ -183,7 +183,7 @@ export const SIHDemoModal: React.FC = () => {
               ) : (
                 <>
                   <Play className="h-4 w-4 fill-polar-950" />
-                  <span>Launch SIH Demo (60s)</span>
+                  <span>Launch Incident Drill (60s)</span>
                 </>
               )}
             </button>

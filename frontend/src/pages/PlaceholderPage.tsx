@@ -47,7 +47,7 @@ export const PlaceholderPage: React.FC<PlaceholderPageProps> = ({
                 PLANNED FOR PHASE {targetPhase}
               </Badge>
               <Badge variant="neutral" size="sm">
-                SIH26060 ARCHITECTED
+                POLARIS ARCHITECTED
               </Badge>
             </div>
             <h1 className="text-2xl font-black text-white tracking-tight">{title}</h1>
@@ -83,10 +83,10 @@ export const PlaceholderPage: React.FC<PlaceholderPageProps> = ({
             <span>Strict phased development protocol active (Phase 1 currently deployed)</span>
           </div>
           <Link
-            to="/architecture"
+            to="/digital-twin"
             className="text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors"
           >
-            View System Architecture Specification →
+            Explore Digital Twin Simulation →
           </Link>
         </div>
       </Card>

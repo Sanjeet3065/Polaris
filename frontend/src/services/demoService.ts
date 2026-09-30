@@ -1,6 +1,6 @@
 /**
- * POLARIS — SIH Demo Mode Service
- * Phase 16: REST client for controlling scripted SIH evaluation demo
+ * POLARIS — Incident Drill Service
+ * Phase 16: REST client for controlling scripted evaluation drill
  */
 
 import { apiClient } from "../lib/apiClient";
@@ -49,7 +49,7 @@ export const demoService = {
   },
 
   /**
-   * Launch scripted 60-second SIH Demo
+   * Launch scripted 60-second incident drill
    */
   async start(): Promise<DemoState> {
     const res = await apiClient.post<unknown, ApiResponseEnvelope<DemoState>>("/demo/start");

@@ -97,7 +97,7 @@ export const LoginPage: React.FC = () => {
           <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-polar-750 bg-polar-900/80 px-3 py-1 text-[11px] text-slate-400">
             <span>MoES / NCPOR</span>
             <span className="text-polar-700">•</span>
-            <span className="font-mono text-slate-300">SIH 2026 (SIH26060)</span>
+            <span className="font-mono text-slate-300">Antarctic Mission Control</span>
           </div>
         </div>
 
@@ -195,11 +195,11 @@ export const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick Demo Credentials for Evaluation & Hackathon Jury */}
+          {/* Quick Credentials for Evaluation */}
           <div className="mt-6 pt-5 border-t border-polar-750">
             <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-mono font-bold text-slate-400">
               <Sparkles className="h-3 w-3 text-orange-400" />
-              <span>SIH 2026 Operator Quick-Fill:</span>
+              <span>Operator Quick-Fill Access:</span>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <button

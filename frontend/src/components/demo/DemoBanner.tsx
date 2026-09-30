@@ -1,6 +1,6 @@
 /**
- * POLARIS — SIH Demo Mode Banner
- * Phase 16: Persistent top bar displaying real-time demo status, progress, and controls
+ * POLARIS — Incident Drill Banner
+ * Phase 16: Disabled for standard mission operation
  */
 
 import React from "react";

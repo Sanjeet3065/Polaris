@@ -68,7 +68,7 @@ export const createApp = (): Application => {
       project: "POLARIS",
       fullName: "Polar Operations & Logistics Automated Remote Intelligence System",
       description: "Digital Twin for Smarter Antarctic Station Management",
-      organization: "MoES / NCPOR (SIH 2026 - Problem ID: SIH26060)",
+      organization: "Ministry of Earth Sciences (MoES) / NCPOR",
       version: "0.1.0",
       status: "Phase 0 Architecture Active",
       healthCheck: "/api/v1/health"

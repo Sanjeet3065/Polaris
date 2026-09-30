@@ -1,7 +1,7 @@
 # ============================================================
 # POLARIS Frontend — Production Multi-Stage Dockerfile
 # Polar Operations & Logistics Automated Remote Intelligence System
-# SIH 2026 - Problem Statement ID: SIH26060
+# MoES / NCPOR — Antarctic Research Stations Digital Twin
 # ============================================================
 
 # ------------------------------------------------------------
