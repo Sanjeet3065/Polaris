@@ -19,6 +19,24 @@ jobs:
   backend-gate:
     name: Backend Lint, Types & 286 Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: polaris_admin
+          POSTGRES_PASSWORD: polaris_secure_password
+          POSTGRES_DB: polaris_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://polaris_admin:polaris_secure_password@localhost:5432/polaris_db?schema=public
+      JWT_ACCESS_SECRET: polaris_super_secret_jwt_access_key_2026
+      JWT_REFRESH_SECRET: polaris_super_secret_refresh_token_key_change_in_production_2026
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -44,6 +62,12 @@ jobs:
         run: |
           cd backend
           npm run db:generate
+
+      - name: Deploy Database Schema & Seed Data
+        run: |
+          cd backend
+          npx prisma db push --skip-generate
+          npm run db:seed
 
       - name: Run Backend Regression & Security Test Suite
         run: |
