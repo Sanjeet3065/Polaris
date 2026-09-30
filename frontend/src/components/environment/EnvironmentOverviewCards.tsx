@@ -1,7 +1,7 @@
 /**
  * POLARIS — Environmental Overview Operational Cards
  * Phase 7: Environment Monitoring
- * 
+ *
  * Displays live microclimate telemetry from station Automatic Weather Stations (AWS).
  */
 
@@ -9,12 +9,17 @@ import React from "react";
 import { Thermometer, Wind, Gauge, Droplets, Eye, Sun } from "lucide-react";
 import { Card } from "../ui/Card";
 import { useStation } from "../../context/StationContext";
-import { formatTemperature, formatWind, formatPressure, formatPercentage } from "../../utils/formatters";
+import {
+  formatTemperature,
+  formatWind,
+  formatPressure,
+  formatPercentage,
+} from "../../utils/formatters";
 import {
   evaluateTemperatureStatus,
   evaluateWindStatus,
   evaluatePressureStatus,
-  evaluateVisibilityStatus
+  evaluateVisibilityStatus,
 } from "../../utils/thresholds";
 
 export const EnvironmentOverviewCards: React.FC = () => {
@@ -22,13 +27,24 @@ export const EnvironmentOverviewCards: React.FC = () => {
 
   const isOffline = realtimeStatus === "OFFLINE";
   const tempC = environment.temperatureCelsius;
-  const windKmh = environment.windSpeedKmh ?? (environment as any).windSpeedKmH ?? 0;
+  const windKmh =
+    environment.windSpeedKmh ?? (environment as any).windSpeedKmH ?? 0;
   const compass = environment.windDirectionCompass || "SE";
   const degrees = environment.windDirectionDegrees ?? 135;
-  const pressureHpa = environment.atmosphericPressureHpa ?? (environment as any).barometricPressureHpa ?? 980;
-  const humidity = environment.humidityPercentage ?? (environment as any).relativeHumidityPercent ?? 70;
-  const visibility = environment.visibilityKm ?? (environment as any).opticalVisibilityKm ?? 15;
-  const solarRad = environment.solarRadiationWattsPerM2 ?? (environment as any).solarIrradianceWm2 ?? 120;
+  const pressureHpa =
+    environment.atmosphericPressureHpa ??
+    (environment as any).barometricPressureHpa ??
+    980;
+  const humidity =
+    environment.humidityPercentage ??
+    (environment as any).relativeHumidityPercent ??
+    70;
+  const visibility =
+    environment.visibilityKm ?? (environment as any).opticalVisibilityKm ?? 15;
+  const solarRad =
+    environment.solarRadiationWattsPerM2 ??
+    (environment as any).solarIrradianceWm2 ??
+    120;
 
   // Threshold evaluations
   const tempEval = evaluateTemperatureStatus(tempC, isOffline);
@@ -37,139 +53,147 @@ export const EnvironmentOverviewCards: React.FC = () => {
   const visEval = evaluateVisibilityStatus(visibility, isOffline);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-3.5 sm:gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-3.5">
+
       {/* 1. Ambient Temperature */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Thermometer className="h-4 w-4 text-orange-400 shrink-0" />
-            <span className="truncate">Temperature</span>
-          </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${tempEval.badgeClass}`}>
-            {tempEval.label}
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        {/* Top: icon + full label */}
+        <div className="flex items-center gap-1.5">
+          <Thermometer className="h-3.5 w-3.5 text-orange-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Temperature
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100">
-            {formatTemperature(tempC)}
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={tempEval.description}>
-            {tempEval.description}
-          </div>
+        {/* Badge below label */}
+        <span className={`self-start text-[10px] font-mono px-1.5 py-0.5 rounded border ${tempEval.badgeClass}`}>
+          {tempEval.label}
+        </span>
+        {/* Value */}
+        <div className="text-xl sm:text-2xl font-bold font-mono text-slate-100 mt-1">
+          {formatTemperature(tempC)}
+        </div>
+        {/* Description */}
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title={tempEval.description}
+        >
+          {tempEval.description}
         </div>
       </Card>
 
       {/* 2. Wind Velocity & Heading */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Wind className="h-4 w-4 text-amber-400 shrink-0" />
-            <span className="truncate">Wind Velocity</span>
-          </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${windEval.badgeClass}`}>
-            {windEval.label}
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Wind className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Wind Velocity
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100 flex items-baseline gap-1.5 min-w-0">
-            <span>{formatWind(windKmh)}</span>
-            <span className="text-xs font-normal text-slate-400 font-sans truncate">{compass} ({degrees}°)</span>
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={windEval.description}>
-            {windEval.description}
-          </div>
+        <span className={`self-start text-[10px] font-mono px-1.5 py-0.5 rounded border ${windEval.badgeClass}`}>
+          {windEval.label}
+        </span>
+        <div className="text-xl sm:text-2xl font-bold font-mono text-slate-100 mt-1">
+          {formatWind(windKmh)}{" "}
+          <span className="text-xs font-normal text-slate-400 font-sans">
+            {compass} ({degrees}°)
+          </span>
+        </div>
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title={windEval.description}
+        >
+          {windEval.description}
         </div>
       </Card>
 
       {/* 3. Barometric Pressure */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Gauge className="h-4 w-4 text-indigo-400 shrink-0" />
-            <span className="truncate">Barometer</span>
-          </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${pressEval.badgeClass}`}>
-            {pressEval.label}
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Gauge className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Barometer
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100">
-            {formatPressure(pressureHpa)}
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={pressEval.description}>
-            {pressEval.description}
-          </div>
+        <span className={`self-start text-[10px] font-mono px-1.5 py-0.5 rounded border ${pressEval.badgeClass}`}>
+          {pressEval.label}
+        </span>
+        <div className="text-xl sm:text-2xl font-bold font-mono text-slate-100 mt-1">
+          {formatPressure(pressureHpa)}
+        </div>
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title={pressEval.description}
+        >
+          {pressEval.description}
         </div>
       </Card>
 
       {/* 4. Relative Humidity */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Droplets className="h-4 w-4 text-sky-400 shrink-0" />
-            <span className="truncate">Humidity</span>
-          </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-sky-500/30 bg-sky-500/10 text-sky-300 whitespace-nowrap shrink-0">
-            RH Ambient
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Droplets className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Humidity
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100">
-            {formatPercentage(humidity)}
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title="Low moisture polar atmosphere">
-            Low moisture polar atmosphere
-          </div>
+        <span className="self-start text-[10px] font-mono px-1.5 py-0.5 rounded border border-sky-500/30 bg-sky-500/10 text-sky-300">
+          RH Ambient
+        </span>
+        <div className="text-xl sm:text-2xl font-bold font-mono text-slate-100 mt-1">
+          {formatPercentage(humidity)}
+        </div>
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title="Low moisture polar atmosphere"
+        >
+          Low moisture polar atmosphere
         </div>
       </Card>
 
       {/* 5. Optical Visibility */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Eye className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span className="truncate">Visibility</span>
-          </span>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${visEval.badgeClass}`}>
-            {visEval.label}
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Eye className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Visibility
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-slate-100">
-            {visibility.toFixed(1)} km
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title={visEval.description}>
-            {visEval.description}
-          </div>
+        <span className={`self-start text-[10px] font-mono px-1.5 py-0.5 rounded border ${visEval.badgeClass}`}>
+          {visEval.label}
+        </span>
+        <div className="text-xl sm:text-2xl font-bold font-mono text-slate-100 mt-1">
+          {visibility.toFixed(1)} km
+        </div>
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title={visEval.description}
+        >
+          {visEval.description}
         </div>
       </Card>
 
       {/* 6. Solar Irradiance */}
-      <Card className="p-3.5 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col justify-between shadow-sm min-w-0">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5 min-w-0 truncate">
-            <Sun className="h-4 w-4 text-amber-400 shrink-0" />
-            <span className="truncate">Solar Flux</span>
-          </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-300 whitespace-nowrap shrink-0">
-            Pyranometer
+      <Card className="p-3 sm:p-4 bg-polar-900/80 border-polar-750 hover:border-orange-500/30 rounded-xl transition-all flex flex-col gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Sun className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+          <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            Solar Flux
           </span>
         </div>
-
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono text-amber-300">
-            {Math.round(solarRad)} W/m²
-          </div>
-          <div className="mt-2 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-polar-750 line-clamp-1" title="Incident global horizontal radiation">
-            Incident global horizontal radiation
-          </div>
+        <span className="self-start text-[10px] font-mono px-1.5 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-300">
+          Pyranometer
+        </span>
+        <div className="text-xl sm:text-2xl font-bold font-mono text-amber-300 mt-1">
+          {Math.round(solarRad)} W/m²
+        </div>
+        <div
+          className="text-[10px] sm:text-[11px] text-slate-400 pt-2 border-t border-polar-750 leading-snug"
+          title="Incident global horizontal radiation"
+        >
+          Incident global horizontal radiation
         </div>
       </Card>
+
     </div>
   );
 };

@@ -79,7 +79,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 truncate block">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 leading-snug block">
             {label}
           </span>
           <div className="mt-1 flex items-baseline gap-1.5 flex-wrap">
@@ -92,7 +92,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
               </span>
             )}
             {statusText && (
-              <span className={cn("text-xs font-semibold ml-1 truncate", variantStyles.statusText)}>
+              <span className={cn("text-xs font-semibold ml-1 leading-snug", variantStyles.statusText)}>
                 {statusText}
               </span>
             )}
@@ -126,7 +126,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
               {trend.label && <span className="text-slate-500 font-sans">({trend.label})</span>}
             </span>
           ) : subtext ? (
-            <span className="text-[11px] text-slate-400 truncate max-w-[70%]">{subtext}</span>
+            <span className="text-[11px] text-slate-400 leading-snug">{subtext}</span>
           ) : (
             <span />
           )}

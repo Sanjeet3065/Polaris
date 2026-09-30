@@ -80,12 +80,13 @@ export const EnvironmentalSnapshot: React.FC = () => {
           return (
             <Card
               key={m.label}
-              className="p-3 bg-polar-900/75 border-polar-750 hover:border-polar-600 shadow-sm transition-colors min-w-0"
+              className="p-3 bg-polar-900/75 border-polar-750 hover:border-polar-600 shadow-sm transition-colors flex flex-col gap-1.5"
             >
-              <div className="flex items-center justify-between text-slate-400 mb-1.5 gap-1.5 min-w-0">
+              {/* Icon + status badge stacked */}
+              <div className="flex items-center gap-1.5">
                 <Icon className="h-3.5 w-3.5 text-orange-400 shrink-0" />
                 <span
-                  className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono whitespace-nowrap shrink-0 ${
+                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded font-mono ${
                     m.status === "WARNING"
                       ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
                       : m.status === "CRITICAL"
@@ -96,11 +97,14 @@ export const EnvironmentalSnapshot: React.FC = () => {
                   {m.status}
                 </span>
               </div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wide truncate">{m.label}</div>
-              <div className={`text-base sm:text-lg font-black font-mono tracking-tight tabular-nums mt-0.5 ${m.color}`}>
+              {/* Full label — no truncation */}
+              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wide leading-snug">{m.label}</div>
+              {/* Value */}
+              <div className={`text-base sm:text-lg font-black font-mono tracking-tight tabular-nums ${m.color}`}>
                 {m.value}
               </div>
-              <div className="text-[10px] text-slate-400 truncate mt-0.5 font-mono">{m.subtext}</div>
+              {/* Subtext — wraps, no truncation */}
+              <div className="text-[10px] text-slate-400 font-mono leading-snug border-t border-polar-750 pt-1.5">{m.subtext}</div>
             </Card>
           );
         })}

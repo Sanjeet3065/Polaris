@@ -96,9 +96,9 @@ export const AlertOverviewCards: React.FC<AlertOverviewCardsProps> = ({
               <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{card.label}</span>
               <Icon className={`w-4 h-4 ${card.color}`} />
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
+            <div className="mt-2 flex items-baseline gap-2 flex-wrap">
               <span className="text-2xl font-bold font-mono text-slate-100">{card.count}</span>
-              <span className="text-[11px] text-slate-400 truncate">{card.sub}</span>
+              <span className="text-[11px] text-slate-400 leading-snug">{card.sub}</span>
             </div>
           </div>
         );
